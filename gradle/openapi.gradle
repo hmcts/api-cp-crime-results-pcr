@@ -1,4 +1,4 @@
-tasks.named('compileJava') {
+tasks.named('compileGeneratedJava') {
   dependsOn(tasks.openApiGenerate)
 }
 

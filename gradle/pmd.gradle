@@ -12,6 +12,13 @@ tasks.named("pmdTest").configure {
   enabled = false
 }
 
+tasks.named("pmdGenerated").configure {
+  // OpenAPI-generated model/api code (see gradle/java.gradle's 'generated'
+  // sourceSet) — machine-generated, regenerated every build, not ours to
+  // fix PMD violations in.
+  enabled = false
+}
+
 tasks.withType(Pmd) {
   reports {
     xml.required.set(true)
