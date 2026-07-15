@@ -97,9 +97,19 @@ Went back through every field `PrisonCourtRegisterPdfPayloadGenerator.java` actu
 
 ### 2c. Real gaps — not fixed, flagged for a decision because there's no confirmed RaS target to fix them against
 
-- **Custody location.** `custodyLocation` (the prison/police custody the defendant is held at) is on every printed register and arguably the single most "prison"-relevant fact on the document — yet no field in RaS's physical data model corresponds to it (the closest is `created_prison`, which is RaS's own audit/provenance field, not a case fact received from CP). Not added to the schema speculatively; needs a direct question to RaS — do they need this, and if so where does it belong.
+- **Custody location — correction, this claim was wrong in the earlier pass.** Previously described `custodyLocation` as "on every printed register." Not so: it's a key in the payload the generator builds, but checking the actual template (and the real `expected_output.pdf` from `OEELayout5IT`'s own fixture) confirms it never prints — it's in the generator's output JSON, absent from the rendered page. For the HMPPS API question specifically: this moves it from "surfaced on PCR, dropped from the API" to "not currently a case fact on the register at all" — if HMPPS/RaS genuinely need custody location, that's a new requirement to raise with them directly, not something this contract dropped.
 - **Defendant identity (name, DOB, address, gender, nationality, aliases).** Entirely absent from the API — only `defendantId` (CP UUID) survives. This is deliberate given RaS's own `court_case` has no name/DOB/address columns. But RaS's Core Person Record matching explicitly runs on "name, DOB, address, PNC, CRO" as its clustering signals — worth directly confirming this event-level API isn't expected to carry any of those, rather than assuming Core Person Record is fed exclusively by some other pipeline.
 - **Court venue display fields** (`ljaName`, `courtHouse` display name, `courtHouseAddress`). `courtCentreId` (UUID) covers RaS's actual join key, but if any downstream consumer needs a human-readable venue name/address rather than resolving the UUID themselves, that's currently nowhere in the contract. Likely fine to leave UUID-only, but worth a one-line confirmation rather than a silent assumption, same as 2a's procedural fields.
+
+---
+
+## 2d. Template double-check — what's *actually* rendered vs. what the generator produces
+
+Went beyond the generator code and verified against the real `OEE_Layout5Template.docx` merge fields and the actual rendered output (`OEELayout5IT`'s `payload.json` → `expected_output.pdf` fixture — real printed text, not just template markup). Findings relevant to this contract:
+
+- **`resultCode`/`cjsResultCode` is never rendered on the printed page** — the extracted PDF text only ever shows `"Result text ..."` lines, never a CJS code. This does not change the API — `cjsResultCode` stays as the correct structured input for RaS's `charge_outcome` resolution regardless of whether CP's own PDF prints it. Noted here only so the field's absence from the visible document is never mistaken for CP not having it in structured form.
+- **`custodyLocation`'s absence is confirmed at the rendered-output level too** — it's a key in `payload.json` (the generator's own test input) but never appears in the extracted PDF text. Same conclusion as §2c, now confirmed against real output rather than template markup alone.
+- **`ljaName`/`courtHouse`/`courtHouseAddress` render in the page header, repeated on every page** — confirmed in the extracted PDF text ("Liverpool Crown Court" / venue address / "Register generated on:" / "LJA:" all repeat identically on pages 1 and 2). Consistent with them being request-level, not per-case, fields.
 
 ---
 
