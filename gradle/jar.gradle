@@ -1,5 +1,9 @@
 jar {
   dependsOn tasks.named('cyclonedxBom')
+  // Generated OpenAPI model/api classes now compile via the separate
+  // 'generated' sourceSet (see gradle/java.gradle) so they no longer land
+  // in sourceSets.main.output automatically — include them explicitly.
+  from sourceSets.generated.output
   if (file("CHANGELOG.md").exists()) {
     println "✅ Including CHANGELOG.md in JAR"
     from('CHANGELOG.md') {

@@ -1,87 +1,662 @@
 openapi: 3.0.0
 servers:
-  - description: API Marketplace api - mocking example api
-    url: https://virtserver.swaggerhub.com/HMCTS-DTS/api-hmcts-crime-template/1.0.0
+  - description: CP Crime Prosecution Case Results (PCR) API
+    url: https://api-cp-crime-results-pcr.net/{version}
+    variables:
+      version:
+        default: 0.1.0
+        description: API version; matches the spec info.version
 
 info:
-  title: API Marketplace api - example api
-  description: API Marketplace api - simple example
-  version: 1.0.0
+  title: CP Crime Prosecution Case Results (PCR) API
+  description: >-
+    Exposes prosecution case results (PCR) for criminal cases on the Common
+    Platform (CP), shaped to align with the consuming HMPPS Remand and
+    Sentencing (RaS) physical data model (Court Case / Court Appearance /
+    Charge / Sentence / Period Length), so each response object maps
+    directly onto an RaS table without HMPPS having to re-derive structure.
+
+    Given a case URN and a hearing, the API returns the results recorded for
+    that prosecution case at the hearing — the result for each charge and
+    each court application, including any sentence handed down. A
+    defendant-scoped endpoint narrows the same view to a single defendant.
+
+    Every request identifies the specific results event to read via the
+    required `eventId` query parameter, so a caller reads a stable snapshot of
+    the results as they stood at that event rather than a mutable "latest".
+
+    Fields with no direct CP source, or with an open question still being
+    tracked with the RaS team, are marked `nullable` and documented as such —
+    they are not silently populated with placeholder values.
+  version: 0.1.0
   contact:
     email: no-reply@hmcts.com
   license:
     name: MIT
     url: 'https://opensource.org/licenses/MIT'
 
+security:
+  - oAuthJwt: []
+
+tags:
+  - name: prosecution-case-results
+    description: Prosecution case results — charge and court application results for a case at a hearing
+
 paths:
-  /:
+  /pcr/cases/{caseURN}/hearings/{hearingId}:
     get:
-      description: Root endpoint
-      operationId: getRoot
+      summary: Get the prosecution case results for a case at a hearing
+      description: >-
+        Returns the results recorded for a prosecution case at a specific
+        hearing, as they stood at the supplied results event. The response
+        includes the prosecution case reference and, for each defendant on the
+        case, a result for each charge and each court application (including
+        any sentence). If the hearing recorded no results for the case, empty
+        lists are returned. If the case, hearing, or event does not exist, a
+        not found response is returned.
+      operationId: getProsecutionCaseResults
       tags:
-        - root
-
-      responses:
-        '200':
-          description: OK
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Hello
-
-  /example/{example_id}:
-    get:
-      description: Get example for example_id
-      operationId: getExampleByExampleId
-      tags:
-        - examples
+        - prosecution-case-results
       parameters:
-        - in: path
-          name: example_id
-          required: true
-          description: Unique id for the example - long
-          schema:
-            type: integer
-            format: int64
+        - $ref: "#/components/parameters/CaseUrnPath"
+        - $ref: "#/components/parameters/HearingIdPath"
+        - $ref: "#/components/parameters/EventIdQuery"
       responses:
         '200':
-          description:  Examples found
+          description: Prosecution case results found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ExampleResponse"
+                $ref: "#/components/schemas/ProsecutionCaseResultView"
         '400':
-          description: Bad input parameter
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+
+  /pcr/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}:
+    get:
+      summary: Get the prosecution case results for a single defendant at a hearing
+      description: >-
+        Returns the results recorded for a single defendant on a prosecution
+        case at a specific hearing, as they stood at the supplied results
+        event. The response includes the prosecution case reference and the
+        defendant's charge and court application results (including any
+        sentence). If the defendant has no recorded results at the hearing,
+        empty lists are returned. If the case, hearing, defendant, or event
+        does not exist, a not found response is returned.
+      operationId: getDefendantProsecutionCaseResults
+      tags:
+        - prosecution-case-results
+      parameters:
+        - $ref: "#/components/parameters/CaseUrnPath"
+        - $ref: "#/components/parameters/HearingIdPath"
+        - $ref: "#/components/parameters/DefendantIdPath"
+        - $ref: "#/components/parameters/EventIdQuery"
+      responses:
+        '200':
+          description: Defendant prosecution case results found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/DefendantResultView"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
 
 components:
+  securitySchemes:
+    oAuthJwt:
+      type: oauth2
+      description: >-
+        OAuth 2.0 protection. Callers must present a valid JWT bearer access
+        token obtained via the client credentials flow.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api-cp-crime-results-pcr.net/oauth2/token
+          scopes:
+            prosecution-case-results.read: Read access to prosecution case results data
+
+  parameters:
+    CaseUrnPath:
+      in: path
+      name: caseURN
+      required: true
+      description: Unique Case URN identifying the prosecution case
+      schema:
+        type: string
+      example: "example-case-urn"
+    HearingIdPath:
+      in: path
+      name: hearingId
+      required: true
+      description: Unique identifier of the hearing
+      schema:
+        type: string
+        format: uuid
+      example: "f1d2c3b4-a5e6-4f7a-8b9c-0d1e2f3a4b5c"
+    DefendantIdPath:
+      in: path
+      name: defendantId
+      required: true
+      description: Unique identifier of the defendant
+      schema:
+        type: string
+        format: uuid
+      example: "7a6b5c4d-3e2f-4109-8a7b-6c5d4e3f2a1b"
+    EventIdQuery:
+      in: query
+      name: eventId
+      required: true
+      description: >-
+        Unique identifier of the results event to read. Identifies the stable
+        snapshot of results to return rather than a mutable "latest" view.
+      schema:
+        type: string
+        format: uuid
+      example: "3b4c5d6e-7f80-4192-a3b4-c5d6e7f80912"
+
+  responses:
+    BadRequest:
+      description: Bad input parameter
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            error: "BAD_REQUEST"
+            message: "The supplied hearingId is not a valid UUID"
+            details:
+              parameter: "hearingId"
+            timestamp: "2026-07-15T11:33:22.794Z"
+            traceId: "b2f1c3d4e5f60718"
+    Unauthorized:
+      description: Authentication is missing or the access token is invalid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            error: "UNAUTHORIZED"
+            message: "Access token is missing or invalid"
+            timestamp: "2026-07-15T11:33:22.794Z"
+            traceId: "c3a2b4d5e6f70819"
+    Forbidden:
+      description: The access token does not grant the required scope
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            error: "FORBIDDEN"
+            message: "The access token does not grant the required scope prosecution-case-results.read"
+            timestamp: "2026-07-15T11:33:22.794Z"
+            traceId: "d4b3c5e6f708192a"
+    NotFound:
+      description: The requested resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            error: "NOT_FOUND"
+            message: "No results found for the supplied case URN, hearing and event"
+            details:
+              caseURN: "example-case-urn"
+              hearingId: "f1d2c3b4-a5e6-4f7a-8b9c-0d1e2f3a4b5c"
+              eventId: "3b4c5d6e-7f80-4192-a3b4-c5d6e7f80912"
+            timestamp: "2026-07-15T11:33:22.794Z"
+            traceId: "e5c4d6f708192a3b"
+    InternalServerError:
+      description: An unexpected error occurred
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            error: "INTERNAL_SERVER_ERROR"
+            message: "An unexpected error occurred while processing the request"
+            timestamp: "2026-07-15T11:33:22.794Z"
+            traceId: "f6d5e708192a3b4c"
+
   schemas:
-    ExampleResponse:
-      description: Details of examples associated with the example id
+    ProsecutionCaseResultView:
+      description: Results recorded for a prosecution case at a hearing
       type: object
       properties:
-        exampleId:
-          description: Id of the example - long
-          type: integer
-          format: int64
-        exampleText:
-          description: Information associated with the example id
+        pcr:
+          $ref: "#/components/schemas/Pcr"
+        hearingId:
+          description: Unique identifier of the hearing the results were recorded at
           type: string
-          example: "Some text"
+          format: uuid
+          example: "f1d2c3b4-a5e6-4f7a-8b9c-0d1e2f3a4b5c"
+        eventId:
+          description: Unique identifier of the results event this snapshot was read at
+          type: string
+          format: uuid
+          example: "3b4c5d6e-7f80-4192-a3b4-c5d6e7f80912"
+        defendants:
+          description: Results for each defendant on the prosecution case
+          type: array
+          items:
+            $ref: "#/components/schemas/DefendantResultView"
+
+    DefendantResultView:
+      description: Results recorded for a single defendant at a hearing
+      type: object
+      properties:
+        defendantId:
+          description: >-
+            CP's UUID for the defendant. RaS `court_case.prisoner_id` is a
+            NOMIS ID (e.g. a NOMIS-format prisoner reference) — CP holds no
+            deterministic mapping to that; RaS resolves it via the Core
+            Person Record probabilistic match, not via this field. Open — no
+            action for CP.
+          type: string
+          format: uuid
+          example: "7a6b5c4d-3e2f-4109-8a7b-6c5d4e3f2a1b"
+        pcr:
+          $ref: "#/components/schemas/Pcr"
+        appearance:
+          $ref: "#/components/schemas/CourtAppearance"
+        charges:
+          description: >-
+            Maps to RaS `charge`. Renamed from the earlier `offences[]` to
+            match the RaS entity name directly.
+          type: array
+          items:
+            $ref: "#/components/schemas/Charge"
+        courtApplicationResults:
+          description: >-
+            Court applications (bail applications, variations etc.), separate
+            from RaS's model entirely — RaS confirmed it is "not interested in
+            court admin applications". Kept for other consumers of this API;
+            not part of the RaS-aligned shape below.
+          type: array
+          items:
+            $ref: "#/components/schemas/CourtApplicationResult"
+
+    Pcr:
+      description: >-
+        Prosecution case reference. Maps to RaS `court_case.case_unique_identifier`
+        (this `id`) and `court_appearance.court_case_reference` (this `reference`).
+      type: object
+      properties:
+        id:
+          description: Unique identifier of the prosecution case (CP case UUID)
+          type: string
+          format: uuid
+          example: "9c8b7a6d-5e4f-4321-8765-0a1b2c3d4e5f"
+        reference:
+          description: Prosecution case reference (case URN)
+          type: string
+          example: "example-case-urn"
+
+    CourtAppearance:
+      description: Maps to RaS `court_appearance`.
+      type: object
+      properties:
+        courtCentreId:
+          description: >-
+            Maps to RaS `court_appearance.court_code`. Open question, not
+            resolved — two conflicting signals on file: one clarification says
+            RaS keys this off the CP court house UUID, but RaS's own physical
+            data model example value for `court_code` is a Court Register
+            code (e.g. "YORKCC"), not a UUID. Left as a plain string
+            (not UUID-locked) until service analysis settles which format RaS
+            actually needs.
+          type: string
+        hearingDate:
+          description: Maps to RaS `court_appearance.appearance_date`. Confirmed as CP hearing date.
+          type: string
+          format: date
+          example: "2026-06-23"
+        hearingOutcome:
+          description: >-
+            Maps to RaS `court_appearance.appearance_outcome_id`. RaS
+            clarification on file: ignore — no CP-side action needed.
+          type: string
+          nullable: true
+        warrantType:
+          description: >-
+            Maps to RaS `court_appearance.warrant_type`
+            (SENTENCING/NON_SENTENCING/IMMIGRATION/UNKNOWN). RaS clarification
+            on file: ignore — RaS derives this itself, no CP-side action needed.
+          type: string
+          nullable: true
+        overallConvictionDate:
+          description: >-
+            Maps to RaS `court_appearance.overall_conviction_date`. Resolved —
+            RaS derives this from `charges[].convictionDate` values CP already
+            sends; this field is UI convenience only on RaS's side, not
+            required from CP.
+          type: string
+          format: date
+          nullable: true
+        nextCourtAppearance:
+          $ref: "#/components/schemas/NextCourtAppearance"
+
+    NextCourtAppearance:
+      description: >-
+        Maps to RaS `next_court_appearance`. Open item: when multiple charges
+        on the same case adjourn to different future dates, which one drives
+        this object is still with RaS (see Nutty/Steven query on file).
+      type: object
+      nullable: true
+      properties:
+        appearanceDate:
+          description: Maps to `next_court_appearance.appearance_date`.
+          type: string
+          format: date
+          nullable: true
+        courtCentreId:
+          description: >-
+            Maps to `next_court_appearance.court_code`. Same open
+            format question as `CourtAppearance.courtCentreId` (UUID vs Court
+            Register code) — not resolved, left as a plain string.
+          type: string
+          nullable: true
+        appearanceTime:
+          description: >-
+            Maps to `next_court_appearance.appearance_time`. CP source not yet
+            confirmed to be in the hearing payload — open item.
+          type: string
+          nullable: true
+        appearanceType:
+          description: >-
+            Maps to `next_court_appearance.appearance_type_id` (video link vs
+            in-person). CP source not yet confirmed to be in the hearing
+            payload — open item.
+          type: string
+          nullable: true
+
+    Charge:
+      description: Maps to RaS `charge`.
+      type: object
+      properties:
+        offenceCode:
+          description: Maps to `charge.offence_code`. RaS confirmed CP offence codes are aligned with OMS.
+          type: string
+          example: "example-offence-code"
+        offenceStartDate:
+          description: Maps to `charge.offence_start_date`.
+          type: string
+          format: date
+          example: "2026-06-13"
+        offenceEndDate:
+          description: >-
+            Maps to `charge.offence_end_date`. RaS confirmed optional. CP only
+            populates this for terminated results.
+          type: string
+          format: date
+          nullable: true
+        convictionDate:
+          description: Maps to `charge.conviction_date` (also read by `sentence.conviction_date` — same value, RaS resolved this as one source of truth).
+          type: string
+          format: date
+          nullable: true
+        chargeOutcomes:
+          description: >-
+            Maps to `charge.charge_outcome_id`, one row per outcome. CP's
+            source (`offences[].results[]`) can carry more than one judicial
+            result per offence (e.g. a conviction result plus a separate
+            costs/compensation or ancillary result) — RaS's model is a single
+            FK per charge. Sending all of them lets RaS decide which is
+            authoritative rather than CP silently picking one; do not collapse
+            this to a single object.
+          type: array
+          items:
+            $ref: "#/components/schemas/ChargeOutcome"
+        terrorRelated:
+          description: >-
+            Maps to `charge.terror_related` (boolean). CP source: judicial
+            result prompt `promptReference` =
+            `theCourtDeterminedATerroristConnectionUnderSection30OfTheCounterTerrorismAct2008AppliesToThisOffence`
+            (or `...ToThisCount`), nested inside the Imprisonment result's
+            prompts. Value is textual ("Yes"/"No") in the source, not a native
+            boolean — needs coercion. Open: RaS to confirm it will key off this
+            exact promptReference.
+          type: boolean
+          nullable: true
+        foreignPowerRelated:
+          description: >-
+            Maps to `charge.foreign_power_related` (boolean). CP source:
+            judicial result prompt `promptReference` =
+            `offenceAggByForeignPowerCondition`, confirmed `type: BOOLEAN` in
+            the domain object — genuine boolean, no coercion needed. Same
+            Imprisonment-result prompt group as `terrorRelated`.
+          type: boolean
+          nullable: true
+        domesticViolenceRelated:
+          description: >-
+            Maps to `charge.domestic_violence_related` (boolean). CP source is
+            NOT a judicial result prompt — it's a case-level
+            `prosecutionCase.caseMarkers[]` entry with
+            `markerTypeCode == 'DomesticViolence'`, already present on
+            `public.events.hearing.hearing-resulted`. Open: RaS models this
+            per-charge; CP only has it per-case — confirm whether every charge
+            on a marked case should echo `true`, or whether RaS wants it
+            surfaced at case level instead.
+          type: boolean
+          nullable: true
+        sentences:
+          type: array
+          items:
+            $ref: "#/components/schemas/Sentence"
+
+    ChargeOutcome:
+      description: >-
+        Maps to RaS `charge_outcome` (a reference-data lookup on RaS's side —
+        outcome_name/outcome_type/nomis_code/disposition_code). CP supplies
+        the raw CJS result code plus the structured Reference Data signals
+        already available against it (`postHearingCustodyStatus`/`financial`/
+        `category`/`convicted`, from `ResultDefinition`); resolving these to
+        an `outcome_type` (NON_CUSTODIAL/REMAND/IMMIGRATION/SENTENCING) is
+        still RaS-side reference data, marked TBD — CP is not itself
+        asserting the classification, only supplying the inputs to it.
+      type: object
+      properties:
+        cjsResultCode:
+          description: >-
+            CP's judicial result CJS code — the raw input to RaS's
+            charge_outcome_id resolution.
+          type: string
+        resultText:
+          description: CP's rendered result text, for reference/audit — not RaS's outcome_name, which is RaS's own reference-data label.
+          type: string
+        postHearingCustodyStatus:
+          description: >-
+            From CP Reference Data's `ResultDefinition.postHearingCustodyStatus`
+            ("the bail status following the hearing"), keyed on `cjsResultCode`.
+            The clearest existing CP signal for classifying custodial vs
+            non-custodial/remand outcomes — offered here rather than asking
+            RaS to infer it from `resultText`.
+          type: string
+          nullable: true
+        financial:
+          description: From `ResultDefinition.financial` (Y/N) — whether this result type is inherently financial.
+          type: string
+          nullable: true
+        category:
+          description: From `ResultDefinition.category`.
+          type: string
+          nullable: true
+        convicted:
+          description: From `ResultDefinition.convicted` (Y/N).
+          type: string
+          nullable: true
+
+    Sentence:
+      description: Maps to RaS `sentence`.
+      type: object
+      properties:
+        countNumber:
+          description: >-
+            Maps to `sentence.count_number`. CP's closest field is
+            `offences[].listingNumber` — not yet confirmed as the correct
+            mapping (open item: verify against warrant examples).
+          type: integer
+          nullable: true
+        sentenceServeType:
+          description: >-
+            Maps to `sentence.sentence_serve_type`
+            (CONCURRENT/CONSECUTIVE/FORTHWITH). CP source: `concurrent`
+            prompt (boolean-ish) and `consecutiveToSentenceImposedOn` prompt
+            presence. FORTHWITH has no confirmed CP source yet — open item.
+          type: string
+          enum: [CONCURRENT, CONSECUTIVE, FORTHWITH]
+          nullable: true
+        consecutiveToId:
+          description: >-
+            Maps to `sentence.consecutive_to_id` (an FK to another sentence
+            record on RaS's side). CP only provides
+            `consecutiveToSentenceImposedOn` (a date) and `whichWasImpBy` (a
+            court name) — not a sentence identifier. Cross-reference
+            resolution mechanism is still open.
+          type: string
+          nullable: true
+        convictionDate:
+          description: Same value as `Charge.convictionDate` — RaS derives one from the other; not sent twice by CP once the parent's is known.
+          type: string
+          format: date
+          nullable: true
+        sentenceType:
+          description: >-
+            Maps to `sentence.sentence_type_id`. RaS sentence-type reference
+            data holds `nomis_cja_code`/`nomis_sentence_calc_type`; CP only
+            has the CJS code (e.g. the code for Imprisonment) — a
+            CJS-to-CJA cross-reference is TBD on the RaS side, not yet
+            defined.
+          type: string
+          nullable: true
+        fineAmount:
+          description: >-
+            Maps to `sentence.fine_amount`. RaS confirmed this is for fines
+            imposed alongside imprisonment only — CP's AOC (costs)/AOS
+            (surcharge) prompts are explicitly excluded, not fines.
+          type: number
+          format: double
+          nullable: true
+        periodLengths:
+          type: array
+          items:
+            $ref: "#/components/schemas/PeriodLength"
+
+    PeriodLength:
+      description: >-
+        Maps to RaS `period_length`. CP source (`imprisonmentPeriod`,
+        `totalCustodialPeriod`) is a single free-text string (e.g. a phrase
+        like "6 Months 1 week") — RaS requires it pre-parsed into these
+        components, not passed through as text.
+      type: object
+      properties:
+        years:
+          type: integer
+          nullable: true
+        months:
+          type: integer
+          nullable: true
+        weeks:
+          type: integer
+          nullable: true
+        days:
+          type: integer
+          nullable: true
+        periodOrder:
+          description: >-
+            Maps to `period_length.period_order` (e.g. "years,months,weeks,days").
+            Constructed from the populated components above, not a CP-native field.
+          type: string
+          nullable: true
+        periodLengthType:
+          description: >-
+            Maps to `period_length.period_length_type`. RaS clarified this
+            mostly resolves to `Custodial_term` — exact mapping depends on
+            which sentence prompt produced the period, not yet fully defined
+            for every result type.
+          type: string
+          enum: [Custodial_term, Licence_period, Tariff_length, Term_length, Overall_sentence_length, Unsupported]
+          nullable: true
+
+    CourtApplicationResult:
+      description: >-
+        The result recorded against a court application. RaS explicitly out
+        of scope for this — see `DefendantResultView.courtApplicationResults`.
+        Shape corrected to match what CP's application data actually carries
+        (`type`/`decision`/`decisionDate`/`response`/`responseDate` plus one
+        result per outcome) — the earlier placeholder only kept `result` as a
+        single object and dropped the rest.
+      type: object
+      properties:
+        id:
+          description: Unique identifier of the court application
+          type: string
+          format: uuid
+          example: "a9b8c7d6-e5f4-4321-9876-0a1b2c3d4e5f"
+        reference:
+          description: Court application reference
+          type: string
+          example: "example-application-reference"
+        type:
+          description: Application type.
+          type: string
+          nullable: true
+        decision:
+          description: Decision made on the application, where applicable.
+          type: string
+          nullable: true
+        decisionDate:
+          type: string
+          format: date
+          nullable: true
+        response:
+          description: Response to the application, where applicable.
+          type: string
+          nullable: true
+        responseDate:
+          type: string
+          format: date
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Result"
+
+    Result:
+      description: A judicial result (used only for court applications — see Charge for RaS-aligned charge results)
+      type: object
+      properties:
+        resultCode:
+          type: string
+          example: "Convicted"
+        resultText:
+          type: string
 
     ErrorResponse:
+      description: Standard error response
       type: object
       properties:
         error:
           type: string
           description: Machine-readable error code
+          example: "NOT_FOUND"
         message:
           type: string
           description: Human-readable error message
+          example: "No results found for the supplied case URN, hearing and event"
         details:
           type: object
           additionalProperties: true
@@ -89,6 +664,8 @@ components:
         timestamp:
           type: string
           format: date-time
+          example: "2026-07-15T11:33:22.794Z"
         traceId:
           type: string
           description: Unique identifier for error tracing
+          example: "b2f1c3d4e5f60718"

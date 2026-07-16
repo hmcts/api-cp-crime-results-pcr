@@ -2,10 +2,10 @@ package uk.gov.hmcts.cp.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.cp.openapi.api.ExamplesApi;
-import uk.gov.hmcts.cp.openapi.api.RootApi;
+import uk.gov.hmcts.cp.openapi.api.ProsecutionCaseResultsApi;
 import uk.gov.hmcts.cp.openapi.model.ErrorResponse;
-import uk.gov.hmcts.cp.openapi.model.ExampleResponse;
+import uk.gov.hmcts.cp.openapi.model.ProsecutionCaseResultView;
+import uk.gov.hmcts.cp.openapi.model.DefendantResultView;
 import java.lang.reflect.Field;
 import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,19 +18,21 @@ class OpenApiObjectsTest {
     }
 
     @Test
-    void generated_court_schedule_should_have_expected_fields() {
-        assertThat(ExampleResponse.class).hasDeclaredFields("exampleId", "exampleText");
+    void generated_prosecution_case_result_view_should_have_expected_fields() {
+        assertThat(ProsecutionCaseResultView.class).hasDeclaredFields("pcr", "hearingId", "eventId", "defendants");
     }
 
     @Test
-    void generated_root_api_should_have_expected_methods() {
-        assertThat(RootApi.class).hasDeclaredMethods("getRoot");
+    void generated_defendant_result_view_should_have_expected_fields() {
+        assertThat(DefendantResultView.class).hasDeclaredFields("defendantId", "pcr", "appearance", "charges", "courtApplicationResults");
     }
 
     @Test
-    void generated_example_api_should_have_expected_methods() {
-        assertThat(ExamplesApi.class).hasDeclaredMethods("getExampleByExampleId");
+    void generated_prosecution_case_results_api_should_have_expected_methods() {
+        assertThat(ProsecutionCaseResultsApi.class)
+                .hasDeclaredMethods("getProsecutionCaseResults", "getDefendantProsecutionCaseResults");
     }
+
     @Test
     void generated_error_response_timestamp_should_be_instant() throws Exception {
         Field timestampField = ErrorResponse.class.getDeclaredField("timestamp");
