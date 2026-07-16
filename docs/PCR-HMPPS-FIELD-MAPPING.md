@@ -114,6 +114,16 @@ Went beyond the generator code and verified against the real `OEE_Layout5Templat
 
 ---
 
-## 3. Superseded framing (kept for the CP source-code trail)
+## 4. Open question — is the defendant-scoped endpoint actually used?
+
+`GET /pcr/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}` returns a strict subset of what `GET /pcr/cases/{caseURN}/hearings/{hearingId}` already gives you — the case-level call's `defendants[]` already contains every defendant. So the defendant-scoped endpoint isn't there because the data is otherwise unreachable; it's there because it's probably the better fit for how HMPPS RaS actually consumes this.
+
+`court_case.prisoner_id` on RaS's own data model is singular — RaS's world is one prisoner per record, not a multi-defendant case container. That points to their real access pattern being "fetch this one defendant," not "fetch the whole case and pick mine out." There's also a data-minimisation angle: the case-level response hands over every co-defendant's results — including the sensitive flags (`terrorRelated`, `foreignPowerRelated`, `domesticViolenceRelated`) — even when a caller only has a legitimate need to see one person's record.
+
+Keeping both costs us nothing (the defendant-scoped endpoint is a thin filter over the same data, not separate logic to maintain), so it stays regardless. What's genuinely unconfirmed: does RaS's integration actually call the defendant-scoped path, or does it fetch the whole case and filter client-side? Worth asking them directly rather than assuming either way.
+
+---
+
+## 5. Superseded framing (kept for the CP source-code trail)
 
 The original version of this document treated `PrisonCourtRegisterPdfPayloadGenerator.java` as the API's source of truth, on the assumption `api-cp-crime-results-pcr` served the printed Prison Court Register. It doesn't — the real consumer is HMPPS RaS, and its physical data model is the actual target (§1 above). The CP-side findings from that earlier pass — judicial result prompts, `ResultDefinition` reference data, `caseMarkers` — carried forward correctly; only the target shape needed correcting, which is what §1 and §2 do here.
