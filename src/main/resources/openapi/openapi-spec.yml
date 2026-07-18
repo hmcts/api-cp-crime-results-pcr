@@ -622,8 +622,51 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/JudicialResultPrompt"
-        sentence:
-          $ref: "#/components/schemas/Sentence"
+        concurrent:
+          description: Whether this sentencing result runs concurrently with another. Only meaningful where this result is a sentence.
+          type: boolean
+          nullable: true
+        consecutiveToDate:
+          description: >-
+            Date of the sentence this one runs consecutively to, where
+            recorded. CP holds this as a date and a court name, not a
+            reference to another sentence's identifier — exposed as CP
+            actually holds it, not as a foreign key CP doesn't have. Only
+            meaningful where this result is a sentence.
+          type: string
+          format: date
+          nullable: true
+        consecutiveToCourtName:
+          description: Name of the court that imposed the sentence this one runs consecutively to, where recorded. Only meaningful where this result is a sentence.
+          type: string
+          nullable: true
+        fineAmount:
+          description: >-
+            Fine amount imposed alongside this sentence, where applicable.
+            Excludes costs and victim surcharge, which are separate result
+            types. Only meaningful where this result is a sentence.
+          type: number
+          format: double
+          nullable: true
+        imprisonmentPeriod:
+          description: >-
+            The custodial period for this sentencing result, as CP records it
+            — a free-text phrase (e.g. "6 Months 1 week"), not pre-parsed into
+            components. Consumers needing a structured breakdown parse it
+            themselves; CP does not commit to any one consumer's decomposition
+            as the contract shape. Only meaningful where this result is a
+            sentence.
+          type: string
+          nullable: true
+          example: "6 Months 1 week"
+        totalCustodialPeriod:
+          description: >-
+            The total custodial period across the sentence, where it differs
+            from `imprisonmentPeriod` (e.g. where consecutive terms combine).
+            Same free-text convention as `imprisonmentPeriod`. Only meaningful
+            where this result is a sentence.
+          type: string
+          nullable: true
 
     JudicialResultPrompt:
       description: A single prompt recorded against a judicial result
@@ -640,56 +683,6 @@ components:
           nullable: true
         type:
           description: Prompt value type, e.g. "BOOLEAN", "TEXT", "DATE".
-          type: string
-          nullable: true
-
-    Sentence:
-      description: >-
-        Sentence detail carried by a judicial result, where the result is a
-        sentencing result. Present only on results that carry a sentence.
-      type: object
-      nullable: true
-      properties:
-        concurrent:
-          description: Whether this sentence runs concurrently with another.
-          type: boolean
-          nullable: true
-        consecutiveToDate:
-          description: >-
-            Date of the sentence this one runs consecutively to, where
-            recorded. CP holds this as a date and a court name, not a
-            reference to another sentence's identifier — exposed as CP
-            actually holds it, not as a foreign key CP doesn't have.
-          type: string
-          format: date
-          nullable: true
-        consecutiveToCourtName:
-          description: Name of the court that imposed the sentence this one runs consecutively to, where recorded.
-          type: string
-          nullable: true
-        fineAmount:
-          description: >-
-            Fine amount imposed alongside this sentence, where applicable.
-            Excludes costs and victim surcharge, which are separate result
-            types.
-          type: number
-          format: double
-          nullable: true
-        imprisonmentPeriod:
-          description: >-
-            The custodial period for this sentence, as CP records it — a
-            free-text phrase (e.g. "6 Months 1 week"), not pre-parsed into
-            components. Consumers needing a structured breakdown parse it
-            themselves; CP does not commit to any one consumer's decomposition
-            as the contract shape.
-          type: string
-          nullable: true
-          example: "6 Months 1 week"
-        totalCustodialPeriod:
-          description: >-
-            The total custodial period across the sentence, where it differs
-            from `imprisonmentPeriod` (e.g. where consecutive terms combine).
-            Same free-text convention as `imprisonmentPeriod`.
           type: string
           nullable: true
 
