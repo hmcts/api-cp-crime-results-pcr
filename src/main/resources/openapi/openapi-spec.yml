@@ -565,23 +565,6 @@ components:
           description: Verdict code recorded against the offence, where applicable.
           type: string
           nullable: true
-        terrorRelated:
-          description: >-
-            Whether the court determined a terrorist connection applies to
-            this offence. Sourced from a judicial result prompt on the
-            Imprisonment result (`promptReference` =
-            `theCourtDeterminedATerroristConnectionUnderSection30OfTheCounterTerrorismAct2008AppliesToThisOffence`
-            or the count-scoped equivalent) — see `judicialResultPrompts[]` on
-            the relevant result for the raw signal this is derived from.
-          type: boolean
-          nullable: true
-        foreignPowerRelated:
-          description: >-
-            Whether a foreign power aggravating condition applies to this
-            offence. Sourced from judicial result prompt `promptReference` =
-            `offenceAggByForeignPowerCondition` (native boolean in the source).
-          type: boolean
-          nullable: true
         results:
           description: >-
             Judicial result(s) recorded against this offence. An offence can
