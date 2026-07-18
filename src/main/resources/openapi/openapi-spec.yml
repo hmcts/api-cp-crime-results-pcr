@@ -13,6 +13,13 @@ info:
     Returns the prosecution case results recorded at a hearing, per defendant —
     the result for each offence and each court application, including any
     sentence handed down, enriched with Reference Data classifications.
+
+
+    This API processes personal data under Article 6(1)(e) UK GDPR (public
+    task) and the administration of justice provisions of Schedule 1 Part 2
+    DPA 2018. Special category data, where present, is processed under
+    Article 9(2)(f) UK GDPR (legal claims) or Article 9(2)(g) (substantial
+    public interest).
   version: 0.1.0
   contact:
     email: no-reply@hmcts.com
@@ -22,6 +29,7 @@ info:
 
 security:
   - oAuthJwt: []
+    SubscriptionKey: []
 
 tags:
   - name: prosecution-case-results
@@ -39,6 +47,10 @@ paths:
         any sentence). If the hearing recorded no results for the case, empty
         lists are returned. If the case, hearing, or event does not exist, a
         not found response is returned.
+
+
+        This operation returns OFFICIAL-SENSITIVE data (defendant address).
+        Caller must hold the `hmcts:prosecution-case-results:read` scope.
       operationId: getProsecutionCaseResults
       tags:
         - prosecution-case-results
@@ -49,6 +61,12 @@ paths:
       responses:
         '200':
           description: Prosecution case results found
+          headers:
+            X-Correlation-Id:
+              description: Echoes the request correlation ID for end-to-end tracing
+              schema:
+                type: string
+                format: uuid
           content:
             application/json:
               schema:
@@ -75,6 +93,10 @@ paths:
         sentence). If the defendant has no recorded results at the hearing,
         empty lists are returned. If the case, hearing, defendant, or event
         does not exist, a not found response is returned.
+
+
+        This operation returns OFFICIAL-SENSITIVE data (defendant address).
+        Caller must hold the `hmcts:prosecution-case-results:read` scope.
       operationId: getDefendantProsecutionCaseResults
       tags:
         - prosecution-case-results
@@ -86,6 +108,12 @@ paths:
       responses:
         '200':
           description: Defendant prosecution case results found
+          headers:
+            X-Correlation-Id:
+              description: Echoes the request correlation ID for end-to-end tracing
+              schema:
+                type: string
+                format: uuid
           content:
             application/json:
               schema:
@@ -112,7 +140,14 @@ components:
         clientCredentials:
           tokenUrl: https://api-cp-crime-results-pcr.net/oauth2/token
           scopes:
-            prosecution-case-results.read: Read access to prosecution case results data
+            hmcts:prosecution-case-results:read: Read access to prosecution case results data
+    SubscriptionKey:
+      type: apiKey
+      in: header
+      name: Ocp-Apim-Subscription-Key
+      description: >-
+        HMCTS APIM subscription key identifying the consuming system. Issued
+        per consumer when their APIM product subscription is provisioned.
 
   parameters:
     CaseUrnPath:
@@ -186,7 +221,7 @@ components:
             $ref: "#/components/schemas/ErrorResponse"
           example:
             error: "FORBIDDEN"
-            message: "The access token does not grant the required scope prosecution-case-results.read"
+            message: "The access token does not grant the required scope hmcts:prosecution-case-results:read"
             timestamp: "2026-07-15T11:33:22.794Z"
             traceId: "d4b3c5e6f708192a"
     NotFound:
@@ -728,9 +763,32 @@ components:
           description: Human-readable error message
           example: "No results found for the supplied case URN, hearing and event"
         details:
+          description: Additional error context, where applicable
           type: object
-          additionalProperties: true
-          description: Additional error context
+          nullable: true
+          properties:
+            parameter:
+              description: Name of the invalid request parameter, for BAD_REQUEST errors
+              type: string
+              nullable: true
+              example: "hearingId"
+            caseURN:
+              description: The case URN supplied in the request, for NOT_FOUND errors
+              type: string
+              nullable: true
+              example: "example-case-urn"
+            hearingId:
+              description: The hearing ID supplied in the request, for NOT_FOUND errors
+              type: string
+              format: uuid
+              nullable: true
+              example: "f1d2c3b4-a5e6-4f7a-8b9c-0d1e2f3a4b5c"
+            eventId:
+              description: The event ID supplied in the request, for NOT_FOUND errors
+              type: string
+              format: uuid
+              nullable: true
+              example: "3b4c5d6e-7f80-4192-a3b4-c5d6e7f80912"
         timestamp:
           type: string
           format: date-time
