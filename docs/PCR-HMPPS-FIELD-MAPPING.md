@@ -51,7 +51,7 @@
 |---|---|---|---|
 | `cjsResultCode` | input to `charge_outcome.outcome_type` resolution | Judicial result CJS code | Confirmed as raw input |
 | `resultText` | — (audit only) | Judicial result rendered text | Confirmed |
-| `postHearingCustodyStatus` | input to `outcome_type` (NON_CUSTODIAL/REMAND/etc.) | **Correction:** a field directly on `JudicialResult` itself (confirmed against `cpp-context-results`) — not a Reference Data lookup. No such field exists on `ResultDefinition`. | Offered as a structured signal — HMPPs classification itself still TBD |
+| `postHearingCustodyStatus` | input to `outcome_type` (NON_CUSTODIAL/REMAND/etc.) | `ResultDefinition.postHearingCustodyStatus`, Reference Data, keyed on `cjsResultCode` — confirmed directly against the reference-data JSON fixture, alongside `financial`/`category`/`convicted`/`publishedForNows` | Offered as a structured signal — HMPPs classification itself still TBD |
 | `financial` / `category` / `convicted` | same | `ResultDefinition.financial`/`category`/`convicted`, Reference Data | Same — structured, offered, not a finished classification |
 
 ### Sentence
