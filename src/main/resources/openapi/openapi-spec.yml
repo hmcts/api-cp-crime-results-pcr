@@ -723,9 +723,25 @@ components:
           format: date
           nullable: true
         results:
+          description: >-
+            Judicial results recorded directly against the application itself
+            (CP source: `CourtApplication.judicialResults`) — distinct from
+            results recorded against a specific offence the application
+            relates to, which appear under `offences[].results` instead.
           type: array
           items:
             $ref: "#/components/schemas/JudicialResult"
+        offences:
+          description: >-
+            Offence(s) this application relates to, where linked — CP source:
+            `CourtApplication.courtApplicationCases[].offences[]` (the same
+            offences as the linked case) and `courtOrder.courtOrderOffences[]`,
+            folded together here since consumers don't need to distinguish how
+            an offence came to be linked to the application. Empty for a
+            standalone application with no case/offence link.
+          type: array
+          items:
+            $ref: "#/components/schemas/Offence"
 
     ErrorResponse:
       description: Standard error response
