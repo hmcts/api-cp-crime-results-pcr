@@ -593,9 +593,10 @@ components:
           example: "Sentenced to 6 months imprisonment"
         postHearingCustodyStatus:
           description: >-
-            From Reference Data's `ResultDefinition.postHearingCustodyStatus`,
-            keyed on `resultCode` — CP's own classification of the resulting
-            custody/bail status.
+            The resulting custody/bail status, recorded directly on the
+            judicial result itself — not a Reference Data lookup (confirmed
+            against `cpp-context-results`'s `JudicialResult`; no such field
+            exists on `ResultDefinition`).
           type: string
           nullable: true
           example: "Bailed"
