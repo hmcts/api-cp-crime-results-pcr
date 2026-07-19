@@ -290,8 +290,10 @@ components:
         identifier consumers should hold or reference.
       type: object
       properties:
-        reference:
-          description: Prosecution case reference (case URN)
+        caseURN:
+          description: >-
+            Prosecution case URN — CP's own field name (`ProsecutionCaseIdentifier.caseURN`
+            in `cpp-context-hearing`), not an invented API-only name.
           type: string
           example: "example-case-urn"
 
@@ -474,15 +476,15 @@ components:
           type: string
           format: date
           nullable: true
-        nextAppearance:
-          $ref: "#/components/schemas/NextAppearance"
+        nextHearing:
+          $ref: "#/components/schemas/NextHearing"
 
-    NextAppearance:
+    NextHearing:
       description: >-
-        The next scheduled appearance following this hearing, where known.
-        Open item: when offences on the same case adjourn to different future
-        dates, which one this object reflects is not yet confirmed on CP's
-        side.
+        The next scheduled hearing following this one, where known. CP's own
+        field name (`nextHearing`), not an invented API-only name. Open item:
+        when offences on the same case adjourn to different future dates,
+        which one this object reflects is not yet confirmed on CP's side.
       type: object
       nullable: true
       properties:
