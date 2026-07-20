@@ -19,12 +19,12 @@ class OpenApiObjectsTest {
 
     @Test
     void generated_prosecution_case_result_view_should_have_expected_fields() {
-        assertThat(ProsecutionCaseResultView.class).hasDeclaredFields("pcr", "hearingId", "eventId", "defendants");
+        assertThat(ProsecutionCaseResultView.class).hasDeclaredFields("prosecutionCase", "hearingId", "eventId", "caseMarkers", "defendants");
     }
 
     @Test
     void generated_defendant_result_view_should_have_expected_fields() {
-        assertThat(DefendantResultView.class).hasDeclaredFields("defendantId", "pcr", "appearance", "charges", "courtApplicationResults");
+        assertThat(DefendantResultView.class).hasDeclaredFields("defendant", "custodyLocation", "hearing", "offences", "courtApplications");
     }
 
     @Test
