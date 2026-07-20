@@ -389,28 +389,6 @@ components:
           example: "1980-01-31"
         address:
           $ref: "#/components/schemas/Address"
-        aliases:
-          description: Any known aliases recorded against the defendant. PII.
-          type: array
-          items:
-            $ref: "#/components/schemas/Alias"
-
-    Alias:
-      description: A single known alias for a defendant
-      type: object
-      properties:
-        title:
-          type: string
-          nullable: true
-        firstName:
-          type: string
-          nullable: true
-        middleName:
-          type: string
-          nullable: true
-        lastName:
-          type: string
-          nullable: true
 
     Address:
       description: A postal address. PII.
