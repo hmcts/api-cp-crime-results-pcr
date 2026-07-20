@@ -1,80 +1,65 @@
 # PCR → HMPPS field mapping for `api-cp-crime-results-pcr`
 
-**Status:** Draft, 15 Jul 2026. Target schema: `2026-07-15-pcr-openapi-spec-hmpps-aligned.yml`, structured 1:1 against the HMPPS Remand and Sentencing (HMPPs) physical data model (Court Case / Court Appearance / Charge / Sentence / Period Length). This document tracks, per HMPPs field, where the value comes from in CP, and separately audits every field CP actually surfaces on the printed Prison Court Register (`PrisonCourtRegisterPdfPayloadGenerator.java`) to check nothing relevant got left behind when the schema was re-targeted at HMPPs instead of the PDF.
+**Status:** Draft. The API itself is CP-native (`openapi-spec.yml`) — this document tracks, per CP-native field, where the value actually comes from in CP, and cross-references HMPPS's own Remand and Sentencing (RaS) physical data model (Court Case / Court Appearance / Charge / Sentence / Period Length) for whichever fields HMPPS needs to map on their own side. It also audits every field CP actually surfaces on the printed Prison Court Register (`PrisonCourtRegisterPdfPayloadGenerator.java`) to check nothing relevant got left behind.
 
 ---
 
 ## 1. Field mapping — API schema → HMPPs table → CP source
 
-### Case (`Pcr`)
+### Prosecution Case (`ProsecutionCase`)
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
-| `pcr.id` | `court_case.case_unique_identifier` | CP case UUID | Confirmed |
-| `pcr.reference` | `court_case.case_unique_identifier` / `court_appearance.court_case_reference` | CP case URN | Confirmed |
-| `defendantId` | `court_case.prisoner_id` | CP defendant UUID | **Not the same identifier.** `prisoner_id` is a NOMIS ID; CP has no deterministic mapping to it. HMPPs resolves this via Core Person Record probabilistic matching — no CP-side action, already answered. |
+| `caseURN` | `court_case.case_unique_identifier` / `court_appearance.court_case_reference` | CP case URN | Confirmed |
+| `defendantId` (on `Defendant`) | `court_case.prisoner_id` | CP defendant UUID | **Not the same identifier.** `prisoner_id` is a NOMIS ID; CP has no deterministic mapping to it. HMPPs resolves this via Core Person Record probabilistic matching — no CP-side action, already answered. |
 
-### Court Appearance (`CourtAppearance`)
+### Hearing Details (`HearingDetails`)
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
-| `courtCentreId` | `court_appearance.court_code` | CP `courtHouse` UUID **or** Court Register code | **Open — conflicting evidence, not confirmed.** One clarification said HMPPs keys off the CP court house UUID; HMPPs's own physical data model shows `court_code`'s example as a Court Register code ("YORKCC"), not a UUID. Left as a plain string in the schema (not UUID-locked) pending service analysis — do not treat either answer as settled. |
+| `courtHouseCode` | `court_appearance.court_code` | CP `courtHouse` UUID **or** Court Register code | **Open — conflicting evidence, not confirmed.** One clarification said HMPPs keys off the CP court house UUID; HMPPs's own physical data model shows `court_code`'s example as a Court Register code ("YORKCC"), not a UUID. Left as a plain string in the schema (not UUID-locked) pending service analysis — do not treat either answer as settled. |
 | `hearingDate` | `court_appearance.appearance_date` | CP hearing date | Confirmed |
 | `hearingOutcome` | `court_appearance.appearance_outcome_id` | — | HMPPs: ignore, no CP-side action |
 | `warrantType` | `court_appearance.warrant_type` | — | HMPPs: ignore, HMPPs derives it itself |
-| `overallConvictionDate` | `court_appearance.overall_conviction_date` | — | HMPPs: resolved, derives from `charges[].convictionDate` — CP need not send |
+| `overallConvictionDate` | `court_appearance.overall_conviction_date` | — | HMPPs: resolved, derives from `offences[].convictionDate` — CP need not send |
 
-### Next Court Appearance
-
-| API field | HMPPs field | CP source | Status |
-|---|---|---|---|
-| `nextCourtAppearance.appearanceDate` | `next_court_appearance.appearance_date` | CP `nextHearing` | Open — which charge's `nextHearing` wins when several diverge is still with HMPPs (Nutty/Steven query on file) |
-| `nextCourtAppearance.courtCentreId` | `next_court_appearance.court_code` | — | Open — not present in CP's next-appearance payload today |
-| `nextCourtAppearance.appearanceTime` | `next_court_appearance.appearance_time` | — | Open — CP source not yet confirmed |
-| `nextCourtAppearance.appearanceType` | `next_court_appearance.appearance_type_id` | — | Open — video-link-vs-in-person not yet confirmed in CP's payload |
-
-### Charge
+### Next Hearing (`NextHearing`)
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
-| `offenceCode` | `charge.offence_code` | `offences[].offenceCode` | Confirmed — HMPPs confirmed CP codes align with OMS |
-| `offenceStartDate` | `charge.offence_start_date` | `offences[].startDate` | Confirmed |
-| `offenceEndDate` | `charge.offence_end_date` | `offences[]` (terminated results only) | Confirmed optional |
+| `date` | `next_court_appearance.appearance_date` | CP `nextHearing` | Open — which offence's `nextHearing` wins when several diverge is still with HMPPs (Nutty/Steven query on file) |
+| `courtHouseCode` | `next_court_appearance.court_code` | — | Open — not present in CP's next-appearance payload today |
+| `time` | `next_court_appearance.appearance_time` | — | Open — CP source not yet confirmed |
+| *(not currently in the API)* | `next_court_appearance.appearance_type_id` | — | Gap — video-link-vs-in-person not yet added to the contract, and CP source not yet confirmed either |
+
+### Offence (`Offence`)
+
+| API field | HMPPs field | CP source | Status |
+|---|---|---|---|
+| `code` | `charge.offence_code` | `offences[].offenceCode` | Confirmed — HMPPs confirmed CP codes align with OMS |
+| `startDate` | `charge.offence_start_date` | `offences[].startDate` | Confirmed |
+| `endDate` | `charge.offence_end_date` | `offences[]` (terminated results only) | Confirmed optional |
 | `convictionDate` | `charge.conviction_date` | `offences[].convictionDate` | Confirmed |
-| `terrorRelated` | `charge.terror_related` | `judicialResultPrompt` `promptReference` = `theCourtDeterminedATerroristConnectionUnderSection30OfTheCounterTerrorismAct2008AppliesToThisOffence`/`...Count`, inside the Imprisonment result's prompts | Open — value is text (`"Yes"`/`"No"`), needs coercion; HMPPs to confirm it keys off this exact promptReference |
-| `foreignPowerRelated` | `charge.foreign_power_related` | `judicialResultPrompt` `promptReference` = `offenceAggByForeignPowerCondition`, confirmed `type: BOOLEAN` | Confirmed structurally — genuine boolean, no parsing needed |
-| `domesticViolenceRelated` | `charge.domestic_violence_related` | `prosecutionCase.caseMarkers[]`, `markerTypeCode == 'DomesticViolence'` | Open — this is case-level in CP, charge-level in HMPPs; confirm whether every charge on a marked case should echo `true` |
+| `listingNumber` | `sentence.count_number` | `offences[].listingNumber` | Open — not yet confirmed as the right mapping; verify against warrant examples |
 
-### Charge Outcome
+Terrorism/foreign-power/domestic-violence signals aren't separate `Offence` fields — the raw judicial result prompts (`theCourtDeterminedATerroristConnectionUnderSection30OfTheCounterTerrorismAct2008AppliesToThisOffence`/`...Count`, `offenceAggByForeignPowerCondition`) are exposed as-is via `JudicialResult.judicialResultPrompts[]` instead, and the domestic-violence marker is case-level (`ProsecutionCaseResultView.caseMarkers[]`, sourced from `prosecutionCase.caseMarkers[]` with `markerTypeCode == 'DomesticViolence'`), not per-offence.
+
+### Judicial Result (`JudicialResult`)
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
-| `cjsResultCode` | input to `charge_outcome.outcome_type` resolution | Judicial result CJS code | Confirmed as raw input |
+| `resultCode` | input to `charge_outcome.outcome_type` resolution | Judicial result CJS code | Confirmed as raw input |
 | `resultText` | — (audit only) | Judicial result rendered text | Confirmed |
 | `postHearingCustodyStatus` | input to `outcome_type` (NON_CUSTODIAL/REMAND/etc.) | `ResultDefinition.postHearingCustodyStatus`, Reference Data, keyed on `cjsResultCode` — confirmed directly against the reference-data JSON fixture, alongside `financial`/`category`/`convicted`/`publishedForNows` | Offered as a structured signal — HMPPs classification itself still TBD |
 | `financial` / `category` / `convicted` | same | `ResultDefinition.financial`/`category`/`convicted`, Reference Data | Same — structured, offered, not a finished classification |
-
-### Sentence
-
-| API field | HMPPs field | CP source | Status |
-|---|---|---|---|
-| `countNumber` | `sentence.count_number` | `offences[].listingNumber` | Open — not yet confirmed as the right mapping; verify against warrant examples |
-| `sentenceServeType` | `sentence.sentence_serve_type` | `concurrent` prompt; `consecutiveToSentenceImposedOn` presence | Open — `FORTHWITH` has no confirmed CP source |
-| `consecutiveToId` | `sentence.consecutive_to_id` (FK) | `consecutiveToSentenceImposedOn` (date) + `whichWasImpBy` (court name) | Open — CP gives a date/court, not an ID; cross-reference mechanism undecided |
-| `sentenceType` | `sentence.sentence_type_id` | CJS code (e.g. Imprisonment) | Open — HMPPs needs `nomis_cja_code`; CJS→CJA cross-reference TBD on HMPPs side |
+| `concurrent` | `sentence.sentence_serve_type` | `concurrent` prompt | Open — only a plain boolean; the CONSECUTIVE/FORTHWITH distinction isn't carried, worth checking if that's a genuine gap |
+| `consecutiveToDate` / `consecutiveToCourtName` | `sentence.consecutive_to_id` (FK) | `consecutiveToSentenceImposedOn` (date) + `whichWasImpBy` (court name) | Open — CP gives a date/court, not an ID; no cross-reference mechanism exists in CP |
 | `fineAmount` | `sentence.fine_amount` | Imprisonment-in-default-of-fine prompts | Confirmed — explicitly excludes AOC (costs)/AOS (surcharge) |
-
-### Period Length
-
-| API field | HMPPs field | CP source | Status |
-|---|---|---|---|
-| `years`/`months`/`weeks`/`days` | `period_length.*` | `imprisonmentPeriod`/`totalCustodialPeriod` (free-text string) | Confirmed source, but needs CP-side parsing before it reaches the API — HMPPs will not accept the raw string |
-| `periodOrder` | `period_length.period_order` | Constructed | Confirmed |
-| `periodLengthType` | `period_length.period_length_type` | — | Open — mostly `Custodial_term`, full mapping depends on which sentence prompt produced it |
+| `imprisonmentPeriod` / `totalCustodialPeriod` | `period_length.*` | `imprisonmentPeriod`/`totalCustodialPeriod` (free-text string, e.g. "6 Months 1 week") | CP's native shape — free text, not pre-parsed into years/months/weeks/days components |
 
 ### Out of HMPPs scope, kept for other consumers
 
-`courtApplicationResults[]` — HMPPs explicitly not interested in court admin applications. Kept in the API for whatever other consumer needs it; not part of the HMPPs-aligned mapping above.
+`courtApplications[]` — HMPPs explicitly not interested in court admin applications. Kept in the API for whatever other consumer needs it; not part of the HMPPs-aligned mapping above.
 
 ---
 
