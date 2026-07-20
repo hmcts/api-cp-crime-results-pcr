@@ -6,20 +6,7 @@
 
 ## 1. Field mapping — API schema → HMPPs table → CP source
 
-**⚠️ The "API field" column and every section heading below describe the original, superseded RaS-aligned schema (§5) — not the current CP-native contract.** The "HMPPS field"/"CP source" columns remain accurate documentation of RaS's own physical model and where each fact really comes from in CP; only the left-hand names are stale. Cross-reference to the current schema:
-
-| This section (old, RaS-aligned) | Current CP-native schema |
-|---|---|
-| `Case` (`Pcr`) — `pcr.id`, `pcr.reference` | `ProsecutionCase` — `caseURN` only; `id`/`pcr.id` (the case UUID) was removed, never exposed to consumers |
-| `Court Appearance` (`CourtAppearance`) — `courtCentreId`, `hearingDate`, `hearingOutcome`, `warrantType`, `overallConvictionDate` | `HearingDetails` — `courtHouseCode` (+ new `courtHouseName`), `hearingDate`, `hearingOutcome`, `warrantType`, `overallConvictionDate` (same names otherwise) |
-| `Next Court Appearance` — `nextCourtAppearance.*` | `NextHearing` — `date`, `time`, `courtHouseCode`, `courtHouseName`, `hearingId`. Note: `appearanceType` (video-link vs in-person) was never added — still a gap, not carried forward |
-| `Charge` — `offenceCode`, `offenceStartDate`, `offenceEndDate`, `convictionDate`, `terrorRelated`, `foreignPowerRelated`, `domesticViolenceRelated` | `Offence` — `code`, `startDate`, `endDate`, `convictionDate` (renamed/same). `terrorRelated`/`foreignPowerRelated` **removed** (raw signal lives in `judicialResultPrompts[]` instead); `domesticViolenceRelated` **removed** from Offence, moved to case-level `CaseMarker` |
-| `Charge Outcome` — `cjsResultCode`, `resultText`, `postHearingCustodyStatus`, `financial`/`category`/`convicted` | `JudicialResult` — `resultCode` (renamed), rest unchanged |
-| `Sentence` — `countNumber`, `sentenceServeType`, `consecutiveToId`, `sentenceType`, `fineAmount` | Flattened directly into `JudicialResult` (no separate `Sentence` schema, §7 design doc): `countNumber`→`Offence.listingNumber` (moved, not `JudicialResult`); `sentenceServeType`'s CONCURRENT/CONSECUTIVE/FORTHWITH enum **not carried forward** — only a plain `concurrent` boolean remains, worth checking if that's a genuine gap; `consecutiveToId`→`consecutiveToDate`+`consecutiveToCourtName`; `sentenceType` **removed** (duplicated `resultCode`); `fineAmount` unchanged |
-| `Period Length` — `years`/`months`/`weeks`/`days`, `periodOrder`, `periodLengthType` | **Removed entirely** — replaced by CP's native free-text `imprisonmentPeriod`/`totalCustodialPeriod` on `JudicialResult`, not pre-parsed into components |
-| `courtApplicationResults[]` | `courtApplications[]` (renamed), each with `results[]` and — per §6's correction below — a new `offences[]` |
-
-### Case (`Pcr`) — superseded name, now `ProsecutionCase`
+### Case (`Pcr`)
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
@@ -27,7 +14,7 @@
 | `pcr.reference` | `court_case.case_unique_identifier` / `court_appearance.court_case_reference` | CP case URN | Confirmed |
 | `defendantId` | `court_case.prisoner_id` | CP defendant UUID | **Not the same identifier.** `prisoner_id` is a NOMIS ID; CP has no deterministic mapping to it. HMPPs resolves this via Core Person Record probabilistic matching — no CP-side action, already answered. |
 
-### Court Appearance (`CourtAppearance`) — superseded name, now `HearingDetails`
+### Court Appearance (`CourtAppearance`)
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
@@ -37,7 +24,7 @@
 | `warrantType` | `court_appearance.warrant_type` | — | HMPPs: ignore, HMPPs derives it itself |
 | `overallConvictionDate` | `court_appearance.overall_conviction_date` | — | HMPPs: resolved, derives from `charges[].convictionDate` — CP need not send |
 
-### Next Court Appearance — superseded name, now `NextHearing`
+### Next Court Appearance
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
@@ -46,7 +33,7 @@
 | `nextCourtAppearance.appearanceTime` | `next_court_appearance.appearance_time` | — | Open — CP source not yet confirmed |
 | `nextCourtAppearance.appearanceType` | `next_court_appearance.appearance_type_id` | — | Open — video-link-vs-in-person not yet confirmed in CP's payload |
 
-### Charge — superseded name, now `Offence`
+### Charge
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
@@ -58,7 +45,7 @@
 | `foreignPowerRelated` | `charge.foreign_power_related` | `judicialResultPrompt` `promptReference` = `offenceAggByForeignPowerCondition`, confirmed `type: BOOLEAN` | Confirmed structurally — genuine boolean, no parsing needed |
 | `domesticViolenceRelated` | `charge.domestic_violence_related` | `prosecutionCase.caseMarkers[]`, `markerTypeCode == 'DomesticViolence'` | Open — this is case-level in CP, charge-level in HMPPs; confirm whether every charge on a marked case should echo `true` |
 
-### Charge Outcome — superseded name, now `JudicialResult`
+### Charge Outcome
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
@@ -67,7 +54,7 @@
 | `postHearingCustodyStatus` | input to `outcome_type` (NON_CUSTODIAL/REMAND/etc.) | `ResultDefinition.postHearingCustodyStatus`, Reference Data, keyed on `cjsResultCode` — confirmed directly against the reference-data JSON fixture, alongside `financial`/`category`/`convicted`/`publishedForNows` | Offered as a structured signal — HMPPs classification itself still TBD |
 | `financial` / `category` / `convicted` | same | `ResultDefinition.financial`/`category`/`convicted`, Reference Data | Same — structured, offered, not a finished classification |
 
-### Sentence — superseded, flattened directly into `JudicialResult` (no separate schema)
+### Sentence
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
@@ -77,7 +64,7 @@
 | `sentenceType` | `sentence.sentence_type_id` | CJS code (e.g. Imprisonment) | Open — HMPPs needs `nomis_cja_code`; CJS→CJA cross-reference TBD on HMPPs side |
 | `fineAmount` | `sentence.fine_amount` | Imprisonment-in-default-of-fine prompts | Confirmed — explicitly excludes AOC (costs)/AOS (surcharge) |
 
-### Period Length — superseded, removed entirely (replaced by free-text `imprisonmentPeriod`/`totalCustodialPeriod`)
+### Period Length
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
@@ -87,7 +74,7 @@
 
 ### Out of HMPPs scope, kept for other consumers
 
-`courtApplicationResults[]` (superseded name, now `courtApplications[]`) — HMPPs explicitly not interested in court admin applications. Kept in the API for whatever other consumer needs it; not part of the HMPPs-aligned mapping above.
+`courtApplicationResults[]` — HMPPs explicitly not interested in court admin applications. Kept in the API for whatever other consumer needs it; not part of the HMPPs-aligned mapping above.
 
 ---
 
