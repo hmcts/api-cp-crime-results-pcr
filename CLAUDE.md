@@ -15,12 +15,19 @@ Sentencing (RaS) physical data model so responses map directly onto RaS tables.
 
 ## API Endpoint(s)
 
-- `GET /pcr/cases/{caseURN}/hearings/{hearingId}?eventId={uuid}` → `ProsecutionCaseResultView` (200/400/401/403/404/500)
-- `GET /pcr/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}?eventId={uuid}` → `DefendantResultView` (200/400/401/403/404/500)
+- `GET /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}` → `PcrVersionHistory` (200/400/401/403/404/500)
+- `GET /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}/versions?version={value}` → `PcrVersion` (200/400/401/403/404/500/501)
 
-Both endpoints are read-only and require `eventId` — every response is a stable snapshot
-of results as they stood at that results event, never a mutable "latest" view. `oAuthJwt`
-(client-credentials) security applies, scope `prosecution-case-results.read`.
+The second endpoint's `version` query parameter is required: `version=latest` returns the most
+recently recorded version; any other value is treated as a specific version's source correlation
+id (not yet supported — returns `501`, see `PcrService` phase-1 notes). `oAuthJwt`
+(client-credentials) security applies, scope `hmcts:prosecution-case-results:read`.
+
+Note: the rest of this file (Generated Interfaces & Schema, Domain Models, Test Structure)
+still describes an earlier, pre-redesign contract (`ProsecutionCaseResultsApi`,
+`ProsecutionCaseResultView`/`DefendantResultView`) and needs a full refresh against the current
+CP-native `PcrApi`/`PcrVersion` contract — out of scope for this change, flagged here so it isn't
+mistaken for accurate.
 
 ## Generated Interfaces & Schema
 
