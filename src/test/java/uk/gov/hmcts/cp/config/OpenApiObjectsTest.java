@@ -2,10 +2,10 @@ package uk.gov.hmcts.cp.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.cp.openapi.api.ProsecutionCaseResultsApi;
+import uk.gov.hmcts.cp.openapi.api.PcrApi;
 import uk.gov.hmcts.cp.openapi.model.ErrorResponse;
-import uk.gov.hmcts.cp.openapi.model.ProsecutionCaseResultView;
-import uk.gov.hmcts.cp.openapi.model.DefendantResultView;
+import uk.gov.hmcts.cp.openapi.model.PcrVersionHistory;
+import uk.gov.hmcts.cp.openapi.model.PcrVersion;
 import java.lang.reflect.Field;
 import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,19 +18,20 @@ class OpenApiObjectsTest {
     }
 
     @Test
-    void generated_prosecution_case_result_view_should_have_expected_fields() {
-        assertThat(ProsecutionCaseResultView.class).hasDeclaredFields("pcr", "hearingId", "eventId", "defendants");
+    void generated_pcr_version_history_should_have_expected_fields() {
+        assertThat(PcrVersionHistory.class).hasDeclaredFields("hearingId", "defendantId", "versions");
     }
 
     @Test
-    void generated_defendant_result_view_should_have_expected_fields() {
-        assertThat(DefendantResultView.class).hasDeclaredFields("defendantId", "pcr", "appearance", "charges", "courtApplicationResults");
+    void generated_pcr_version_should_have_expected_fields() {
+        assertThat(PcrVersion.class).hasDeclaredFields("id", "hearingId", "defendantId",
+                "prosecutionCase", "caseMarkers", "defendant", "custodyLocation", "hearing", "offences", "courtApplications");
     }
 
     @Test
-    void generated_prosecution_case_results_api_should_have_expected_methods() {
-        assertThat(ProsecutionCaseResultsApi.class)
-                .hasDeclaredMethods("getProsecutionCaseResults", "getDefendantProsecutionCaseResults");
+    void generated_pcr_api_should_have_expected_methods() {
+        assertThat(PcrApi.class)
+                .hasDeclaredMethods("getPcrVersionHistory", "getPcrVersion", "getLatestPcrVersion");
     }
 
     @Test
