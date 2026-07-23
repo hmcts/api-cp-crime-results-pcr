@@ -398,8 +398,10 @@ components:
     Defendant:
       description: >-
         Defendant identity as recorded on the prosecution case at this
-        hearing. All fields here are personal data (OFFICIAL-SENSITIVE) —
-        handle per HMCTS data protection policy; do not log.
+        hearing. Deliberately limited to identifiers only — consumers resolve
+        the defendant's personal details (name, DOB, address) themselves via
+        defendantId/masterDefendantId against their own systems (e.g. NOMIS),
+        so this API never carries that personal data.
       type: object
       properties:
         id:
@@ -415,56 +417,6 @@ components:
           format: uuid
           nullable: true
           example: "a1f2e3d4-c5b6-4789-9abc-1d2e3f4a5b6c"
-        title:
-          description: Title, where recorded (e.g. "Mr", "Ms")
-          type: string
-          nullable: true
-          example: "Mr"
-        firstName:
-          description: First name. PII.
-          type: string
-          nullable: true
-          example: "John"
-        middleName:
-          description: Middle name, where recorded. PII.
-          type: string
-          nullable: true
-        lastName:
-          description: Last name. PII.
-          type: string
-          nullable: true
-          example: "Doe"
-        dateOfBirth:
-          description: Date of birth. PII.
-          type: string
-          format: date
-          nullable: true
-          example: "1980-01-31"
-        address:
-          $ref: "#/components/schemas/Address"
-
-    Address:
-      description: A postal address. PII.
-      type: object
-      properties:
-        address1:
-          type: string
-          nullable: true
-        address2:
-          type: string
-          nullable: true
-        address3:
-          type: string
-          nullable: true
-        address4:
-          type: string
-          nullable: true
-        address5:
-          type: string
-          nullable: true
-        postCode:
-          type: string
-          nullable: true
 
     HearingDetails:
       description: Facts recorded about the hearing itself
