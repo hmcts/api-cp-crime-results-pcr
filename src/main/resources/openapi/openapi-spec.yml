@@ -399,7 +399,14 @@ components:
       description: >-
         Defendant identity as recorded on the prosecution case at this
         hearing. All fields here are personal data (OFFICIAL-SENSITIVE) —
-        handle per HMCTS data protection policy; do not log.
+        handle per HMCTS data protection policy; do not log. `title`/
+        `firstName`/`middleName`/`lastName`/`dateOfBirth`/`address` are
+        encrypted at rest by the consuming service — see
+        `service-cp-crime-results-pcr`'s ADR-002
+        (`docs/pipeline/adrs/002-carry-defendant-pii-encrypted-at-rest.md`)
+        for the decision to carry this data and the encryption mechanism.
+        This API response itself returns decrypted plaintext to authorized
+        callers; encryption protects the data store, not the wire response.
       type: object
       properties:
         id:
@@ -416,26 +423,29 @@ components:
           nullable: true
           example: "a1f2e3d4-c5b6-4789-9abc-1d2e3f4a5b6c"
         title:
-          description: Title, where recorded (e.g. "Mr", "Ms")
+          description: >-
+            Title, where recorded (e.g. "Mr", "Ms"). Encrypted at rest
+            (ADR-002).
           type: string
           nullable: true
           example: "Mr"
         firstName:
-          description: First name. PII.
+          description: First name. PII, encrypted at rest (ADR-002).
           type: string
           nullable: true
           example: "John"
         middleName:
-          description: Middle name, where recorded. PII.
+          description: >-
+            Middle name, where recorded. PII, encrypted at rest (ADR-002).
           type: string
           nullable: true
         lastName:
-          description: Last name. PII.
+          description: Last name. PII, encrypted at rest (ADR-002).
           type: string
           nullable: true
           example: "Doe"
         dateOfBirth:
-          description: Date of birth. PII.
+          description: Date of birth. PII, encrypted at rest (ADR-002).
           type: string
           format: date
           nullable: true
@@ -444,7 +454,9 @@ components:
           $ref: "#/components/schemas/Address"
 
     Address:
-      description: A postal address. PII.
+      description: >-
+        A postal address. PII, encrypted at rest — see
+        `service-cp-crime-results-pcr`'s ADR-002.
       type: object
       properties:
         address1:
