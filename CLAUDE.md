@@ -5,8 +5,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Repo: api-cp-crime-results-pcr
 
 OpenAPI contract for Prosecution Case Results (PCR) — case/hearing/defendant results
-(charges, court applications, sentences), shaped 1:1 against the HMPPS Remand and
-Sentencing (RaS) physical data model so responses map directly onto RaS tables.
+(charges, court applications, sentences). CP-native shape, not scoped to any single
+consumer's internal data model — see `docs/PCR-FIELD-MAPPING.md` for how individual fields
+relate to one confirmed consumer's (HMPPS) Remand and Sentencing (RaS) physical data model,
+kept as reference material for that integration, not as the source of the contract's shape.
 
 **Pattern**: Pure spec-only
 **OpenAPI spec version**: 0.1.0 (OpenAPI 3.0.0)
@@ -49,7 +51,7 @@ mistaken for accurate.
 
 Every non-guaranteed field is `nullable: true` with an inline description recording *why*
 (RaS confirmed no CP-side action needed, vs. genuinely open/unconfirmed) — see
-`docs/PCR-HMPPS-FIELD-MAPPING.md` for the authoritative per-field status table. When editing
+`docs/PCR-FIELD-MAPPING.md` for the authoritative per-field status table. When editing
 the spec, keep both in sync.
 
 ## Test Structure
@@ -80,11 +82,12 @@ is in addition to, not instead of, the standard SwaggerHub/APIHub publish alread
 
 ## Repo-Specific Notes
 
-- `docs/PCR-HMPPS-FIELD-MAPPING.md` is the field-by-field mapping ledger against the HMPPS RaS
-  physical data model (Court Case / Court Appearance / Charge / Sentence / Period Length) —
-  check it before changing any field's shape or nullability; several fields carry open questions
-  still being tracked with the RaS team (e.g. `courtCentreId` format, `consecutiveToId`
-  cross-reference, `domesticViolenceRelated` case-vs-charge level).
+- `docs/PCR-FIELD-MAPPING.md` is the field-by-field mapping ledger — its §1 cross-references
+  HMPPS's RaS physical data model (Court Case / Court Appearance / Charge / Sentence / Period
+  Length) as reference material for that one confirmed consumer, not as the reason a field is
+  shaped the way it is — check it before changing any field's shape or nullability; several
+  fields carry open questions still being tracked with the RaS team (e.g. `courtCentreId`
+  format, `consecutiveToId` cross-reference, `domesticViolenceRelated` case-vs-charge level).
 - `docs/DATA-PRODUCTS.md` and `docs/CHAIN_OF_CUSTODY.md` cover structured data-output and
   supply-chain/audit-trail concerns specific to this spec.
 - Consumer: `service-cp-crime-results-pcr` (primary, not yet implemented against this contract).
