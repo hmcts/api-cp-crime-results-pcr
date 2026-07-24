@@ -42,7 +42,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version: '24'
 
       - run: npm install -g jsonlint
 
@@ -68,7 +68,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version: '24'
 
       - run: npm install ajv ajv-formats ajv-keywords
 
@@ -97,7 +97,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version: '24'
 
       - run: npm install -g @stoplight/spectral-cli
 
