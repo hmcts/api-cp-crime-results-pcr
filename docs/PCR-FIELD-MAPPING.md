@@ -30,7 +30,6 @@ also audits every field CP actually surfaces on the printed Prison Court Registe
 | `courtHouseCode` | `court_appearance.court_code` | CP `courtHouse` UUID **or** Court Register code | **Open — conflicting evidence, not confirmed.** One clarification said HMPPs keys off the CP court house UUID; HMPPs's own physical data model shows `court_code`'s example as a Court Register code ("YORKCC"), not a UUID. Left as a plain string in the schema (not UUID-locked) pending service analysis — do not treat either answer as settled. |
 | `hearingDate` | `court_appearance.appearance_date` | CP hearing date | Confirmed |
 | `hearingOutcome` | `court_appearance.appearance_outcome_id` | — | HMPPs: ignore, no CP-side action |
-| `warrantType` | `court_appearance.warrant_type` | — | HMPPs: ignore, HMPPs derives it itself |
 | `overallConvictionDate` | `court_appearance.overall_conviction_date` | — | HMPPs: resolved, derives from `offences[].convictionDate` — CP need not send |
 
 ### Next Hearing (`NextHearing`)

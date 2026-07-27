@@ -374,12 +374,6 @@ components:
             still being confirmed with the business — currently free text.
           type: string
           nullable: true
-        warrantType:
-          description: >-
-            Type of warrant associated with the hearing, where recorded (e.g.
-            SENTENCING, NON_SENTENCING, IMMIGRATION).
-          type: string
-          nullable: true
         overallConvictionDate:
           description: >-
             Overall conviction date for the hearing, where recorded. Where not
@@ -403,6 +397,11 @@ components:
       type: object
       nullable: true
       properties:
+        hearingId:
+          description: Identifier of the next hearing, where known.
+          type: string
+          format: uuid
+          nullable: true
         dateTime:
           description: Scheduled date and time of the next appearance, where known.
           type: string
@@ -414,11 +413,6 @@ components:
           nullable: true
         courtHouseName:
           type: string
-          nullable: true
-        hearingId:
-          description: Identifier of the next hearing, where known.
-          type: string
-          format: uuid
           nullable: true
 
     PcrVersionMetadataList:
@@ -809,23 +803,17 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/JudicialResult"
-        relatedOffenceIds:
+        offences:
           description: >-
-            Id(s) of the offence(s) this application relates to, where linked
-            — CP source: `CourtApplication.courtApplicationCases[].offences[]`
-            (the same offences as the linked case) and
-            `courtOrder.courtOrderOffences[]`, folded together here since
-            consumers don't need to distinguish how an offence came to be
-            linked to the application. References `Offence.id` in the
-            response's own top-level `offences[]` array rather than embedding
-            the offence a second time, so offence data has a single source of
-            truth in the response — an application can relate to a subset of
-            offences or all of them. Empty for a standalone application with
-            no case/offence link.
+            Offence(s) this application relates to, where linked — CP source:
+            `CourtApplication.courtApplicationCases[].offences[]` (the same
+            offences as the linked case) and `courtOrder.courtOrderOffences[]`,
+            folded together here since consumers don't need to distinguish how
+            an offence came to be linked to the application. Empty for a
+            standalone application with no case/offence link.
           type: array
           items:
-            type: string
-            format: uuid
+            $ref: "#/components/schemas/Offence"
 
     ErrorResponse:
       description: Standard error response
