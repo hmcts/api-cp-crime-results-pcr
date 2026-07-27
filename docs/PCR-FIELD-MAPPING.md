@@ -109,8 +109,9 @@ This section previously claimed to have checked the real `OEE_Layout5Template.do
 The earlier case-level "all defendants at a hearing" endpoint has been removed. The design doc's unit of work is
 one PCR resource per `(hearingId, defendantId)` pair, so there is no whole-case view to choose between — the API
 now has two operations under `/pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}`: the base path
-(every recorded version's full data — `PcrVersionHistory` → `{ pcrs: PcrResult[] }`, no `id` field, phase-1 has no
-correlation id to put on it), and `.../versions?versionId={value}` (metadata only —
+(every recorded version's full data — a bare `PcrResult[]`, no `id` field and no per-item `defendantId` since it's
+already the request path parameter; phase-1 has no correlation id to put on `id`), and
+`.../versions?versionId={value}` (metadata only —
 `PcrVersionMetadataList` → `{ versions: PcrVersionMetadata[] }`, each entry `id`/`hearingId`/`defendantId`/
 `recordedAt`). `versionId` is optional, not required, and there is no `latest` special value: omitted, it lists
 every version's metadata; supplied, it filters the same list down to the one matching entry — `recordedAt` is what
