@@ -17,18 +17,21 @@ kept as reference material for that integration, not as the source of the contra
 
 ## API Endpoint(s)
 
-- `GET /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}` → `PcrVersionHistory` (200/400/401/403/404/500)
-- `GET /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}/versions?version={value}` → `PcrVersion` (200/400/401/403/404/500/501)
+- `GET /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}` → `PcrVersionHistory`
+  (`{ pcrs: PcrResult[] }`, full data, no `id`) (200/400/401/403/404/500)
+- `GET /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}/versions?versionId={value}`
+  → `PcrVersionMetadataList` (`{ versions: PcrVersionMetadata[] }`, metadata only — `id`,
+  `hearingId`, `defendantId`, `recordedAt`) (200/400/401/403/404/500)
 
-The second endpoint's `version` query parameter is required: `version=latest` returns the most
-recently recorded version; any other value is treated as a specific version's source correlation
-id (not yet supported — returns `501`, see `PcrService` phase-1 notes). `oAuthJwt`
-(client-credentials) security applies, scope `hmcts:prosecution-case-results:read`.
+The second endpoint's `versionId` query parameter is optional: omitted, it lists metadata for
+every recorded version; supplied, it filters the list down to the single matching entry (still a
+list, just narrowed) — there is no `latest` special value and no single-full-data-by-id lookup.
+`oAuthJwt` (client-credentials) security applies, scope `hmcts:prosecution-case-results:read`.
 
-Note: the rest of this file (Generated Interfaces & Schema, Domain Models, Test Structure)
-still describes an earlier, pre-redesign contract (`ProsecutionCaseResultsApi`,
+Note: the rest of this file (Generated Interfaces & Schema, Domain Models) still describes an
+earlier, pre-redesign contract (`ProsecutionCaseResultsApi`,
 `ProsecutionCaseResultView`/`DefendantResultView`) and needs a full refresh against the current
-CP-native `PcrApi`/`PcrVersion` contract — out of scope for this change, flagged here so it isn't
+CP-native `PcrApi`/`PcrResult` contract — out of scope for this change, flagged here so it isn't
 mistaken for accurate.
 
 ## Generated Interfaces & Schema
@@ -58,7 +61,7 @@ the spec, keep both in sync.
 
 | Class | What it validates |
 |---|---|
-| `OpenApiObjectsTest` | Generated `ErrorResponse`/`ProsecutionCaseResultView`/`DefendantResultView` field shapes, generated `ProsecutionCaseResultsApi` method names, and that `ErrorResponse.timestamp` generates as `Instant` (not `OffsetDateTime`) |
+| `OpenApiObjectsTest` | Generated `ErrorResponse`/`PcrVersionHistory`/`PcrResult`/`PcrVersionMetadataList`/`PcrVersionMetadata` field shapes, generated `PcrApi` method names (`getPcrVersionHistory`, `getPcrVersionMetadata`), and that `ErrorResponse.timestamp` generates as `Instant` (not `OffsetDateTime`) |
 
 ## Generator Config Notes
 
