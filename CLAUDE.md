@@ -17,8 +17,9 @@ kept as reference material for that integration, not as the source of the contra
 
 ## API Endpoint(s)
 
-- `GET /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}` → `PcrVersionHistory`
-  (`{ pcrs: PcrResult[] }`, full data, no `id`) (200/400/401/403/404/500)
+- `GET /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}` → bare `PcrResult[]`
+  (full data, no `id`, no per-item `defendantId` — already known from the path)
+  (200/400/401/403/404/500)
 - `GET /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}/versions?versionId={value}`
   → `PcrVersionMetadataList` (`{ versions: PcrVersionMetadata[] }`, metadata only — `id`,
   `hearingId`, `defendantId`, `recordedAt`) (200/400/401/403/404/500)
@@ -26,7 +27,8 @@ kept as reference material for that integration, not as the source of the contra
 The second endpoint's `versionId` query parameter is optional: omitted, it lists metadata for
 every recorded version; supplied, it filters the list down to the single matching entry (still a
 list, just narrowed) — there is no `latest` special value and no single-full-data-by-id lookup.
-`oAuthJwt` (client-credentials) security applies, scope `hmcts:prosecution-case-results:read`.
+Security: `bearerAuth` + `subscriptionKey` (no OAuth2 scope), matching HRDS's pattern —
+see ADR-006/AMP-890 in `service-cp-crime-results-pcr`.
 
 Note: the rest of this file (Generated Interfaces & Schema, Domain Models) still describes an
 earlier, pre-redesign contract (`ProsecutionCaseResultsApi`,
@@ -61,7 +63,7 @@ the spec, keep both in sync.
 
 | Class | What it validates |
 |---|---|
-| `OpenApiObjectsTest` | Generated `ErrorResponse`/`PcrVersionHistory`/`PcrResult`/`PcrVersionMetadataList`/`PcrVersionMetadata` field shapes, generated `PcrApi` method names (`getPcrVersionHistory`, `getPcrVersionMetadata`), and that `ErrorResponse.timestamp` generates as `Instant` (not `OffsetDateTime`) |
+| `OpenApiObjectsTest` | Generated `ErrorResponse`/`PcrResult`/`PcrVersionMetadataList`/`PcrVersionMetadata` field shapes, generated `PcrApi` method names (`getPcrVersionHistory`, `getPcrVersionMetadata`), and that `ErrorResponse.timestamp` generates as `Instant` (not `OffsetDateTime`) |
 
 ## Generator Config Notes
 

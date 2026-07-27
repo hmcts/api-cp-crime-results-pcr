@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.cp.openapi.api.PcrApi;
 import uk.gov.hmcts.cp.openapi.model.ErrorResponse;
-import uk.gov.hmcts.cp.openapi.model.PcrVersionHistory;
 import uk.gov.hmcts.cp.openapi.model.PcrResult;
 import uk.gov.hmcts.cp.openapi.model.PcrVersionMetadataList;
 import uk.gov.hmcts.cp.openapi.model.PcrVersionMetadata;
@@ -20,13 +19,8 @@ class OpenApiObjectsTest {
     }
 
     @Test
-    void generated_pcr_version_history_should_have_expected_fields() {
-        assertThat(PcrVersionHistory.class).hasDeclaredFields("pcrs");
-    }
-
-    @Test
     void generated_pcr_result_should_have_expected_fields() {
-        assertThat(PcrResult.class).hasDeclaredFields("defendantId",
+        assertThat(PcrResult.class).hasDeclaredFields(
                 "prosecutionCase", "caseMarkers", "defendant", "custodyLocation", "hearing", "offences", "courtApplications");
     }
 
