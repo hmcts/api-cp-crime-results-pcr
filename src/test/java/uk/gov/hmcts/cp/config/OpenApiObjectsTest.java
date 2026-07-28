@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.cp.openapi.api.PcrApi;
 import uk.gov.hmcts.cp.openapi.model.ErrorResponse;
-import uk.gov.hmcts.cp.openapi.model.PcrResult;
+import uk.gov.hmcts.cp.openapi.model.PcrHearingResult;
 import uk.gov.hmcts.cp.openapi.model.PcrVersionMetadataList;
 import uk.gov.hmcts.cp.openapi.model.PcrVersionMetadata;
 import java.lang.reflect.Field;
@@ -20,7 +20,7 @@ class OpenApiObjectsTest {
 
     @Test
     void generated_pcr_result_should_have_expected_fields() {
-        assertThat(PcrResult.class).hasDeclaredFields(
+        assertThat(PcrHearingResult.class).hasDeclaredFields(
                 "prosecutionCase", "caseMarkers", "defendant", "custodyLocation", "hearing", "offences", "courtApplications");
     }
 
@@ -37,7 +37,7 @@ class OpenApiObjectsTest {
     @Test
     void generated_pcr_api_should_have_expected_methods() {
         assertThat(PcrApi.class)
-                .hasDeclaredMethods("getPcrVersionHistory", "getPcrVersionMetadata");
+                .hasDeclaredMethods("getPcrHearingResults", "getPcrHearingResultsMetadata");
     }
 
     @Test

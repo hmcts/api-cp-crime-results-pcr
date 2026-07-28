@@ -30,7 +30,7 @@ also audits every field CP actually surfaces on the printed Prison Court Registe
 | `courtHouseCode` | `court_appearance.court_code` | CP `courtHouse` UUID **or** Court Register code | **Open — conflicting evidence, not confirmed.** One clarification said HMPPs keys off the CP court house UUID; HMPPs's own physical data model shows `court_code`'s example as a Court Register code ("YORKCC"), not a UUID. Left as a plain string in the schema (not UUID-locked) pending service analysis — do not treat either answer as settled. |
 | `hearingDate` | `court_appearance.appearance_date` | CP hearing date | Confirmed |
 | `hearingOutcome` | `court_appearance.appearance_outcome_id` | — | HMPPs: ignore, no CP-side action |
-| `overallConvictionDate` | `court_appearance.overall_conviction_date` | — | HMPPs: resolved, derives from `offences[].convictionDate` — CP need not send |
+| ~~`overallConvictionDate`~~ | `court_appearance.overall_conviction_date` | — | **Removed.** No hearing-level source in CP — `OutboundPrisonCourtRegister`'s `Hearing`/`Offence` models confirm conviction date only exists per-offence (`Offence.convictionDate`), matching `PcrHearingResult.offences[].convictionDate` |
 
 ### Next Hearing (`NextHearing`)
 
@@ -51,7 +51,7 @@ also audits every field CP actually surfaces on the printed Prison Court Registe
 | `convictionDate` | `charge.conviction_date` | `offences[].convictionDate` | Confirmed |
 | `listingNumber` | `sentence.count_number` | `offences[].listingNumber` | Open — not yet confirmed as the right mapping; verify against warrant examples |
 
-Terrorism/foreign-power/domestic-violence signals aren't separate `Offence` fields — the raw judicial result prompts (`theCourtDeterminedATerroristConnectionUnderSection30OfTheCounterTerrorismAct2008AppliesToThisOffence`/`...Count`, `offenceAggByForeignPowerCondition`) are exposed as-is via `JudicialResult.prompts[]` instead, and the domestic-violence marker is case-level (`PcrResult.caseMarkers[]`, sourced from `prosecutionCase.caseMarkers[]` with `markerTypeCode == 'DomesticViolence'`), not per-offence.
+Terrorism/foreign-power/domestic-violence signals aren't separate `Offence` fields — the raw judicial result prompts (`theCourtDeterminedATerroristConnectionUnderSection30OfTheCounterTerrorismAct2008AppliesToThisOffence`/`...Count`, `offenceAggByForeignPowerCondition`) are exposed as-is via `JudicialResult.prompts[]` instead, and the domestic-violence marker is case-level (`PcrHearingResult.caseMarkers[]`, sourced from `prosecutionCase.caseMarkers[]` with `markerTypeCode == 'DomesticViolence'`), not per-offence.
 
 ### Judicial Result (`JudicialResult`)
 
@@ -109,7 +109,7 @@ This section previously claimed to have checked the real `OEE_Layout5Template.do
 The earlier case-level "all defendants at a hearing" endpoint has been removed. The design doc's unit of work is
 one PCR resource per `(hearingId, defendantId)` pair, so there is no whole-case view to choose between — the API
 now has two operations under `/pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}`: the base path
-(every recorded version's full data — a bare `PcrResult[]`, no `id` field and no per-item `defendantId` since it's
+(every recorded version's full data — a bare `PcrHearingResult[]`, no `id` field and no per-item `defendantId` since it's
 already the request path parameter; phase-1 has no correlation id to put on `id`), and
 `.../versions?versionId={value}` (metadata only —
 `PcrVersionMetadataList` → `{ versions: PcrVersionMetadata[] }`, each entry `id`/`hearingId`/`defendantId`/
