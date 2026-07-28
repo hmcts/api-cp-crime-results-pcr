@@ -33,7 +33,7 @@ security:
 
 tags:
   - name: pcr
-    description: Prison Court Register per hearing and defendant with version information
+    description: Prison Court Register(s) results per case, hearing and defendant
 
 paths:
   /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}:
