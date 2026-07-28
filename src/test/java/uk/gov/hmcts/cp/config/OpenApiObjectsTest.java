@@ -37,7 +37,7 @@ class OpenApiObjectsTest {
     @Test
     void generated_pcr_api_should_have_expected_methods() {
         assertThat(PcrApi.class)
-                .hasDeclaredMethods("getPcrVersionHistory", "getPcrVersionMetadata");
+                .hasDeclaredMethods("getPcrHearingResults", "getPcrVersionMetadata");
     }
 
     @Test

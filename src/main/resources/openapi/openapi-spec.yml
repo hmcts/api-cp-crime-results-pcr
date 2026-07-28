@@ -40,16 +40,14 @@ paths:
     get:
       summary: Get the PCR results history for a hearing and defendant
       description: >-
-        Returns every PCR hearing results recorded for the given case,
-        hearing and defendant — one PCR resource per `(hearingId,
-        defendantId)` pair, per the Data Store's unit of work. If no result
-        has been recorded yet for the hearing and defendant, an empty list
-        is returned. If the case, hearing, or defendant does not exist, a
-        not found response is returned.
+        Returns PCR hearing results recorded for the given case, hearing and
+        defendant. If no result has been recorded yet for the hearing and
+        defendant, an empty list is returned. If the case, hearing, or
+        defendant does not exist, a not found response is returned.
 
 
         This operation returns OFFICIAL-SENSITIVE data (defendant address).
-      operationId: getPcrVersionHistory
+      operationId: getPcrHearingResults
       tags:
         - pcr
       parameters:
