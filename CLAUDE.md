@@ -69,7 +69,7 @@ the spec, keep both in sync.
 
 | Class | What it validates |
 |---|---|
-| `OpenApiObjectsTest` | Generated `ErrorResponse`/`PcrResult`/`PcrVersionMetadataList`/`PcrVersionMetadata` field shapes, generated `PcrApi` method names (`getPcrHearingResults`, `getPcrVersionMetadata`), and that `ErrorResponse.timestamp` generates as `Instant` (not `OffsetDateTime`) |
+| `OpenApiObjectsTest` | Generated `ErrorResponse`/`PcrResult`/`PcrVersionMetadataList`/`PcrVersionMetadata` field shapes, generated `PcrApi` method names (`getPcrHearingResults`, `getPcrHearingResultsMetadata`), and that `ErrorResponse.timestamp` generates as `Instant` (not `OffsetDateTime`) |
 
 ## Generator Config Notes
 
