@@ -73,10 +73,6 @@ paths:
                   $ref: "#/components/schemas/PcrResult"
         '400':
           $ref: "#/components/responses/BadRequest"
-        '401':
-          $ref: "#/components/responses/Unauthorized"
-        '403':
-          $ref: "#/components/responses/Forbidden"
         '404':
           $ref: "#/components/responses/NotFound"
         '500':
@@ -135,10 +131,6 @@ paths:
                 $ref: "#/components/schemas/PcrVersionMetadataList"
         '400':
           $ref: "#/components/responses/BadRequest"
-        '401':
-          $ref: "#/components/responses/Unauthorized"
-        '403':
-          $ref: "#/components/responses/Forbidden"
         '404':
           $ref: "#/components/responses/NotFound"
         '500':
@@ -217,37 +209,15 @@ components:
               parameter: "hearingId"
             timestamp: "2026-07-15T11:33:22.794Z"
             traceId: "b2f1c3d4e5f60718"
-    Unauthorized:
-      description: Authentication is missing or the access token is invalid
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorResponse"
-          example:
-            error: "UNAUTHORIZED"
-            message: "Access token is missing or invalid"
-            timestamp: "2026-07-15T11:33:22.794Z"
-            traceId: "c3a2b4d5e6f70819"
-    Forbidden:
-      description: Valid subscription key required but not subscribed to this API
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ErrorResponse"
-          example:
-            error: "FORBIDDEN"
-            message: "Valid subscription key required but not subscribed to this API"
-            timestamp: "2026-07-15T11:33:22.794Z"
-            traceId: "d4b3c5e6f708192a"
     NotFound:
-      description: The requested resource was not found
+      description: The case, hearing, or defendant does not exist
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/ErrorResponse"
           example:
             error: "NOT_FOUND"
-            message: "No PCR version found for the supplied identifiers"
+            message: "No case, hearing, or defendant found for the supplied identifiers"
             timestamp: "2026-07-15T11:33:22.794Z"
             traceId: "e5c4d6f708192a3b"
     InternalServerError:
@@ -359,14 +329,6 @@ components:
             this should be constrained to an enumerated set of values is
             still being confirmed with the business — currently free text.
           type: string
-          nullable: true
-        overallConvictionDate:
-          description: >-
-            Overall conviction date for the hearing, where recorded. Where not
-            set, it can be derived from the conviction dates on individual
-            offences (`Offence.convictionDate`).
-          type: string
-          format: date
           nullable: true
         nextHearing:
           $ref: "#/components/schemas/NextHearing"
