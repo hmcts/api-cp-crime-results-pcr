@@ -16,29 +16,45 @@ also audits every field CP actually surfaces on the printed Prison Court Registe
 
 ## 1. Field mapping — API schema → HMPPs table → CP source
 
-### Prosecution Case (`ProsecutionCase`)
+### Case identity (top-level `caseURN` on `PcrHearingResult`)
+
+Architect review flattened this out of a separate `ProsecutionCase` wrapper — `caseURN` is now a
+direct sibling of `caseMarkers` on `PcrHearingResult`, not nested. Mapping unchanged.
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
 | `caseURN` | `court_case.case_unique_identifier` / `court_appearance.court_case_reference` | CP case URN | Confirmed |
 | `defendantId` (on `Defendant`) | `court_case.prisoner_id` | CP defendant UUID | **Not the same identifier.** `prisoner_id` is a NOMIS ID; CP has no deterministic mapping to it. HMPPs resolves this via Core Person Record probabilistic matching — no CP-side action, already answered. |
 
+### Court (`Court`, shared by `HearingDetails.court` and `NextHearing.court`)
+
+Architect review pulled the court-house fields into one shared `Court` object, referenced from
+both `HearingDetails` and `NextHearing`, and added `courtHouseId` (UUID) alongside the existing
+`courtHouseCode`/`courtHouseName`.
+
+| API field | HMPPs field | CP source | Status |
+|---|---|---|---|
+| `courtHouseId` | — | Likely CP `courtHouse` UUID | **New.** Added per architect review — probably resolves the `courtHouseCode` row's open UUID-vs-code question below by giving the UUID its own field, but not yet confirmed against a real CP payload. |
+| `courtHouseCode` | `court_appearance.court_code` | CP `courtHouse` UUID **or** Court Register code | **Open — conflicting evidence, not confirmed.** One clarification said HMPPs keys off the CP court house UUID; HMPPs's own physical data model shows `court_code`'s example as a Court Register code ("YORKCC"), not a UUID. Left as a plain string in the schema (not UUID-locked) pending service analysis — do not treat either answer as settled. |
+| `courtHouseName` | — | Court house display name | Confirmed — display-only, no HMPPs mapping needed |
+
 ### Hearing Details (`HearingDetails`)
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
-| `courtHouseCode` | `court_appearance.court_code` | CP `courtHouse` UUID **or** Court Register code | **Open — conflicting evidence, not confirmed.** One clarification said HMPPs keys off the CP court house UUID; HMPPs's own physical data model shows `court_code`'s example as a Court Register code ("YORKCC"), not a UUID. Left as a plain string in the schema (not UUID-locked) pending service analysis — do not treat either answer as settled. |
 | `hearingDate` | `court_appearance.appearance_date` | CP hearing date | Confirmed |
 | `hearingOutcome` | `court_appearance.appearance_outcome_id` | — | HMPPs: ignore, no CP-side action |
 | ~~`overallConvictionDate`~~ | `court_appearance.overall_conviction_date` | — | **Removed.** No hearing-level source in CP — `OutboundPrisonCourtRegister`'s `Hearing`/`Offence` models confirm conviction date only exists per-offence (`Offence.convictionDate`), matching `PcrHearingResult.offences[].convictionDate` |
 
 ### Next Hearing (`NextHearing`)
 
+Architect review moved `nextHearing` up to be a sibling of `hearing` on `PcrHearingResult`,
+rather than nested under `HearingDetails.nextHearing`. See the shared `Court` table above for
+`court.courtHouseCode`/`court.courtHouseId`/`court.courtHouseName`.
+
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
-| `date` | `next_court_appearance.appearance_date` | CP `nextHearing` | Open — which offence's `nextHearing` wins when several diverge is still with HMPPs (Nutty/Steven query on file) |
-| `courtHouseCode` | `next_court_appearance.court_code` | — | Open — not present in CP's next-appearance payload today |
-| `time` | `next_court_appearance.appearance_time` | — | Open — CP source not yet confirmed |
+| `dateTime` | `next_court_appearance.appearance_date` + `appearance_time` | CP `nextHearing` | Open on two counts: which offence's `nextHearing` wins when several diverge is still with HMPPs (Nutty/Steven query on file), and the `appearance_time` half of the CP source isn't yet confirmed either |
 | *(not currently in the API)* | `next_court_appearance.appearance_type_id` | — | Gap — video-link-vs-in-person not yet added to the contract, and CP source not yet confirmed either |
 
 ### Offence (`Offence`)
@@ -51,7 +67,7 @@ also audits every field CP actually surfaces on the printed Prison Court Registe
 | `convictionDate` | `charge.conviction_date` | `offences[].convictionDate` | Confirmed |
 | `listingNumber` | `sentence.count_number` | `offences[].listingNumber` | Open — not yet confirmed as the right mapping; verify against warrant examples |
 
-Terrorism/foreign-power/domestic-violence signals aren't separate `Offence` fields — the raw judicial result prompts (`theCourtDeterminedATerroristConnectionUnderSection30OfTheCounterTerrorismAct2008AppliesToThisOffence`/`...Count`, `offenceAggByForeignPowerCondition`) are exposed as-is via `JudicialResult.prompts[]` instead, and the domestic-violence marker is case-level (`PcrHearingResult.caseMarkers[]`, sourced from `prosecutionCase.caseMarkers[]` with `markerTypeCode == 'DomesticViolence'`), not per-offence.
+Terrorism/foreign-power/domestic-violence signals aren't separate `Offence` fields — the raw judicial result prompts (`theCourtDeterminedATerroristConnectionUnderSection30OfTheCounterTerrorismAct2008AppliesToThisOffence`/`...Count`, `offenceAggByForeignPowerCondition`) are exposed as-is via `JudicialResult.prompts[]` instead, and the domestic-violence marker is case-level (`PcrHearingResult.caseMarkers[]`, sourced from CP's case-level `caseMarkers[]` with `markerTypeCode == 'DomesticViolence'`), not per-offence.
 
 ### Judicial Result (`JudicialResult`)
 

@@ -230,13 +230,16 @@ components:
         phase 1 — see `PcrVersionMetadata.id`).
       type: object
       properties:
-        prosecutionCase:
-          $ref: "#/components/schemas/ProsecutionCase"
+        caseURN:
+          description: >-
+            Prosecution case URN — CP's own field name (`ProsecutionCaseIdentifier.caseURN`
+            in `cpp-context-hearing`), not an invented API-only name.
+          type: string
+          example: "example-case-urn"
         caseMarkers:
           description: >-
             Case-level markers recorded against the prosecution case (e.g.
-            domestic-violence, vulnerability). Sourced from
-            `prosecutionCase.caseMarkers[]` — a case-level fact in CP, not
+            domestic-violence, vulnerability) — a case-level fact in CP, not
             derived per offence or per defendant.
           type: array
           items:
@@ -247,6 +250,8 @@ components:
           $ref: "#/components/schemas/CustodyLocation"
         hearing:
           $ref: "#/components/schemas/HearingDetails"
+        nextHearing:
+          $ref: "#/components/schemas/NextHearing"
         offences:
           description: Results for each offence charged against the defendant at this hearing
           type: array
@@ -269,11 +274,6 @@ components:
       type: object
       nullable: true
       properties:
-        id:
-          description: CP's establishment identifier (`custodialEstablishment.id`).
-          type: string
-          format: uuid
-          nullable: true
         name:
           description: Prison/establishment display name.
           type: string
@@ -294,20 +294,8 @@ components:
           type: string
           format: uuid
           example: "f1d2c3b4-a5e6-4f7a-8b9c-0d1e2f3a4b5c"
-        courtHouseCode:
-          description: >-
-            CP Reference Data's court house code. CP's own faithful
-            identifier for the court house — resolving it to any other
-            consumer's reference data is the consumer's concern, not this
-            contract's.
-          type: string
-          nullable: true
-          example: "LND001"
-        courtHouseName:
-          description: Name of the court house, for display without a Reference Data lookup.
-          type: string
-          nullable: true
-          example: "Central London Crown Court"
+        court:
+          $ref: "#/components/schemas/Court"
         hearingDate:
           description: Date of the hearing.
           type: string
@@ -320,8 +308,6 @@ components:
             still being confirmed with the business — currently free text.
           type: string
           nullable: true
-        nextHearing:
-          $ref: "#/components/schemas/NextHearing"
 
     NextHearing:
       description: >-
@@ -346,12 +332,35 @@ components:
           format: date-time
           nullable: true
           example: "2026-07-21T09:00:00Z"
+        court:
+          $ref: "#/components/schemas/Court"
+
+    Court:
+      description: >-
+        Court house identity — shared shape for both the hearing and the
+        next hearing, since they identify a court house the same way.
+      type: object
+      nullable: true
+      properties:
+        courtHouseId:
+          description: CP Reference Data's court house UUID.
+          type: string
+          format: uuid
+          nullable: true
         courtHouseCode:
+          description: >-
+            CP Reference Data's court house code. CP's own faithful
+            identifier for the court house — resolving it to any other
+            consumer's reference data is the consumer's concern, not this
+            contract's.
           type: string
           nullable: true
+          example: "LND001"
         courtHouseName:
+          description: Name of the court house, for display without a Reference Data lookup.
           type: string
           nullable: true
+          example: "Central London Crown Court"
 
     PcrVersionMetadataList:
       description: >-
@@ -404,20 +413,6 @@ components:
           format: date-time
           nullable: true
           example: "2026-07-15T11:33:22.794Z"
-
-    ProsecutionCase:
-      description: >-
-        Identity of the prosecution case. CP's internal case UUID is
-        deliberately not exposed here — the case URN is the only case
-        identifier consumers should hold or reference.
-      type: object
-      properties:
-        caseURN:
-          description: >-
-            Prosecution case URN — CP's own field name (`ProsecutionCaseIdentifier.caseURN`
-            in `cpp-context-hearing`), not an invented API-only name.
-          type: string
-          example: "example-case-urn"
 
     CaseMarker:
       description: A marker recorded against the whole prosecution case
@@ -508,11 +503,6 @@ components:
       description: A single offence and the result(s) recorded against it
       type: object
       properties:
-        id:
-          description: Unique identifier of the offence
-          type: string
-          format: uuid
-          example: "c4a1b2d3-e5f6-4789-9abc-0d1e2f3a4b5c"
         code:
           description: Offence code, aligned with OMS.
           type: string
@@ -690,11 +680,6 @@ components:
       description: A court application (bail application, variation, etc.) and any results recorded against it
       type: object
       properties:
-        id:
-          description: Unique identifier of the court application
-          type: string
-          format: uuid
-          example: "a9b8c7d6-e5f4-4321-9876-0a1b2c3d4e5f"
         reference:
           description: Court application reference
           type: string
@@ -719,7 +704,7 @@ components:
           type: string
           format: date
           nullable: true
-        results:
+        judicialResults:
           description: >-
             Judicial results recorded directly against the application itself
             (CP source: `CourtApplication.judicialResults`) — distinct from
