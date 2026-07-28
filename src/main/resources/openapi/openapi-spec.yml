@@ -68,7 +68,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/PcrResult"
+                  $ref: "#/components/schemas/PcrHearingResult"
         '400':
           $ref: "#/components/responses/BadRequest"
         '404':
@@ -108,7 +108,7 @@ paths:
         - $ref: "#/components/parameters/VersionIdQuery"
       responses:
         '200':
-          description: PCR Hearing Results metadata list
+          description: PCR Hearing Results versions metadata list
           headers:
             X-Correlation-Id:
               description: Echoes the request correlation ID for end-to-end tracing
@@ -223,7 +223,7 @@ components:
             traceId: "f6d5e708192a3b4c"
 
   schemas:
-    PcrResult:
+    PcrHearingResult:
       description: >-
         A single recorded PCR result for a hearing and defendant. No
         `defendantId` (already in the path) and no `id` (nullable during
@@ -370,7 +370,7 @@ components:
     PcrVersionMetadata:
       description: >-
         Identifying metadata for a single recorded version — not the full
-        PCR data (see `PcrResult`, returned by the version-history endpoint,
+        PCR data (see `PcrHearingResult`, returned by the version-history endpoint,
         for that).
       type: object
       properties:

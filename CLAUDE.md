@@ -17,7 +17,7 @@ kept as reference material for that integration, not as the source of the contra
 
 ## API Endpoint(s)
 
-- `GET /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}` → bare `PcrResult[]`
+- `GET /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}` → bare `PcrHearingResult[]`
   (full data, no `id`, no per-item `defendantId` — already known from the path)
   (200/400/404/500)
 - `GET /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}/versions?versionId={value}`
@@ -39,7 +39,7 @@ see ADR-006/AMP-890 in `service-cp-crime-results-pcr`.
 Note: the rest of this file (Generated Interfaces & Schema, Domain Models) still describes an
 earlier, pre-redesign contract (`ProsecutionCaseResultsApi`,
 `ProsecutionCaseResultView`/`DefendantResultView`) and needs a full refresh against the current
-CP-native `PcrApi`/`PcrResult` contract — out of scope for this change, flagged here so it isn't
+CP-native `PcrApi`/`PcrHearingResult` contract — out of scope for this change, flagged here so it isn't
 mistaken for accurate.
 
 ## Generated Interfaces & Schema
@@ -69,7 +69,7 @@ the spec, keep both in sync.
 
 | Class | What it validates |
 |---|---|
-| `OpenApiObjectsTest` | Generated `ErrorResponse`/`PcrResult`/`PcrVersionMetadataList`/`PcrVersionMetadata` field shapes, generated `PcrApi` method names (`getPcrHearingResults`, `getPcrHearingResultsMetadata`), and that `ErrorResponse.timestamp` generates as `Instant` (not `OffsetDateTime`) |
+| `OpenApiObjectsTest` | Generated `ErrorResponse`/`PcrHearingResult`/`PcrVersionMetadataList`/`PcrVersionMetadata` field shapes, generated `PcrApi` method names (`getPcrHearingResults`, `getPcrHearingResultsMetadata`), and that `ErrorResponse.timestamp` generates as `Instant` (not `OffsetDateTime`) |
 
 ## Generator Config Notes
 
