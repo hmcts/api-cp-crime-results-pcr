@@ -134,14 +134,8 @@ paths:
       description: >-
         Internal webhook endpoint. Azure Event Grid delivers Hearing_Resulted
         pointer events here directly (EventGridSchema, delivered as a JSON
-        array), replacing the self-provisioned Service Bus queue this service
-        previously consumed. Also receives Event Grid's subscription
-        validation handshake on first subscribe.
-
-
-        Not reachable via the public APIM gateway — secured by network
-        isolation, not application-level auth. See ADR-007 in
-        service-cp-crime-results-pcr.
+        array). Also receives Event Grid's subscription validation handshake
+        on first subscribe.
       operationId: receiveHearingResultedWebhook
       tags:
         - Internal
