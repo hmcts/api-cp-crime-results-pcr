@@ -313,10 +313,7 @@ components:
           type: string
         data:
           type: object
-          description: >-
-            validationCode/validationUrl present only for the validation
-            handshake; hearingId/hearingDay/userId present only for a real
-            Hearing_Resulted event.
+          description: validationCode/validationUrl for the handshake; hearingId/hearingDay/userId for a real event.
           properties:
             validationCode:
               type: string
