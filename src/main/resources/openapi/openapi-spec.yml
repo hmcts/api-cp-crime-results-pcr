@@ -38,7 +38,7 @@ tags:
     description: Internal, platform-only operations — not exposed via the public APIM gateway
 
 paths:
-  /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}:
+  /cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}:
     get:
       summary: Get the PCR hearing results history for a hearing and defendant
       description: >-
@@ -78,7 +78,7 @@ paths:
         '500':
           $ref: "#/components/responses/InternalServerError"
 
-  /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}/versions:
+  /cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}/versions:
     get:
       summary: Get list of PCR hearing results versions
       description: >-

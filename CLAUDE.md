@@ -17,10 +17,10 @@ kept as reference material for that integration, not as the source of the contra
 
 ## API Endpoint(s)
 
-- `GET /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}` → bare `PcrHearingResult[]`
+- `GET /cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}` → bare `PcrHearingResult[]`
   (full data, no `id`, no per-item `defendantId` — already known from the path)
   (200/400/404/500)
-- `GET /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}/versions?versionId={value}`
+- `GET /cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}/versions?versionId={value}`
   → `PcrVersionMetadataList` (`{ versions: PcrVersionMetadata[] }`, metadata only — `id`,
   `hearingId`, `defendantId`, `recordedAt`) (200/400/404/500)
 
