@@ -34,6 +34,8 @@ security:
 tags:
   - name: pcr
     description: Prison Court Register(s) results per case, hearing and defendant
+  - name: Internal
+    description: Internal, platform-only operations — not exposed via the public APIM gateway
 
 paths:
   /pcrs/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}:
@@ -125,6 +127,56 @@ paths:
           $ref: "#/components/responses/NotFound"
         '500':
           $ref: "#/components/responses/InternalServerError"
+
+  /internal/hearing-results:
+    post:
+      summary: Receive Hearing_Resulted events from Azure Event Grid
+      description: >-
+        Internal webhook endpoint. Azure Event Grid delivers Hearing_Resulted
+        pointer events here directly (EventGridSchema, delivered as a JSON
+        array), replacing the self-provisioned Service Bus queue this service
+        previously consumed. Also receives Event Grid's subscription
+        validation handshake on first subscribe.
+
+
+        Not reachable via the public APIM gateway — secured by network
+        isolation, not application-level auth. See ADR-007 in
+        service-cp-crime-results-pcr.
+      operationId: receiveHearingResultedWebhook
+      tags:
+        - Internal
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/HearingResultedWebhookEvent"
+      responses:
+        '200':
+          description: >-
+            Event accepted (Hearing_Resulted processed, or subscription
+            validation handshake echoed back).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebhookAck"
+        '400':
+          description: Malformed payload or unrecognized eventType — Event Grid will not retry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '503':
+          description: >-
+            Hearing details not yet complete after in-process retries —
+            Event Grid should redeliver per its own retry policy.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
 components:
   securitySchemes:
@@ -223,6 +275,58 @@ components:
             traceId: "f6d5e708192a3b4c"
 
   schemas:
+    HearingResultedWebhookEvent:
+      type: object
+      required: [id, eventType, data]
+      description: >-
+        Covers both Event Grid's subscription-validation handshake
+        (eventType Microsoft.EventGrid.SubscriptionValidationEvent) and the
+        real Hearing_Resulted event — the service branches on eventType.
+      properties:
+        id:
+          type: string
+        eventType:
+          type: string
+          example: Hearing_Resulted
+        subject:
+          type: string
+        eventTime:
+          type: string
+          format: date-time
+        dataVersion:
+          type: string
+        metadataVersion:
+          type: string
+        topic:
+          type: string
+        data:
+          type: object
+          description: >-
+            validationCode/validationUrl present only for the validation
+            handshake; hearingId/hearingDay/userId present only for a real
+            Hearing_Resulted event.
+          properties:
+            validationCode:
+              type: string
+            validationUrl:
+              type: string
+            hearingId:
+              type: string
+              format: uuid
+            hearingDay:
+              type: string
+              format: date
+            userId:
+              type: string
+              format: uuid
+
+    WebhookAck:
+      type: object
+      properties:
+        validationResponse:
+          type: string
+          description: Only present when acknowledging a subscription validation handshake.
+
     PcrHearingResult:
       description: >-
         A single recorded PCR result for a hearing and defendant. No
