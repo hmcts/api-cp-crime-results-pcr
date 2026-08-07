@@ -32,13 +32,18 @@ will add a dev deployment job with no further pipeline changes needed.
 
 ### Required GitHub Actions variables
 
-These must be set on the repository (Settings → Secrets and variables → Variables):
+These are set at **repository level** (Settings → Secrets and variables → Variables) — they are
+not inherited from the org. Copy from `api-cp-crime-schedulingandlisting-courtschedule` when
+adding a new environment.
 
-| Variable | Description |
-|---|---|
-| `AZURE_CLIENT_ID_SBOX` | Client ID of the OIDC app registration for sbox |
-| `AZURE_SUBSCRIPTION_ID_SBOX` | Azure subscription ID for sbox (`bd2864ed-4f3e-45ed-9c6a-8d179674bab1`) |
-| `TFSTATE_STORAGE_ACCOUNT_NONPROD` | Storage account name for Terraform state (non-prod) |
+| Variable | Value | Description |
+|---|---|---|
+| `AZURE_CLIENT_ID_SBOX` | `72a7651d-9d2a-4c04-9085-957efeab0e53` | Client ID of the OIDC app registration for sbox |
+| `AZURE_SUBSCRIPTION_ID_SBOX` | `bd2864ed-4f3e-45ed-9c6a-8d179674bab1` | Azure subscription ID for sbox |
+| `AZURE_SUBSCRIPTION_SBOX` | `DTS-SPS-SBOX` | Subscription display name for sbox |
+
+Note: `TFSTATE_STORAGE_ACCOUNT_NONPROD` is **not** required — the Terraform state storage account
+is hardcoded in the workflow as `spsapimapi<env>state` (e.g. `spsapimapisboxstate`).
 
 Authentication uses OpenID Connect — no passwords or secrets are stored.
 
