@@ -40,7 +40,7 @@ module "apis" {
   )
 
   protocols             = each.value.protocols
-  service_url           = "https://${each.value.service_host}${each.value.service_path}"
+  service_url           = "https://${each.value.service_host}.org.uk${each.value.service_path}"
   subscription_required = each.value.subscription_required
   api_type              = each.value.api_type
 
