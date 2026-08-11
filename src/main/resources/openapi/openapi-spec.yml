@@ -435,10 +435,6 @@ components:
           nullable: true
           example: "South East London Magistrates' Court"
         courtHouseAddress:
-          description: >-
-            The court centre's own postal address — CP's courtCentre.address
-            — distinct from the defendant's address. Same reasoning as
-            ljaName for living here rather than on the shared Court schema.
           $ref: "#/components/schemas/Address"
         hearingDate:
           description: Date of the hearing.
