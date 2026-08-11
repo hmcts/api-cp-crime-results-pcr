@@ -421,6 +421,15 @@ components:
             still being confirmed with the business — currently free text.
           type: string
           nullable: true
+        hearingType:
+          description: >-
+            Classification of the hearing itself, e.g. "First hearing". CP
+            sends this as an object (id + description); only the
+            human-readable description is surfaced here, matching the
+            convention for CourtApplication.type.
+          type: string
+          nullable: true
+          example: "First hearing"
 
     NextHearing:
       description: >-
