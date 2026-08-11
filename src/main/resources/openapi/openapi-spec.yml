@@ -430,6 +430,18 @@ components:
           type: string
           nullable: true
           example: "First hearing"
+        jurisdiction:
+          description: The hearing's jurisdiction type, e.g. "MAGISTRATES".
+          type: string
+          nullable: true
+          example: "MAGISTRATES"
+        defendantPresent:
+          description: >-
+            Whether this defendant attended this hearing, resolved from the
+            hearing's own attendance record for this defendant on the
+            register date.
+          type: boolean
+          example: true
 
     NextHearing:
       description: >-
@@ -597,6 +609,25 @@ components:
           example: "1980-01-31"
         address:
           $ref: "#/components/schemas/Address"
+        gender:
+          description: Gender, where recorded.
+          type: string
+          nullable: true
+          example: "MALE"
+        nationality:
+          description: Nationality, where recorded.
+          type: string
+          nullable: true
+        postHearingCustodyStatus:
+          description: >-
+            The defendant's overall post-hearing custody status for this
+            hearing, resolved once per defendant across their case-level
+            judicial results — not to be confused with a specific result's
+            own status. Matches the legacy PCR pipeline's own resolution:
+            the first case-level result whose status isn't already
+            "Not Applicable", defaulting to "Not Applicable" otherwise.
+          type: string
+          example: "Not Applicable"
 
     Address:
       description: A postal address.
@@ -669,9 +700,17 @@ components:
           format: date
           nullable: true
         verdictCode:
-          description: Verdict code recorded against the offence, where applicable.
+          description: >-
+            Verdict code recorded against the offence, where applicable —
+            from CP's verdict.verdictType.verdictCode.
           type: string
           nullable: true
+          example: "GUILTY"
+        offenceLegislation:
+          description: The legislation the offence was charged under, where recorded.
+          type: string
+          nullable: true
+          example: "Contrary to section 8(1) of the Theft Act 1968."
         judicialResults:
           description: >-
             Judicial result(s) recorded against this offence. An offence can
@@ -698,15 +737,6 @@ components:
           description: Rendered result text.
           type: string
           example: "Sentenced to 6 months imprisonment"
-        postHearingCustodyStatus:
-          description: >-
-            From Reference Data's `ResultDefinition.postHearingCustodyStatus`
-            (confirmed directly against the reference-data fixture, alongside
-            `financial`/`category`/`convicted`/`publishedForNows`) — CP's own
-            classification of the resulting custody/bail status.
-          type: string
-          nullable: true
-          example: "Bailed"
         financial:
           description: >-
             From `ResultDefinition.financial` — whether this result type is
