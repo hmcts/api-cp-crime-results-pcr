@@ -138,7 +138,7 @@ paths:
         pointer event here verbatim (EventGridSchema, delivered as a JSON
         array) via a plain internal HTTP call — this operation itself never
         sees Event Grid's own handshake.
-      operationId: receiveHearingResultedWebhook
+      operationId: receiveHearingResultedEvent
       tags:
         - Internal
       security: []
