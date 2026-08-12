@@ -149,7 +149,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/HearingResultedWebhookEvent"
+                $ref: "#/components/schemas/HearingResultedEvent"
       responses:
         '200':
           description: Hearing_Resulted event accepted and processed. No response body.
@@ -283,7 +283,7 @@ components:
             traceId: "f6d5e708192a3b4c"
 
   schemas:
-    HearingResultedWebhookEvent:
+    HearingResultedEvent:
       type: object
       required: [id, eventType, data]
       description: >-
