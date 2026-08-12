@@ -423,19 +423,8 @@ components:
           type: string
           format: uuid
           example: "f1d2c3b4-a5e6-4f7a-8b9c-0d1e2f3a4b5c"
-        court:
-          $ref: "#/components/schemas/Court"
-        ljaName:
-          description: >-
-            Local Justice Area name for the hearing's court centre — CP's
-            courtCentre.lja.ljaName. Only ever sourced for the hearing's own
-            venue, never for a next hearing, so it lives here rather than on
-            the shared Court schema.
-          type: string
-          nullable: true
-          example: "South East London Magistrates' Court"
-        courtHouseAddress:
-          $ref: "#/components/schemas/Address"
+        courtDetails:
+          $ref: "#/components/schemas/CourtDetails"
         hearingDate:
           description: Date of the hearing.
           type: string
@@ -496,6 +485,28 @@ components:
           example: "2026-07-21T09:00:00Z"
         court:
           $ref: "#/components/schemas/Court"
+
+    CourtDetails:
+      description: >-
+        Court venue detail for the hearing itself — identity, postal address
+        and Local Justice Area name. Kept separate from the shared `Court`
+        schema (used here and on `NextHearing`) because address and LJA name
+        are only ever sourced for the hearing's own venue, never for a next
+        hearing, so `NextHearing` cannot offer them.
+      type: object
+      nullable: true
+      properties:
+        court:
+          $ref: "#/components/schemas/Court"
+        courtAddress:
+          $ref: "#/components/schemas/Address"
+        ljaName:
+          description: >-
+            Local Justice Area name for the hearing's court centre — CP's
+            courtCentre.lja.ljaName.
+          type: string
+          nullable: true
+          example: "South East London Magistrates' Court"
 
     Court:
       description: >-
