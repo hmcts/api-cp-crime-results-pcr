@@ -738,12 +738,10 @@ components:
           type: string
           format: date
           nullable: true
-        verdictCode:
+        verdict:
           description: >-
             Verdict recorded against the offence, where applicable — CP's
-            verdict.verdictType.description. Despite the field name, this is
-            the human-readable verdict description (e.g. "Found guilty"),
-            not a short code.
+            verdict.verdictType.description (e.g. "Found guilty").
           type: string
           nullable: true
           example: "Found guilty"
