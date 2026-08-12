@@ -492,9 +492,7 @@ components:
         and Local Justice Area name. Kept separate from the shared `Court`
         schema (used here and on `NextHearing`) because address and LJA name
         are only ever sourced for the hearing's own venue, never for a next
-        hearing, so `NextHearing` cannot offer them. Optional as a whole for
-        the same reason: a PCR result with no confirmed venue for this
-        hearing has nothing to populate here.
+        hearing, so `NextHearing` cannot offer them.
       type: object
       nullable: true
       properties:
