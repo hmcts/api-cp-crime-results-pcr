@@ -391,7 +391,7 @@ components:
             Judicial results recorded directly against the case, not tied to
             any specific offence — CP's
             `defendant.defendantCaseJudicialResults[]`, distinct from
-            `offences[].judicialResults`.
+            `offences[].resultTexts`.
           type: array
           items:
             $ref: "#/components/schemas/JudicialResult"
@@ -591,15 +591,13 @@ components:
       description: A marker recorded against the whole prosecution case
       type: object
       properties:
-        code:
-          description: Marker type code, e.g. "DomesticViolence"
-          type: string
-          example: "DomesticViolence"
         description:
-          description: Human-readable description of the marker
+          description: >-
+            Human-readable description of the marker — CP's
+            `caseMarkers[].markerTypeDescription`.
           type: string
           nullable: true
-          example: "Domestic violence case marker"
+          example: "Domestic Violence"
 
     Defendant:
       description: >-
@@ -765,7 +763,7 @@ components:
           type: string
           nullable: true
           example: "INDICATED_NOT_GUILTY"
-        judicialResults:
+        resultTexts:
           description: >-
             Judicial result(s) recorded against this offence. An offence can
             carry more than one result (e.g. a conviction result plus a
@@ -791,25 +789,7 @@ components:
           description: Rendered result text.
           type: string
           example: "Sentenced to 6 months imprisonment"
-        financial:
-          description: >-
-            From `ResultDefinition.financial` — whether this result type is
-            inherently financial. CP holds this as `Y`/`N`; mapped to a
-            boolean here for consumer ergonomics.
-          type: boolean
-          nullable: true
-        category:
-          description: From `ResultDefinition.category`.
-          type: string
-          nullable: true
-        convicted:
-          description: >-
-            From `ResultDefinition.convicted` — whether this result type
-            represents a conviction. CP holds this as `Y`/`N`; mapped to a
-            boolean here for consumer ergonomics.
-          type: boolean
-          nullable: true
-        prompts:
+        texts:
           description: >-
             Raw judicial result prompts recorded against this result, exposed
             as-is so consumers can build their own downstream logic on top of
@@ -818,24 +798,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/JudicialResultPrompt"
-        concurrent:
-          description: Whether this sentencing result runs concurrently with another. Only meaningful where this result is a sentence.
-          type: boolean
-          nullable: true
-        consecutiveToDate:
-          description: >-
-            Date of the sentence this one runs consecutively to, where
-            recorded. CP holds this as a date and a court name, not a
-            reference to another sentence's identifier — exposed as CP
-            actually holds it, not as a foreign key CP doesn't have. Only
-            meaningful where this result is a sentence.
-          type: string
-          format: date
-          nullable: true
-        consecutiveToCourtName:
-          description: Name of the court that imposed the sentence this one runs consecutively to, where recorded. Only meaningful where this result is a sentence.
-          type: string
-          nullable: true
         fineAmount:
           description: >-
             Fine amount imposed alongside this sentence, where applicable.
@@ -844,23 +806,14 @@ components:
           type: number
           format: double
           nullable: true
-        imprisonmentPeriod:
+        totalCustodialPeriod:
           description: >-
-            The custodial period for this sentencing result, as CP records it
+            The total custodial period across the sentence, as CP records it
             — a free-text phrase (e.g. "6 Months 1 week"), not pre-parsed into
             components. Consumers needing a structured breakdown parse it
             themselves; CP does not commit to any one consumer's decomposition
             as the contract shape. Only meaningful where this result is a
             sentence.
-          type: string
-          nullable: true
-          example: "6 Months 1 week"
-        totalCustodialPeriod:
-          description: >-
-            The total custodial period across the sentence, where it differs
-            from `imprisonmentPeriod` (e.g. where consecutive terms combine).
-            Same free-text convention as `imprisonmentPeriod`. Only meaningful
-            where this result is a sentence.
           type: string
           nullable: true
 
@@ -872,13 +825,6 @@ components:
           type: string
           nullable: true
         value:
-          type: string
-          nullable: true
-        reference:
-          type: string
-          nullable: true
-        type:
-          description: Prompt value type, e.g. "BOOLEAN", "TEXT", "DATE".
           type: string
           nullable: true
 
@@ -910,12 +856,12 @@ components:
           type: string
           format: date
           nullable: true
-        judicialResults:
+        resultTexts:
           description: >-
             Judicial results recorded directly against the application itself
             (CP source: `CourtApplication.judicialResults`) — distinct from
             results recorded against a specific offence the application
-            relates to, which appear under `offences[].judicialResults`
+            relates to, which appear under `offences[].resultTexts`
             instead.
           type: array
           items:
