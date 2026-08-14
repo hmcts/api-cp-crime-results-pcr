@@ -397,7 +397,7 @@ components:
             this defendant's own id.
           type: array
           items:
-            $ref: "#/components/schemas/JudicialResult"
+            $ref: "#/components/schemas/ResultText"
         caseResults:
           description: >-
             Judicial results recorded directly against the case, not tied to
@@ -406,7 +406,7 @@ components:
             `offences[].resultTexts`.
           type: array
           items:
-            $ref: "#/components/schemas/JudicialResult"
+            $ref: "#/components/schemas/ResultText"
 
     CustodyLocation:
       description: >-
@@ -802,9 +802,9 @@ components:
             real shape and is not collapsed to a single result.
           type: array
           items:
-            $ref: "#/components/schemas/JudicialResult"
+            $ref: "#/components/schemas/ResultText"
 
-    JudicialResult:
+    ResultText:
       description: >-
         A single judicial result, with its Reference Data classification and
         any sentence detail it carries. Reused for both offence results and
@@ -828,20 +828,9 @@ components:
             than depend only on CP's own derived convenience fields.
           type: array
           items:
-            $ref: "#/components/schemas/JudicialResultPrompt"
-        totalCustodialPeriod:
-          description: >-
-            The total custodial period across the sentence, as CP records it
-            — a free-text phrase (e.g. "6 Months 1 week"), not pre-parsed into
-            components. Consumers needing a structured breakdown parse it
-            themselves; CP does not commit to any one consumer's decomposition
-            as the contract shape. Only meaningful where this result is a
-            sentence.
-          type: string
-          nullable: true
-          example: "5 Months"
+            $ref: "#/components/schemas/Text"
 
-    JudicialResultPrompt:
+    Text:
       description: A single prompt recorded against a judicial result
       type: object
       properties:
@@ -896,7 +885,7 @@ components:
             instead.
           type: array
           items:
-            $ref: "#/components/schemas/JudicialResult"
+            $ref: "#/components/schemas/ResultText"
         offences:
           description: >-
             Offence(s) this application relates to, where linked — CP source:
