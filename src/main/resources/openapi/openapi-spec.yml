@@ -297,37 +297,48 @@ components:
       properties:
         id:
           type: string
+          example: "b2f1c3d4-e5f6-4708-91a2-b3c4d5e6f708"
         eventType:
           type: string
           example: Hearing_Resulted
         subject:
           type: string
+          example: "hearing/9c7e33d3-e6c0-4138-b7fb-b176554ae98c"
         eventTime:
           type: string
           format: date-time
+          example: "2026-07-15T11:33:22.794Z"
         dataVersion:
           type: string
+          example: "1.0"
         metadataVersion:
           type: string
+          example: "1"
         topic:
           type: string
+          example: "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/hmcts-cp/providers/Microsoft.EventGrid/topics/hearing-results"
         data:
           type: object
           description: validationCode/validationUrl for the handshake; hearingId/hearingDay/userId for a real event.
           properties:
             validationCode:
               type: string
+              example: "2D1781C7-EBFC-4D6A-8CB9-19B2B4EFB13B"
             validationUrl:
               type: string
+              example: "https://rp-eastus2.eventgrid.azure.net/eventsubscriptions/hearing-results/validate?id=2D1781C7-EBFC-4D6A-8CB9-19B2B4EFB13B"
             hearingId:
               type: string
               format: uuid
+              example: "9c7e33d3-e6c0-4138-b7fb-b176554ae98c"
             hearingDay:
               type: string
               format: date
+              example: "2026-07-15"
             userId:
               type: string
               format: uuid
+              example: "00000000-0000-0000-0000-000000000099"
 
     WebhookAck:
       type: object
@@ -335,6 +346,7 @@ components:
         validationResponse:
           type: string
           description: Only present when acknowledging a subscription validation handshake.
+          example: "2D1781C7-EBFC-4D6A-8CB9-19B2B4EFB13B"
 
     PcrHearingResult:
       description: >-
@@ -407,12 +419,14 @@ components:
           description: Prison/establishment display name.
           type: string
           nullable: true
+          example: "HMP Dovegate"
         custodyType:
           description: >-
             Custody-type classification (e.g. `Prison`) vs. other custody
             types such as police custody. Full value set unconfirmed.
           type: string
           nullable: true
+          example: "Prison"
 
     HearingDetails:
       description: Facts recorded about the hearing itself, for a single PCR result.
@@ -437,6 +451,7 @@ components:
             still being confirmed with the business — currently free text.
           type: string
           nullable: true
+          example: "Adjourned"
         hearingType:
           description: >-
             Classification of the hearing itself, e.g. "First hearing". CP
@@ -477,6 +492,7 @@ components:
           type: string
           format: uuid
           nullable: true
+          example: "14085700-414d-4345-9dff-688a128f4177"
         dateTime:
           description: Scheduled date and time of the next appearance, where known.
           type: string
@@ -520,6 +536,7 @@ components:
           type: string
           format: uuid
           nullable: true
+          example: "7e967376-eacf-4fca-9b30-21b0c5aad427"
         courtHouseCode:
           description: >-
             CP Reference Data's court house code. CP's own faithful
@@ -633,6 +650,7 @@ components:
           description: Middle name, where recorded.
           type: string
           nullable: true
+          example: "Quinn"
         lastName:
           description: Last name.
           type: string
@@ -655,6 +673,7 @@ components:
           description: Nationality, where recorded.
           type: string
           nullable: true
+          example: "British"
         postHearingCustodyStatus:
           description: >-
             The defendant's overall post-hearing custody status for this
@@ -673,21 +692,27 @@ components:
         address1:
           type: string
           nullable: true
+          example: "1 Example Street"
         address2:
           type: string
           nullable: true
+          example: "Example District"
         address3:
           type: string
           nullable: true
+          example: "London"
         address4:
           type: string
           nullable: true
+          example: "Greater London"
         address5:
           type: string
           nullable: true
+          example: ""
         postCode:
           type: string
           nullable: true
+          example: "SW1A 1AA"
 
     Offence:
       description: A single offence and the result(s) recorded against it
