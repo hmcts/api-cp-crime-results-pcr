@@ -67,30 +67,37 @@ rather than nested under `HearingDetails.nextHearing`. See the shared `Court` ta
 | `convictionDate` | `charge.conviction_date` | `offences[].convictionDate` | Confirmed |
 | `listingNumber` | `sentence.count_number` | `offences[].listingNumber` | Open — not yet confirmed as the right mapping; verify against warrant examples |
 
-Terrorism/foreign-power/domestic-violence signals aren't separate `Offence` fields — the raw judicial result prompts (`theCourtDeterminedATerroristConnectionUnderSection30OfTheCounterTerrorismAct2008AppliesToThisOffence`/`...Count`, `offenceAggByForeignPowerCondition`) are exposed as-is via `JudicialResult.texts[]` instead, and the domestic-violence marker is case-level (`PcrHearingResult.caseMarkers[]`, sourced from CP's case-level `caseMarkers[]` with `markerTypeCode == 'DomesticViolence'`), not per-offence. **2026-08-14:**
+Terrorism/foreign-power/domestic-violence signals aren't separate `Offence` fields — the raw judicial result prompts (`theCourtDeterminedATerroristConnectionUnderSection30OfTheCounterTerrorismAct2008AppliesToThisOffence`/`...Count`, `offenceAggByForeignPowerCondition`) are exposed as-is via `ResultText.resultTexts[]` instead, and the domestic-violence marker is case-level (`PcrHearingResult.caseMarkers[]`, sourced from CP's case-level `caseMarkers[]` with `markerTypeCode == 'DomesticViolence'`), not per-offence. **2026-08-14:**
 `CaseMarker.code` is removed from the contract (no confirmed consumer need); `CaseMarker.description`
 is now sourced from CP's `caseMarkers[].markerTypeDescription`, not left unpopulated.
 
-### Judicial Result (`JudicialResult`)
+### Judicial Result (`ResultText`, formerly `JudicialResult`; item prompts are `Text`, formerly `JudicialResultPrompt`)
 
-**2026-08-14 — simplified, breaking change (v2.0.0).** `financial`, `category`, `convicted`,
-`concurrent`, `consecutiveToDate`, `consecutiveToCourtName`, and `imprisonmentPeriod` are removed
-from the contract — no confirmed consumer was relying on the HMPPs-alignment framing these rows
-below describe, and the table is kept only for the CP-source trail. `Offence.judicialResults` /
-`CourtApplication.judicialResults` are renamed to `resultTexts`; `JudicialResult.prompts` is
-renamed to `texts`, and `JudicialResultPrompt.reference`/`.type` are removed (`label`/`value`
-only remain). See `docs/pipeline/adrs/` for the decision record.
+**2026-08-14 — simplified, breaking change.** `financial`, `category`, `convicted`,
+`concurrent`, `consecutiveToDate`, `consecutiveToCourtName`, `imprisonmentPeriod`, `fineAmount`,
+and `totalCustodialPeriod` are removed from the contract — no confirmed consumer was relying on
+the HMPPs-alignment framing these rows below describe, and the table is kept only for the
+CP-source trail. `JudicialResultPrompt.reference`/`.type` are removed (`label`/`value` only
+remain). The `JudicialResult`/`JudicialResultPrompt` schema type names themselves are renamed to
+`ResultText`/`Text` — matching this spec's own singular-item-schema convention now that the
+HMPPs-aligned naming is gone.
+
+**Field names, current as of 2026-08-14:** `Offence.offenceResults` (was `results`, then
+`judicialResults`, then `resultTexts`) and `CourtApplication.applicationResults` (same lineage)
+are both arrays of `ResultText`. `ResultText.resultTexts` (was `prompts`, then `texts`) is the
+array of `Text` prompt items recorded against that result. See `docs/pipeline/adrs/` for the
+decision record.
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
-| `resultCode` | input to `charge_outcome.outcome_type` resolution | Judicial result CJS code | Confirmed as raw input |
+| ~~`resultCode`~~ | input to `charge_outcome.outcome_type` resolution | Judicial result CJS code | **Removed 2026-08-14** — no confirmed consumer need |
 | `resultText` | — (audit only) | Judicial result rendered text | Confirmed |
-| ~~`postHearingCustodyStatus`~~ | input to `outcome_type` (NON_CUSTODIAL/REMAND/etc.) | `ResultDefinition.postHearingCustodyStatus`, Reference Data, keyed on `cjsResultCode` — confirmed directly against the reference-data JSON fixture, alongside `financial`/`category`/`convicted`/`publishedForNows` | Not on `JudicialResult` in the current contract — this field lives on `Defendant.postHearingCustodyStatus` instead; row kept for the CP-source trail only |
+| ~~`postHearingCustodyStatus`~~ | input to `outcome_type` (NON_CUSTODIAL/REMAND/etc.) | `ResultDefinition.postHearingCustodyStatus`, Reference Data, keyed on `cjsResultCode` — confirmed directly against the reference-data JSON fixture, alongside `financial`/`category`/`convicted`/`publishedForNows` | Not on `ResultText` in the current contract — this field lives on `Defendant.postHearingCustodyStatus` instead; row kept for the CP-source trail only |
 | ~~`financial`~~ / ~~`category`~~ / ~~`convicted`~~ | same | `ResultDefinition.financial`/`category`/`convicted`, Reference Data | **Removed 2026-08-14** — structured, offered, never a finished classification; no confirmed consumer need |
 | ~~`concurrent`~~ | `sentence.sentence_serve_type` | `concurrent` prompt | **Removed 2026-08-14** |
 | ~~`consecutiveToDate`~~ / ~~`consecutiveToCourtName`~~ | `sentence.consecutive_to_id` (FK) | `consecutiveToSentenceImposedOn` (date) + `whichWasImpBy` (court name) | **Removed 2026-08-14** |
-| `fineAmount` | `sentence.fine_amount` | Imprisonment-in-default-of-fine prompts | Confirmed — explicitly excludes AOC (costs)/AOS (surcharge) |
-| ~~`imprisonmentPeriod`~~ / `totalCustodialPeriod` | `period_length.*` | `imprisonmentPeriod`/`totalCustodialPeriod` (free-text string, e.g. "6 Months 1 week") | `imprisonmentPeriod` **removed 2026-08-14**; `totalCustodialPeriod` stays — CP's native free-text shape, not pre-parsed into years/months/weeks/days components |
+| ~~`fineAmount`~~ | `sentence.fine_amount` | Imprisonment-in-default-of-fine prompts | **Removed 2026-08-14** — no confirmed consumer need |
+| ~~`imprisonmentPeriod`~~ / ~~`totalCustodialPeriod`~~ | `period_length.*` | `imprisonmentPeriod`/`totalCustodialPeriod` (free-text string, e.g. "6 Months 1 week") | Both **removed 2026-08-14** — no confirmed consumer need |
 
 ### Out of HMPPs scope, kept for other consumers
 
