@@ -74,7 +74,7 @@ paths:
               examples:
                 CaseMarkersAndResults:
                   summary: Domestic-violence marker with case/defendant-level results
-                  description: Real replayed hearing (drift-detection scenario og231065167-appeal-imprisonment-concurrent-consecutive), prompt lists trimmed for brevity.
+                  description: case-appealhearing-imprisonment-concurrent-consecutive
                   value:
                     - courtApplications: []
                       custodyLocation:
