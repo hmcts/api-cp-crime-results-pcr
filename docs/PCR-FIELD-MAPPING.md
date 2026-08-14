@@ -12,6 +12,13 @@ a confirmed need, which is a different, contract-wide judgement, not an HMPPS-sp
 also audits every field CP actually surfaces on the printed Prison Court Register
 (`PrisonCourtRegisterPdfPayloadGenerator.java`) to check nothing relevant got left behind.
 
+**2026-08-14:** `PcrHearingResult`'s top-level shape was restructured (`prosecutionCase`,
+`defendant.results`, `hearing.nextHearing`/`.sharedTime`, `Offence`/`CourtApplication.results`)
+and `ResultText.resultCode`/`.resultText` removed — see
+`docs/pipeline/adrs/003-restructure-pcr-hearing-result-top-level-shape.md`. The tables below
+predate this and describe the flat shape as it existed at the time; field-existence/removal
+status per row is still accurate, only the nesting has changed.
+
 ---
 
 ## 1. Field mapping — API schema → HMPPs table → CP source
