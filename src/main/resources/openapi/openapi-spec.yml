@@ -812,10 +812,6 @@ components:
         wherever they are recorded.
       type: object
       properties:
-        resultCode:
-          description: CJS result code for this judicial result.
-          type: string
-          example: "1200"
         resultText:
           description: Rendered result text.
           type: string

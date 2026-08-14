@@ -31,6 +31,8 @@ generated model/Swagger UI still read `JudicialResult`/`JudicialResultPrompt`.
   `applicationResults` — each array now named for what it actually holds, rather than sharing one
   generic name across two different owners. `ResultText.texts` is renamed to `resultTexts` — the
   array of raw prompts recorded against a single result.
+- `ResultText.resultCode` is removed — no confirmed consumer, same rationale as the other removals
+  in this family. `resultText` (the rendered text) remains.
 - Added realistic `example:` values to `JudicialResultPrompt.label`/`.value`, and the remaining
   placeholder-prone fields on `Offence` (`wording`/`endDate`/`listingNumber`/`convictionDate`/
   `pleaValue`/`pleaDate`) and `CourtApplication` (`type`/`decision`/`decisionDate`/`response`/

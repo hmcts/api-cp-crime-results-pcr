@@ -90,7 +90,7 @@ decision record.
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
-| `resultCode` | input to `charge_outcome.outcome_type` resolution | Judicial result CJS code | Confirmed as raw input |
+| ~~`resultCode`~~ | input to `charge_outcome.outcome_type` resolution | Judicial result CJS code | **Removed 2026-08-14** — no confirmed consumer need |
 | `resultText` | — (audit only) | Judicial result rendered text | Confirmed |
 | ~~`postHearingCustodyStatus`~~ | input to `outcome_type` (NON_CUSTODIAL/REMAND/etc.) | `ResultDefinition.postHearingCustodyStatus`, Reference Data, keyed on `cjsResultCode` — confirmed directly against the reference-data JSON fixture, alongside `financial`/`category`/`convicted`/`publishedForNows` | Not on `ResultText` in the current contract — this field lives on `Defendant.postHearingCustodyStatus` instead; row kept for the CP-source trail only |
 | ~~`financial`~~ / ~~`category`~~ / ~~`convicted`~~ | same | `ResultDefinition.financial`/`category`/`convicted`, Reference Data | **Removed 2026-08-14** — structured, offered, never a finished classification; no confirmed consumer need |
