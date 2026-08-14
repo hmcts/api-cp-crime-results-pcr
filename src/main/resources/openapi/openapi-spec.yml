@@ -71,6 +71,178 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/PcrHearingResult"
+              examples:
+                CaseMarkersAndResults:
+                  summary: Domestic-violence marker with case/defendant-level results
+                  description: Real replayed hearing (drift-detection scenario og231065167-appeal-imprisonment-concurrent-consecutive), prompt lists trimmed for brevity.
+                  value:
+                    - courtApplications: []
+                      custodyLocation:
+                        custodyType: Prison
+                        name: HMP Ashfield
+                      defendant:
+                        address:
+                          address1: 12 King Street
+                          address2: King Street
+                          address3: Covent Garden
+                          postCode: NW1 5BR
+                        dateOfBirth: '1993-08-11'
+                        firstName: Rita
+                        gender: MALE
+                        id: 86fc543b-4090-43f3-bd6d-8c1522844c99
+                        lastName: Wyman
+                        masterDefendantId: 86fc543b-4090-43f3-bd6d-8c1522844c99
+                        nationality: British
+                        postHearingCustodyStatus: A
+                        results:
+                          - resultTexts:
+                              - label: Collection order type
+                                value: Make payments as ordered
+                          - resultTexts:
+                              - label: Date to pay in full by
+                                value: 19/08/2026
+                        title: Mr
+                      hearing:
+                        courtDetails:
+                          court:
+                            courtHouseCode: B01LY00
+                            courtHouseName: Lavender Hill Magistrates' Court
+                          courtAddress:
+                            address1: 176A Lavender Hill
+                            address2: London
+                            address3: ''
+                            address4: ''
+                            address5: ''
+                            postCode: SW11 1JU
+                          ljaName: South West London Magistrates' Court
+                        defendantAppearanceDetails: In person
+                        hearingDate: '2026-08-12'
+                        hearingType: Appeal
+                        id: c95ea2d2-0845-40d9-adbe-71ac88af4962
+                        jurisdiction: MAGISTRATES
+                        sharedTime: '2026-08-12T08:44:03.431Z'
+                      offences:
+                        - code: TH68001
+                          listingNumber: 2
+                          offenceLegislation: Contrary to section 1(1) and 7 of the Theft Act 1968.
+                          pleaDate: '2026-08-11'
+                          pleaValue: NOT_GUILTY
+                          results:
+                            - resultTexts:
+                                - label: Total custodial period
+                                  value: 7 Months
+                                - label: Prison organisation name
+                                  value: HMP/YOI High Down
+                                - label: Prison email address 1
+                                  value: OMU.Highdown@justice.gov.uk
+                          startDate: '2026-06-12'
+                          title: Theft from the person of another
+                          verdict: Autrefois convict
+                          wording: Theft from the person of another
+                      prosecutionCase:
+                        caseMarkers:
+                          - description: Domestic Violence
+                        caseURN: OG231065167
+                        results:
+                          - resultTexts:
+                              - label: Amount of costs
+                                value: £567.00
+                              - label: Major creditor organisation name
+                                value: City of London Police
+                              - label: Major creditor address line 1
+                                value: Bishopsgate police station
+                CourtApplicationAndNextHearing:
+                  summary: Court application with a linked next hearing
+                  description: Real replayed hearing (drift-detection scenario two-def-application-for-one-def), prompt lists trimmed for brevity.
+                  value:
+                    - courtApplications:
+                        - offences: []
+                          reference: JS238681716
+                          results:
+                            - resultTexts: []
+                          type: Application within criminal proceedings
+                      custodyLocation:
+                        custodyType: Prison
+                        name: HMP Ashfield
+                      defendant:
+                        address:
+                          address1: 63 North Street
+                          address2: North Street
+                          address3: Guildford
+                          postCode: NW1 5BR
+                        dateOfBirth: '1998-07-31'
+                        firstName: Geraldo
+                        gender: MALE
+                        id: 77807b6c-4d05-45ca-9fb7-cd4c1d1d7842
+                        lastName: Turner
+                        masterDefendantId: 77807b6c-4d05-45ca-9fb7-cd4c1d1d7842
+                        nationality: Unknown
+                        postHearingCustodyStatus: Not Applicable
+                        results: []
+                        title: Mr
+                      hearing:
+                        courtDetails:
+                          court:
+                            courtHouseCode: B52CM00
+                            courtHouseName: Bristol Magistrates' Court
+                          courtAddress:
+                            address1: Marlborough St
+                            address2: Bristol
+                            address3: ''
+                            address4: ''
+                            address5: ''
+                            postCode: BS1 3NU
+                          ljaName: Avon & Somerset Magistrates' Court
+                        defendantAppearanceDetails: In person
+                        hearingDate: '2026-07-31'
+                        hearingType: Application
+                        id: 9316e6f1-6824-443d-b6c2-8982f42549a3
+                        jurisdiction: MAGISTRATES
+                        nextHearing:
+                          court:
+                            courtHouseCode: B01LY00
+                            courtHouseId: f8254db1-1683-483e-afb3-b87fde5a0a26
+                            courtHouseName: Lavender Hill Magistrates' Court
+                          dateTime: '2026-08-03T09:00:00Z'
+                          hearingId: 6b8aafdc-aa57-4158-bbd8-6f1ea525ba01
+                        sharedTime: '2026-07-31T08:33:21.608Z'
+                      offences:
+                        - code: TH68013A
+                          listingNumber: 2
+                          offenceLegislation: Contrary to section 1(1)    of the Criminal Attempts Act 1981.
+                          results:
+                            - resultTexts:
+                                - label: Next hearing in magistrates' court
+                                  value: 'Date of hearing:03/08/2026
+
+                                    Time of hearing:10:00
+
+                                    Courthouse organisation name:Lavender Hill Magistrates'' Court
+
+                                    Courthouse address line 1:176A Lavender Hill
+
+                                    Courthouse address line 2:London
+
+                                    Courthouse post code:SW11 1JU
+
+                                    Courtroom:Courtroom 01
+
+                                    Hearing type:Plea
+
+                                    Estimated duration:20 MINUTES
+
+                                    Booking reference:6b8aafdc-aa57-4158-bbd8-6f1ea525ba01'
+                                - label: Prison organisation name
+                                  value: HMP/YOI Eastwood Park
+                                - label: Prison email address 1
+                                  value: OMU.EastwoodPark@justice.gov.uk
+                          startDate: '2026-05-02'
+                          title: Attempt theft of motor vehicle
+                          wording: Attempt theft to vehicle
+                      prosecutionCase:
+                        caseMarkers: []
+                        caseURN: JS238681716
+                        results: []
         '400':
           $ref: "#/components/responses/BadRequest"
         '404':
