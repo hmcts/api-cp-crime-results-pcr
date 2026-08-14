@@ -74,7 +74,7 @@ paths:
               examples:
                 CaseMarkersAndResults:
                   summary: Domestic-violence marker with case/defendant-level results
-                  description: case-appealhearing-imprisonment-concurrent-consecutive
+                  description: An appeal hearing with a domestic violence case marker, a case-level costs result, and defendant-level collection order results.
                   value:
                     - courtApplications: []
                       custodyLocation:
@@ -153,7 +153,7 @@ paths:
                                 value: Bishopsgate police station
                 CourtApplicationAndNextHearing:
                   summary: Court application with a linked next hearing
-                  description: Real replayed hearing (drift-detection scenario two-def-application-for-one-def), prompt lists trimmed for brevity.
+                  description: A court application with no linked offence, plus a defendant's scheduled next hearing.
                   value:
                     - courtApplications:
                         - offences: []
@@ -245,7 +245,7 @@ paths:
                         results: []
                 MultipleOffencesPerDefendant:
                   summary: One defendant with two offences at the same hearing
-                  description: Real replayed hearing (drift-detection scenario multiple-defendants-multiple-offences), prompt lists trimmed for brevity.
+                  description: A single defendant convicted on two separate offences at the same hearing.
                   value:
                     - courtApplications: []
                       defendant:
@@ -367,7 +367,7 @@ paths:
                         results: []
                 DomesticViolenceMarkerWithRemand:
                   summary: Domestic-violence marker with a remand result and video-link appearance
-                  description: Real replayed hearing (drift-detection scenario tm370142723-remand-bail-direction-dv-marker), prompt lists trimmed for brevity.
+                  description: A domestic violence case marker with a remand result, recorded from a video-link appearance.
                   value:
                     - courtApplications: []
                       defendant:
@@ -440,7 +440,7 @@ paths:
                           - resultTexts: []
                 CourtApplicationWithLinkedOffence:
                   summary: Community order breach application with its own linked offence and result
-                  description: Real replayed hearing (drift-detection scenario od123921416-breach-community-order-resentence), prompt lists trimmed for brevity.
+                  description: A community order breach application with its own linked offence and result.
                   value:
                     - courtApplications:
                         - offences:
