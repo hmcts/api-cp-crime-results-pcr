@@ -89,7 +89,7 @@ only remain). See `docs/pipeline/adrs/` for the decision record.
 | ~~`financial`~~ / ~~`category`~~ / ~~`convicted`~~ | same | `ResultDefinition.financial`/`category`/`convicted`, Reference Data | **Removed 2026-08-14** — structured, offered, never a finished classification; no confirmed consumer need |
 | ~~`concurrent`~~ | `sentence.sentence_serve_type` | `concurrent` prompt | **Removed 2026-08-14** |
 | ~~`consecutiveToDate`~~ / ~~`consecutiveToCourtName`~~ | `sentence.consecutive_to_id` (FK) | `consecutiveToSentenceImposedOn` (date) + `whichWasImpBy` (court name) | **Removed 2026-08-14** |
-| `fineAmount` | `sentence.fine_amount` | Imprisonment-in-default-of-fine prompts | Confirmed — explicitly excludes AOC (costs)/AOS (surcharge) |
+| ~~`fineAmount`~~ | `sentence.fine_amount` | Imprisonment-in-default-of-fine prompts | **Removed 2026-08-14** — no confirmed consumer need |
 | ~~`imprisonmentPeriod`~~ / `totalCustodialPeriod` | `period_length.*` | `imprisonmentPeriod`/`totalCustodialPeriod` (free-text string, e.g. "6 Months 1 week") | `imprisonmentPeriod` **removed 2026-08-14**; `totalCustodialPeriod` stays — CP's native free-text shape, not pre-parsed into years/months/weeks/days components |
 
 ### Out of HMPPs scope, kept for other consumers

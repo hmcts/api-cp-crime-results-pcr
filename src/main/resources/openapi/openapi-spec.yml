@@ -706,6 +706,7 @@ components:
           description: Full wording of the offence as charged.
           type: string
           nullable: true
+          example: "Stole a bicycle belonging to another, contrary to section 1(1) of the Theft Act 1968."
         startDate:
           description: Offence start date.
           type: string
@@ -718,24 +719,29 @@ components:
           type: string
           format: date
           nullable: true
+          example: "2026-06-20"
         listingNumber:
           description: The listing/count number the offence was recorded against, where set.
           type: integer
           nullable: true
+          example: 1
         convictionDate:
           description: Conviction date recorded against the offence, where applicable.
           type: string
           format: date
           nullable: true
+          example: "2026-06-13"
         pleaValue:
           description: Plea recorded against the offence, where taken.
           type: string
           nullable: true
+          example: "GUILTY"
         pleaDate:
           description: Date the plea was recorded, where taken. Kept as its own field rather than folded into pleaValue's text.
           type: string
           format: date
           nullable: true
+          example: "2026-06-13"
         verdict:
           description: >-
             Verdict recorded against the offence, where applicable — CP's
@@ -798,14 +804,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/JudicialResultPrompt"
-        fineAmount:
-          description: >-
-            Fine amount imposed alongside this sentence, where applicable.
-            Excludes costs and victim surcharge, which are separate result
-            types. Only meaningful where this result is a sentence.
-          type: number
-          format: double
-          nullable: true
         totalCustodialPeriod:
           description: >-
             The total custodial period across the sentence, as CP records it
@@ -816,6 +814,7 @@ components:
             sentence.
           type: string
           nullable: true
+          example: "5 Months"
 
     JudicialResultPrompt:
       description: A single prompt recorded against a judicial result
@@ -824,9 +823,11 @@ components:
         label:
           type: string
           nullable: true
+          example: "Total custodial period"
         value:
           type: string
           nullable: true
+          example: "5 Months"
 
     CourtApplication:
       description: A court application (bail application, variation, etc.) and any results recorded against it
@@ -840,22 +841,27 @@ components:
           description: Application type.
           type: string
           nullable: true
+          example: "Application within criminal proceedings"
         decision:
           description: Decision made on the application, where applicable.
           type: string
           nullable: true
+          example: "Granted"
         decisionDate:
           type: string
           format: date
           nullable: true
+          example: "2026-06-13"
         response:
           description: Response to the application, where applicable.
           type: string
           nullable: true
+          example: "Consented"
         responseDate:
           type: string
           format: date
           nullable: true
+          example: "2026-06-13"
         resultTexts:
           description: >-
             Judicial results recorded directly against the application itself
