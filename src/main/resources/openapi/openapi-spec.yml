@@ -403,7 +403,7 @@ components:
             Judicial results recorded directly against the case, not tied to
             any specific offence — CP's
             `defendant.defendantCaseJudicialResults[]`, distinct from
-            `offences[].resultTexts`.
+            `offences[].offenceResults`.
           type: array
           items:
             $ref: "#/components/schemas/ResultText"
@@ -794,7 +794,7 @@ components:
           type: string
           nullable: true
           example: "INDICATED_NOT_GUILTY"
-        resultTexts:
+        offenceResults:
           description: >-
             Judicial result(s) recorded against this offence. An offence can
             carry more than one result (e.g. a conviction result plus a
@@ -820,7 +820,7 @@ components:
           description: Rendered result text.
           type: string
           example: "Sentenced to 6 months imprisonment"
-        texts:
+        resultTexts:
           description: >-
             Raw judicial result prompts recorded against this result, exposed
             as-is so consumers can build their own downstream logic on top of
@@ -876,12 +876,12 @@ components:
           format: date
           nullable: true
           example: "2026-06-13"
-        resultTexts:
+        applicationResults:
           description: >-
             Judicial results recorded directly against the application itself
             (CP source: `CourtApplication.judicialResults`) — distinct from
             results recorded against a specific offence the application
-            relates to, which appear under `offences[].resultTexts`
+            relates to, which appear under `offences[].offenceResults`
             instead.
           type: array
           items:

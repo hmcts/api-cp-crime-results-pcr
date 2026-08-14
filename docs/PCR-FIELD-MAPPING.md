@@ -67,7 +67,7 @@ rather than nested under `HearingDetails.nextHearing`. See the shared `Court` ta
 | `convictionDate` | `charge.conviction_date` | `offences[].convictionDate` | Confirmed |
 | `listingNumber` | `sentence.count_number` | `offences[].listingNumber` | Open — not yet confirmed as the right mapping; verify against warrant examples |
 
-Terrorism/foreign-power/domestic-violence signals aren't separate `Offence` fields — the raw judicial result prompts (`theCourtDeterminedATerroristConnectionUnderSection30OfTheCounterTerrorismAct2008AppliesToThisOffence`/`...Count`, `offenceAggByForeignPowerCondition`) are exposed as-is via `ResultText.texts[]` instead, and the domestic-violence marker is case-level (`PcrHearingResult.caseMarkers[]`, sourced from CP's case-level `caseMarkers[]` with `markerTypeCode == 'DomesticViolence'`), not per-offence. **2026-08-14:**
+Terrorism/foreign-power/domestic-violence signals aren't separate `Offence` fields — the raw judicial result prompts (`theCourtDeterminedATerroristConnectionUnderSection30OfTheCounterTerrorismAct2008AppliesToThisOffence`/`...Count`, `offenceAggByForeignPowerCondition`) are exposed as-is via `ResultText.resultTexts[]` instead, and the domestic-violence marker is case-level (`PcrHearingResult.caseMarkers[]`, sourced from CP's case-level `caseMarkers[]` with `markerTypeCode == 'DomesticViolence'`), not per-offence. **2026-08-14:**
 `CaseMarker.code` is removed from the contract (no confirmed consumer need); `CaseMarker.description`
 is now sourced from CP's `caseMarkers[].markerTypeDescription`, not left unpopulated.
 
@@ -77,12 +77,16 @@ is now sourced from CP's `caseMarkers[].markerTypeDescription`, not left unpopul
 `concurrent`, `consecutiveToDate`, `consecutiveToCourtName`, `imprisonmentPeriod`, `fineAmount`,
 and `totalCustodialPeriod` are removed from the contract — no confirmed consumer was relying on
 the HMPPs-alignment framing these rows below describe, and the table is kept only for the
-CP-source trail. `Offence.judicialResults` / `CourtApplication.judicialResults` are renamed to
-`resultTexts`; `JudicialResult.prompts` is renamed to `texts`, and `JudicialResultPrompt.reference`/
-`.type` are removed (`label`/`value` only remain). The `JudicialResult`/`JudicialResultPrompt`
-schema type names themselves are renamed to `ResultText`/`Text` — matching this spec's own
-singular-item-schema convention now that the HMPPs-aligned naming is gone. See
-`docs/pipeline/adrs/` for the decision record.
+CP-source trail. `JudicialResultPrompt.reference`/`.type` are removed (`label`/`value` only
+remain). The `JudicialResult`/`JudicialResultPrompt` schema type names themselves are renamed to
+`ResultText`/`Text` — matching this spec's own singular-item-schema convention now that the
+HMPPs-aligned naming is gone.
+
+**Field names, current as of 2026-08-14:** `Offence.offenceResults` (was `results`, then
+`judicialResults`, then `resultTexts`) and `CourtApplication.applicationResults` (same lineage)
+are both arrays of `ResultText`. `ResultText.resultTexts` (was `prompts`, then `texts`) is the
+array of `Text` prompt items recorded against that result. See `docs/pipeline/adrs/` for the
+decision record.
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|

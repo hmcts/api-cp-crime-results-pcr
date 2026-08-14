@@ -27,6 +27,10 @@ generated model/Swagger UI still read `JudicialResult`/`JudicialResultPrompt`.
 - The `JudicialResult` schema is renamed to `ResultText`, and `JudicialResultPrompt` to `Text`
   — matching this spec's own singular-item-schema convention (e.g. `offences[]` → `Offence`,
   `caseMarkers[]` → `CaseMarker`), rather than a name still tied to the abandoned HMPPs framing.
+- `Offence.resultTexts` is renamed to `offenceResults`, and `CourtApplication.resultTexts` to
+  `applicationResults` — each array now named for what it actually holds, rather than sharing one
+  generic name across two different owners. `ResultText.texts` is renamed to `resultTexts` — the
+  array of raw prompts recorded against a single result.
 - Added realistic `example:` values to `JudicialResultPrompt.label`/`.value`, and the remaining
   placeholder-prone fields on `Offence` (`wording`/`endDate`/`listingNumber`/`convictionDate`/
   `pleaValue`/`pleaDate`) and `CourtApplication` (`type`/`decision`/`decisionDate`/`response`/
