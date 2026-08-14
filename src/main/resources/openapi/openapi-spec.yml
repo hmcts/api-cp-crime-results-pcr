@@ -130,15 +130,13 @@ paths:
 
   /internal/hearing-results:
     post:
-      summary: Receive Hearing_Resulted events relayed from Azure Event Grid
+      summary: Receive Hearing_Resulted events from Azure Event Grid
       description: >-
-        Internal ingestion endpoint. `pcr-eventgrid-relay-function` absorbs
-        the Event Grid subscription upstream (including its
-        subscription-validation handshake) and relays each Hearing_Resulted
-        pointer event here verbatim (EventGridSchema, delivered as a JSON
-        array) via a plain internal HTTP call — this operation itself never
-        sees Event Grid's own handshake.
-      operationId: receiveHearingResultedEvent
+        Internal webhook endpoint. Azure Event Grid delivers Hearing_Resulted
+        pointer events here directly (EventGridSchema, delivered as a JSON
+        array). Also receives Event Grid's subscription validation handshake
+        on first subscribe.
+      operationId: receiveHearingResultedWebhook
       tags:
         - Internal
       security: []
@@ -149,10 +147,16 @@ paths:
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/HearingResultedEvent"
+                $ref: "#/components/schemas/HearingResultedWebhookEvent"
       responses:
         '200':
-          description: Hearing_Resulted event accepted and processed. No response body.
+          description: >-
+            Event accepted (Hearing_Resulted processed, or subscription
+            validation handshake echoed back).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebhookAck"
         '400':
           description: Malformed payload or unrecognized eventType — Event Grid will not retry.
           content:
@@ -283,14 +287,13 @@ components:
             traceId: "f6d5e708192a3b4c"
 
   schemas:
-    HearingResultedEvent:
+    HearingResultedWebhookEvent:
       type: object
       required: [id, eventType, data]
       description: >-
-        The Hearing_Resulted event (EventGridSchema shape), relayed verbatim
-        by pcr-eventgrid-relay-function. Event Grid's own
-        subscription-validation handshake never reaches this operation — the
-        relay function's @EventGridTrigger binding answers it upstream.
+        Covers both Event Grid's subscription-validation handshake
+        (eventType Microsoft.EventGrid.SubscriptionValidationEvent) and the
+        real Hearing_Resulted event — the service branches on eventType.
       properties:
         id:
           type: string
@@ -310,7 +313,12 @@ components:
           type: string
         data:
           type: object
+          description: validationCode/validationUrl for the handshake; hearingId/hearingDay/userId for a real event.
           properties:
+            validationCode:
+              type: string
+            validationUrl:
+              type: string
             hearingId:
               type: string
               format: uuid
@@ -320,6 +328,13 @@ components:
             userId:
               type: string
               format: uuid
+
+    WebhookAck:
+      type: object
+      properties:
+        validationResponse:
+          type: string
+          description: Only present when acknowledging a subscription validation handshake.
 
     PcrHearingResult:
       description: >-
