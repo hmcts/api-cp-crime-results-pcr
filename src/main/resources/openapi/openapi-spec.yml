@@ -355,6 +355,33 @@ components:
         phase 1 — see `PcrVersionMetadata.id`).
       type: object
       properties:
+        prosecutionCase:
+          $ref: "#/components/schemas/ProsecutionCase"
+        defendant:
+          $ref: "#/components/schemas/Defendant"
+        custodyLocation:
+          $ref: "#/components/schemas/CustodyLocation"
+        hearing:
+          $ref: "#/components/schemas/HearingDetails"
+        offences:
+          description: Results for each offence charged against the defendant at this hearing
+          type: array
+          items:
+            $ref: "#/components/schemas/Offence"
+        courtApplications:
+          description: >-
+            Court applications (bail applications, variations, etc.) and any
+            results recorded against them.
+          type: array
+          items:
+            $ref: "#/components/schemas/CourtApplication"
+
+    ProsecutionCase:
+      description: >-
+        The prosecution case this hearing belongs to, and case-level facts
+        recorded against it.
+      type: object
+      properties:
         caseURN:
           description: >-
             Prosecution case URN — CP's own field name (`ProsecutionCaseIdentifier.caseURN`
@@ -369,41 +396,12 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CaseMarker"
-        defendant:
-          $ref: "#/components/schemas/Defendant"
-        custodyLocation:
-          $ref: "#/components/schemas/CustodyLocation"
-        hearing:
-          $ref: "#/components/schemas/HearingDetails"
-        nextHearing:
-          $ref: "#/components/schemas/NextHearing"
-        offences:
-          description: Results for each offence charged against the defendant at this hearing
-          type: array
-          items:
-            $ref: "#/components/schemas/Offence"
-        courtApplications:
-          description: >-
-            Court applications (bail applications, variations, etc.) and any
-            results recorded against them.
-          type: array
-          items:
-            $ref: "#/components/schemas/CourtApplication"
-        defendantResults:
-          description: >-
-            Judicial results recorded directly against the defendant, not
-            tied to any specific case, offence, or application — CP's
-            `hearing.defendantJudicialResults[].judicialResult`, matched by
-            this defendant's own id.
-          type: array
-          items:
-            $ref: "#/components/schemas/ResultText"
-        caseResults:
+        results:
           description: >-
             Judicial results recorded directly against the case, not tied to
             any specific offence — CP's
             `defendant.defendantCaseJudicialResults[]`, distinct from
-            `offences[].offenceResults`.
+            `offences[].results`.
           type: array
           items:
             $ref: "#/components/schemas/ResultText"
@@ -474,6 +472,20 @@ components:
           type: string
           nullable: true
           example: "In person"
+        sharedTime:
+          description: >-
+            The timestamp CP recorded when this hearing's results were
+            shared — CP's own `sharedTime` field, a sibling of `hearing` in
+            the source payload rather than nested under it. One of the
+            candidate version-correlation mechanisms under consideration
+            (design §7) — exposed here as a raw fact, not yet used to
+            correlate anything.
+          type: string
+          format: date-time
+          nullable: true
+          example: "2026-07-15T11:33:22.794Z"
+        nextHearing:
+          $ref: "#/components/schemas/NextHearing"
 
     NextHearing:
       description: >-
@@ -684,6 +696,15 @@ components:
             "Not Applicable", defaulting to "Not Applicable" otherwise.
           type: string
           example: "Not Applicable"
+        results:
+          description: >-
+            Judicial results recorded directly against the defendant, not
+            tied to any specific case, offence, or application — CP's
+            `hearing.defendantJudicialResults[].judicialResult`, matched by
+            this defendant's own id.
+          type: array
+          items:
+            $ref: "#/components/schemas/ResultText"
 
     Address:
       description: A postal address.
@@ -794,7 +815,7 @@ components:
           type: string
           nullable: true
           example: "INDICATED_NOT_GUILTY"
-        offenceResults:
+        results:
           description: >-
             Judicial result(s) recorded against this offence. An offence can
             carry more than one result (e.g. a conviction result plus a
@@ -812,10 +833,6 @@ components:
         wherever they are recorded.
       type: object
       properties:
-        resultText:
-          description: Rendered result text.
-          type: string
-          example: "Sentenced to 6 months imprisonment"
         resultTexts:
           description: >-
             Raw judicial result prompts recorded against this result, exposed
@@ -872,12 +889,12 @@ components:
           format: date
           nullable: true
           example: "2026-06-13"
-        applicationResults:
+        results:
           description: >-
             Judicial results recorded directly against the application itself
             (CP source: `CourtApplication.judicialResults`) — distinct from
             results recorded against a specific offence the application
-            relates to, which appear under `offences[].offenceResults`
+            relates to, which appear under `offences[].results`
             instead.
           type: array
           items:

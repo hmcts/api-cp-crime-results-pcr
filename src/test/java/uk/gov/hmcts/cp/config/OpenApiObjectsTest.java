@@ -21,7 +21,7 @@ class OpenApiObjectsTest {
     @Test
     void generated_pcr_result_should_have_expected_fields() {
         assertThat(PcrHearingResult.class).hasDeclaredFields(
-                "caseURN", "caseMarkers", "defendant", "custodyLocation", "hearing", "nextHearing", "offences", "courtApplications");
+                "prosecutionCase", "defendant", "custodyLocation", "hearing", "offences", "courtApplications");
     }
 
     @Test
