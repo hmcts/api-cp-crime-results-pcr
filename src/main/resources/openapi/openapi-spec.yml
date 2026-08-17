@@ -592,13 +592,14 @@ paths:
 
   /internal/hearing-results:
     post:
-      summary: Receive Hearing_Resulted events from Azure Event Grid
+      summary: Receive Hearing_Resulted events
       description: >-
-        Internal webhook endpoint. Azure Event Grid delivers Hearing_Resulted
-        pointer events here directly (EventGridSchema, delivered as a JSON
-        array). Also receives Event Grid's subscription validation handshake
-        on first subscribe.
-      operationId: receiveHearingResultedWebhook
+        Internal ingestion endpoint. An upstream relay owns the Event Grid
+        subscription and its subscription-validation handshake, and forwards
+        each Hearing_Resulted pointer event here verbatim (EventGridSchema,
+        delivered as a JSON array) via a plain internal HTTP call — this
+        operation itself never sees Event Grid's own handshake.
+      operationId: receiveHearingResultedEvent
       tags:
         - Internal
       security: []
@@ -609,16 +610,10 @@ paths:
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/HearingResultedWebhookEvent"
+                $ref: "#/components/schemas/HearingResultedEvent"
       responses:
         '200':
-          description: >-
-            Event accepted (Hearing_Resulted processed, or subscription
-            validation handshake echoed back).
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/WebhookAck"
+          description: Hearing_Resulted event accepted and processed. No response body.
         '400':
           description: Malformed payload or unrecognized eventType — Event Grid will not retry.
           content:
@@ -749,13 +744,14 @@ components:
             traceId: "f6d5e708192a3b4c"
 
   schemas:
-    HearingResultedWebhookEvent:
+    HearingResultedEvent:
       type: object
       required: [id, eventType, data]
       description: >-
-        Covers both Event Grid's subscription-validation handshake
-        (eventType Microsoft.EventGrid.SubscriptionValidationEvent) and the
-        real Hearing_Resulted event — the service branches on eventType.
+        The Hearing_Resulted event (EventGridSchema shape), relayed verbatim
+        by an upstream relay. Event Grid's own subscription-validation
+        handshake never reaches this operation — the relay answers it
+        upstream.
       properties:
         id:
           type: string
@@ -781,14 +777,7 @@ components:
           example: "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/hmcts-cp/providers/Microsoft.EventGrid/topics/hearing-results"
         data:
           type: object
-          description: validationCode/validationUrl for the handshake; hearingId/hearingDay/userId for a real event.
           properties:
-            validationCode:
-              type: string
-              example: "2D1781C7-EBFC-4D6A-8CB9-19B2B4EFB13B"
-            validationUrl:
-              type: string
-              example: "https://rp-eastus2.eventgrid.azure.net/eventsubscriptions/hearing-results/validate?id=2D1781C7-EBFC-4D6A-8CB9-19B2B4EFB13B"
             hearingId:
               type: string
               format: uuid
@@ -801,14 +790,6 @@ components:
               type: string
               format: uuid
               example: "00000000-0000-0000-0000-000000000099"
-
-    WebhookAck:
-      type: object
-      properties:
-        validationResponse:
-          type: string
-          description: Only present when acknowledging a subscription validation handshake.
-          example: "2D1781C7-EBFC-4D6A-8CB9-19B2B4EFB13B"
 
     PcrHearingResult:
       description: >-
