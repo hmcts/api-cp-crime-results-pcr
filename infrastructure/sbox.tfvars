@@ -16,8 +16,8 @@ entra_client_id = "d03af961-b3a6-4b59-ba5e-ad16a6329b6b"
 apis = {
   pcrresults = {
     openapi_spec_path = "../src/main/resources/openapi/openapi-spec.yml"
-    service_host      = "spnl-dev-apim-int-gw.dev.nl.cjscp"
-    service_path      = "/amp/pcr"
+    service_host      = "devamp01-appgw.dev.nl.cjscp"
+    service_path      = ""
     revision          = "1"
   }
 }
