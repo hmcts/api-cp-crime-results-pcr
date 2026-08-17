@@ -592,14 +592,13 @@ paths:
 
   /internal/hearing-results:
     post:
-      summary: Receive Hearing_Resulted events relayed from Azure Event Grid
+      summary: Receive Hearing_Resulted events
       description: >-
-        Internal ingestion endpoint. `pcr-eventgrid-relay-function` absorbs
-        the Event Grid subscription upstream (including its
-        subscription-validation handshake) and relays each Hearing_Resulted
-        pointer event here verbatim (EventGridSchema, delivered as a JSON
-        array) via a plain internal HTTP call — this operation itself never
-        sees Event Grid's own handshake.
+        Internal ingestion endpoint. An upstream relay owns the Event Grid
+        subscription and its subscription-validation handshake, and forwards
+        each Hearing_Resulted pointer event here verbatim (EventGridSchema,
+        delivered as a JSON array) via a plain internal HTTP call — this
+        operation itself never sees Event Grid's own handshake.
       operationId: receiveHearingResultedEvent
       tags:
         - Internal
@@ -750,9 +749,9 @@ components:
       required: [id, eventType, data]
       description: >-
         The Hearing_Resulted event (EventGridSchema shape), relayed verbatim
-        by `pcr-eventgrid-relay-function`. Event Grid's own
-        subscription-validation handshake never reaches this operation — the
-        relay function's own `@EventGridTrigger` binding answers it upstream.
+        by an upstream relay. Event Grid's own subscription-validation
+        handshake never reaches this operation — the relay answers it
+        upstream.
       properties:
         id:
           type: string
