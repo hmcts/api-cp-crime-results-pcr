@@ -17,7 +17,7 @@ apis = {
   pcrresults = {
     openapi_spec_path = "../src/main/resources/openapi/openapi-spec.yml"
     service_host      = "devamp01-appgw.dev.nl.cjscp"
-    service_path      = ""
+    service_path      = "/pcr"
     revision          = "1"
   }
 }
