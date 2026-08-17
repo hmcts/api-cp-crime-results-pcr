@@ -47,6 +47,22 @@ is hardcoded in the workflow as `spsapimapi<env>state` (e.g. `spsapimapisboxstat
 
 Authentication uses OpenID Connect — no passwords or secrets are stored.
 
+### Federated identity configuration
+
+The OIDC app registration (`72a7651d-9d2a-4c04-9085-957efeab0e53`) is managed centrally in
+[`hmcts/azure-github-federation-config`](https://github.com/hmcts/azure-github-federation-config).
+Each repo that uses it must be explicitly added as a federated credential subject — this repo was
+added in commit `cb35887`. When adding a new repo or environment, raise a PR there to add entries
+for both `pull_request` and `ref:refs/heads/main`:
+
+```yaml
+- 'repo:hmcts/your-repo-name:pull_request'
+- 'repo:hmcts/your-repo-name:ref:refs/heads/main'
+```
+
+Without this the workflow fails at **Azure Login (OIDC)** with
+`Not all values are present. Ensure 'client-id' and 'tenant-id' are supplied.`
+
 ---
 
 ## Running locally
