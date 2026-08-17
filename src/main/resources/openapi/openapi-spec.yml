@@ -71,6 +71,468 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/PcrHearingResult"
+              examples:
+                CaseMarkersAndResults:
+                  summary: Domestic-violence marker with case/defendant-level results
+                  description: An appeal hearing with a domestic violence case marker, a case-level costs result, and defendant-level collection order results.
+                  value:
+                    - courtApplications: []
+                      custodyLocation:
+                        custodyType: Prison
+                        name: HMP Ashfield
+                      defendant:
+                        address:
+                          address1: 12 King Street
+                          address2: King Street
+                          address3: Covent Garden
+                          postCode: NW1 5BR
+                        dateOfBirth: '1993-08-11'
+                        firstName: Rita
+                        gender: MALE
+                        id: 86fc543b-4090-43f3-bd6d-8c1522844c99
+                        lastName: Wyman
+                        masterDefendantId: 86fc543b-4090-43f3-bd6d-8c1522844c99
+                        nationality: British
+                        postHearingCustodyStatus: A
+                        results:
+                          - resultTexts:
+                              - label: Collection order type
+                                value: Make payments as ordered
+                          - resultTexts:
+                              - label: Date to pay in full by
+                                value: 19/08/2026
+                        title: Mr
+                      hearing:
+                        courtDetails:
+                          court:
+                            courtHouseCode: B01LY00
+                            courtHouseName: Lavender Hill Magistrates' Court
+                          courtAddress:
+                            address1: 176A Lavender Hill
+                            address2: London
+                            address3: ''
+                            address4: ''
+                            address5: ''
+                            postCode: SW11 1JU
+                          ljaName: South West London Magistrates' Court
+                        defendantAppearanceDetails: In person
+                        hearingDate: '2026-08-12'
+                        hearingType: Appeal
+                        id: c95ea2d2-0845-40d9-adbe-71ac88af4962
+                        jurisdiction: MAGISTRATES
+                        sharedTime: '2026-08-12T08:44:03.431Z'
+                      offences:
+                        - code: TH68001
+                          listingNumber: 2
+                          offenceLegislation: Contrary to section 1(1) and 7 of the Theft Act 1968.
+                          pleaDate: '2026-08-11'
+                          pleaValue: NOT_GUILTY
+                          results:
+                            - resultTexts:
+                                - label: Total custodial period
+                                  value: 7 Months
+                                - label: Prison organisation name
+                                  value: HMP/YOI High Down
+                                - label: Prison email address 1
+                                  value: OMU.Highdown@justice.gov.uk
+                          startDate: '2026-06-12'
+                          title: Theft from the person of another
+                          verdict: Autrefois convict
+                          wording: Theft from the person of another
+                      prosecutionCase:
+                        caseMarkers:
+                          - description: Domestic Violence
+                        caseURN: OG231065167
+                        results:
+                          - resultTexts:
+                              - label: Amount of costs
+                                value: £567.00
+                              - label: Major creditor organisation name
+                                value: City of London Police
+                              - label: Major creditor address line 1
+                                value: Bishopsgate police station
+                CourtApplicationAndNextHearing:
+                  summary: Court application with a linked next hearing
+                  description: A court application with no linked offence, plus a defendant's scheduled next hearing.
+                  value:
+                    - courtApplications:
+                        - offences: []
+                          reference: JS238681716
+                          results:
+                            - resultTexts: []
+                          type: Application within criminal proceedings
+                      custodyLocation:
+                        custodyType: Prison
+                        name: HMP Ashfield
+                      defendant:
+                        address:
+                          address1: 63 North Street
+                          address2: North Street
+                          address3: Guildford
+                          postCode: NW1 5BR
+                        dateOfBirth: '1998-07-31'
+                        firstName: Geraldo
+                        gender: MALE
+                        id: 77807b6c-4d05-45ca-9fb7-cd4c1d1d7842
+                        lastName: Turner
+                        masterDefendantId: 77807b6c-4d05-45ca-9fb7-cd4c1d1d7842
+                        nationality: Unknown
+                        postHearingCustodyStatus: Not Applicable
+                        results: []
+                        title: Mr
+                      hearing:
+                        courtDetails:
+                          court:
+                            courtHouseCode: B52CM00
+                            courtHouseName: Bristol Magistrates' Court
+                          courtAddress:
+                            address1: Marlborough St
+                            address2: Bristol
+                            address3: ''
+                            address4: ''
+                            address5: ''
+                            postCode: BS1 3NU
+                          ljaName: Avon & Somerset Magistrates' Court
+                        defendantAppearanceDetails: In person
+                        hearingDate: '2026-07-31'
+                        hearingType: Application
+                        id: 9316e6f1-6824-443d-b6c2-8982f42549a3
+                        jurisdiction: MAGISTRATES
+                        nextHearing:
+                          court:
+                            courtHouseCode: B01LY00
+                            courtHouseId: f8254db1-1683-483e-afb3-b87fde5a0a26
+                            courtHouseName: Lavender Hill Magistrates' Court
+                          dateTime: '2026-08-03T09:00:00Z'
+                          hearingId: 6b8aafdc-aa57-4158-bbd8-6f1ea525ba01
+                        sharedTime: '2026-07-31T08:33:21.608Z'
+                      offences:
+                        - code: TH68013A
+                          listingNumber: 2
+                          offenceLegislation: Contrary to section 1(1)    of the Criminal Attempts Act 1981.
+                          results:
+                            - resultTexts:
+                                - label: Next hearing in magistrates' court
+                                  value: 'Date of hearing:03/08/2026
+
+                                    Time of hearing:10:00
+
+                                    Courthouse organisation name:Lavender Hill Magistrates'' Court
+
+                                    Courthouse address line 1:176A Lavender Hill
+
+                                    Courthouse address line 2:London
+
+                                    Courthouse post code:SW11 1JU
+
+                                    Courtroom:Courtroom 01
+
+                                    Hearing type:Plea
+
+                                    Estimated duration:20 MINUTES
+
+                                    Booking reference:6b8aafdc-aa57-4158-bbd8-6f1ea525ba01'
+                                - label: Prison organisation name
+                                  value: HMP/YOI Eastwood Park
+                                - label: Prison email address 1
+                                  value: OMU.EastwoodPark@justice.gov.uk
+                          startDate: '2026-05-02'
+                          title: Attempt theft of motor vehicle
+                          wording: Attempt theft to vehicle
+                      prosecutionCase:
+                        caseMarkers: []
+                        caseURN: JS238681716
+                        results: []
+                MultipleOffencesPerDefendant:
+                  summary: One defendant with two offences at the same hearing
+                  description: A single defendant convicted on two separate offences at the same hearing.
+                  value:
+                    - courtApplications: []
+                      defendant:
+                        address:
+                          address1: 18 George Square
+                          address2: George Square
+                          address3: Glasgow
+                          postCode: G2 1QU
+                        dateOfBirth: '1969-07-30'
+                        firstName: MechTommie
+                        gender: MALE
+                        id: 0f8306f4-b997-4d4c-81d6-999a646a7031
+                        lastName: MachLarkin
+                        masterDefendantId: 0f8306f4-b997-4d4c-81d6-999a646a7031
+                        postHearingCustodyStatus: Not Applicable
+                        results: []
+                        title: Mr
+                      hearing:
+                        courtDetails:
+                          court:
+                            courtHouseCode: B52CM00
+                            courtHouseName: Bristol Magistrates' Court
+                          courtAddress:
+                            address1: Marlborough St
+                            address2: Bristol
+                            address3: ''
+                            address4: ''
+                            address5: ''
+                            postCode: BS1 3NU
+                          ljaName: Avon & Somerset Magistrates' Court
+                        defendantAppearanceDetails: In person
+                        hearingDate: '2026-07-31'
+                        hearingType: First hearing
+                        id: f15a49db-812e-43d2-bfc5-7f3c7ee9ede1
+                        jurisdiction: MAGISTRATES
+                        nextHearing:
+                          court:
+                            courtHouseCode: B01LY00
+                            courtHouseId: f8254db1-1683-483e-afb3-b87fde5a0a26
+                            courtHouseName: Lavender Hill Magistrates' Court
+                          dateTime: '2026-07-31T09:00:00Z'
+                          hearingId: cf1f6d0c-6f9c-461f-b91a-5458a16c6342
+                        sharedTime: '2026-07-30T13:45:43.563Z'
+                      offences:
+                        - code: TH68013A
+                          convictionDate: '2026-07-31'
+                          listingNumber: 1
+                          offenceLegislation: Contrary to section 1(1)    of the Criminal Attempts Act 1981.
+                          pleaDate: '2026-07-31'
+                          pleaValue: GUILTY
+                          results:
+                            - resultTexts:
+                                - label: Next hearing in magistrates' court
+                                  value: 'Date of hearing:31/07/2026
+
+                                    Time of hearing:10:00
+
+                                    Courthouse organisation name:Lavender Hill Magistrates'' Court
+
+                                    Courthouse address line 1:176A Lavender Hill
+
+                                    Courthouse address line 2:London
+
+                                    Courthouse post code:SW11 1JU
+
+                                    Courtroom:Courtroom 01
+
+                                    Hearing type:Appeal
+
+                                    Estimated duration:30 MINUTES
+
+                                    Booking reference:277bb4af-0109-420b-a640-3249b0fbe0ff'
+                                - label: Prison organisation name
+                                  value: HMP Ashfield
+                                - label: Prison email address 1
+                                  value: yoiashfield.premiercustody@premier-serco.cjsm.net
+                          startDate: '2026-05-01'
+                          title: Attempt theft of motor vehicle
+                          wording: Attempt theft to vehicle
+                        - allocationDecision: Summary-only offence
+                          code: CA03012
+                          convictionDate: '2026-07-31'
+                          listingNumber: 1
+                          offenceLegislation: Contrary to section 363(3)(b) and (4) of the Communications Act 2003.
+                          pleaDate: '2026-07-31'
+                          pleaValue: GUILTY
+                          results:
+                            - resultTexts:
+                                - label: Next hearing in magistrates' court
+                                  value: 'Date of hearing:31/07/2026
+
+                                    Time of hearing:10:00
+
+                                    Courthouse organisation name:Lavender Hill Magistrates'' Court
+
+                                    Courthouse address line 1:176A Lavender Hill
+
+                                    Courthouse address line 2:London
+
+                                    Courthouse post code:SW11 1JU
+
+                                    Courtroom:Courtroom 01
+
+                                    Hearing type:Appeal
+
+                                    Estimated duration:30 MINUTES
+
+                                    Booking reference:6e0ae098-72a9-4866-97e6-992d3126a4ad'
+                                - label: Prison organisation name
+                                  value: HMP Ashfield
+                                - label: Prison email address 1
+                                  value: yoiashfield.premiercustody@premier-serco.cjsm.net
+                          startDate: '2026-05-01'
+                          title: Possess / control TV set with intent another use install without a licence
+                          wording: Theft of pedal cycle
+                      prosecutionCase:
+                        caseMarkers: []
+                        caseURN: AS231157673
+                        results: []
+                DomesticViolenceMarkerWithRemand:
+                  summary: Domestic-violence marker with a remand result and video-link appearance
+                  description: A domestic violence case marker with a remand result, recorded from a video-link appearance.
+                  value:
+                    - courtApplications: []
+                      defendant:
+                        address:
+                          address1: 99 Riverside Drive
+                          address2: Riverside Drive
+                          address3: Chester-le-Street
+                          postCode: NW1 5BR
+                        dateOfBirth: '1975-08-11'
+                        firstName: Cristal
+                        gender: MALE
+                        id: beea4cae-7107-46d0-b994-979d02063411
+                        lastName: Kutch
+                        masterDefendantId: beea4cae-7107-46d0-b994-979d02063411
+                        nationality: British
+                        postHearingCustodyStatus: Not Applicable
+                        results: []
+                        title: Mr
+                      hearing:
+                        courtDetails:
+                          court:
+                            courtHouseCode: B01DU00
+                            courtHouseName: City of London Magistrates' Court
+                          courtAddress:
+                            address1: 1 Queen Victoria Street
+                            address2: London
+                            address3: ''
+                            address4: ''
+                            address5: ''
+                            postCode: EC4N 4XY
+                          ljaName: Central London Magistrates' Court
+                        defendantAppearanceDetails: By video link
+                        hearingDate: '2026-08-11'
+                        hearingType: First hearing
+                        id: 24b88ffb-4290-4560-9518-d6084c125c54
+                        jurisdiction: MAGISTRATES
+                        nextHearing:
+                          court:
+                            courtHouseCode: B01DU00
+                            courtHouseId: c133d0de-c989-48b9-bd20-0431943e347e
+                            courtHouseName: City of London Magistrates' Court
+                          dateTime: '2026-08-11T09:00:00Z'
+                          hearingId: 69304c69-7264-46b2-ac4c-0c94b26788dc
+                        sharedTime: '2026-08-11T13:57:14.435Z'
+                      offences:
+                        - code: TH68013A
+                          convictionDate: '2026-08-11'
+                          indicatedPleaValue: NO_INDICATION
+                          listingNumber: 1
+                          offenceLegislation: Contrary to section 1(1)    of the Criminal Attempts Act 1981.
+                          pleaDate: '2026-08-11'
+                          pleaValue: NOT_GUILTY
+                          results:
+                            - resultTexts:
+                                - label: Remanded for medical reports under Section
+                                  value: Act 1983
+                                - label: Type of medical report required
+                                  value: Approved Clinician
+                                - label: Reason for report
+                                  value: Use in Legal Proceedings
+                          startDate: '2026-06-12'
+                          title: Attempt theft of motor vehicle
+                          verdict: Found guilty
+                          wording: Attempt theft to vehicle
+                      prosecutionCase:
+                        caseMarkers:
+                          - description: Domestic Violence
+                        caseURN: TM370142723
+                        results:
+                          - resultTexts: []
+                CourtApplicationWithLinkedOffence:
+                  summary: Community order breach application with its own linked offence and result
+                  description: A community order breach application with its own linked offence and result.
+                  value:
+                    - courtApplications:
+                        - offences:
+                            - allocationDecision: Indictable-only offence
+                              code: CJ03522
+                              convictionDate: '2026-08-11'
+                              listingNumber: 1
+                              offenceLegislation: Contrary to section 8(1) of the Theft Act 1968.
+                              pleaDate: '2026-08-11'
+                              pleaValue: GUILTY
+                              results:
+                                - resultTexts:
+                                    - label: Imprisonment Period
+                                      value: 15 Days
+                                    - label: Imprisonment reasons
+                                      value: the offence(s) are so serious that only a custodial sentence can be justified
+                                    - label: Reason for custody
+                                      value: because of an unprovoked attack of a serious nature
+                                    - label: Bail remand days to count (tagged days)
+                                      value: '0'
+                                    - label: This offence is aggravated by the foreign power condition being met in relation to it as defined by section 31 of the National Security Act 2023
+                                      value: 'false'
+                              startDate: '2026-06-12'
+                              title: Robbery
+                              wording: 'Original CaseURN: YX123927526, Re-sentenced Original code : TH68023, Original details: Robbery'
+                          reference: OD123921416
+                          results:
+                            - resultTexts:
+                                - label: Date original order made
+                                  value: 10/08/2026
+                                - label: Order revoked
+                                  value: community order
+                                - label: Court that made the original order
+                                  value: Bexley Magistrates' Court
+                          type: Conviction of an offence while a community order is in force
+                      defendant:
+                        address:
+                          address1: 90 Mill Lane
+                          address2: Mill Lane
+                          address3: Cardiff
+                          postCode: NW1 5BR
+                        dateOfBirth: '1971-08-11'
+                        firstName: Marya
+                        gender: MALE
+                        id: 81570703-2942-4ae0-af35-14559883a888
+                        lastName: Klocko
+                        masterDefendantId: f4b5e73e-e7f7-421a-9b9f-88003d5355c3
+                        postHearingCustodyStatus: Not Applicable
+                        results: []
+                        title: Mr
+                      hearing:
+                        courtDetails:
+                          court:
+                            courtHouseCode: B01BH00
+                            courtHouseName: Bexley Magistrates' Court
+                          courtAddress:
+                            address1: Norwich Place
+                            address2: Bexleyheath
+                            address3: Kent
+                            address4: ''
+                            address5: ''
+                            postCode: DA6 7ND
+                          ljaName: South East London Magistrates' Court
+                        defendantAppearanceDetails: In person
+                        hearingDate: '2026-08-11'
+                        hearingType: First hearing
+                        id: cd274eae-19f3-4a4a-b615-ad85dace6331
+                        jurisdiction: MAGISTRATES
+                        sharedTime: '2026-08-11T10:57:08.180Z'
+                      offences:
+                        - allocationDecision: Indictable-only offence
+                          code: TH68023
+                          convictionDate: '2026-08-11'
+                          listingNumber: 1
+                          offenceLegislation: Contrary to section 8(1) of the Theft Act 1968.
+                          pleaDate: '2026-08-11'
+                          pleaValue: GUILTY
+                          results:
+                            - resultTexts:
+                                - label: Total custodial period is life
+                                  value: 'true'
+                                - label: Prison organisation name
+                                  value: HMP/YOI Low Newton
+                                - label: Prison email address 1
+                                  value: OMU.LowNewton@justice.gov.uk
+                          startDate: '2026-06-12'
+                          title: Robbery
+                          wording: Robbery
+                      prosecutionCase:
+                        caseMarkers: []
+                        caseURN: OD123921416
+                        results: []
         '400':
           $ref: "#/components/responses/BadRequest"
         '404':
@@ -297,37 +759,48 @@ components:
       properties:
         id:
           type: string
+          example: "b2f1c3d4-e5f6-4708-91a2-b3c4d5e6f708"
         eventType:
           type: string
           example: Hearing_Resulted
         subject:
           type: string
+          example: "hearing/9c7e33d3-e6c0-4138-b7fb-b176554ae98c"
         eventTime:
           type: string
           format: date-time
+          example: "2026-07-15T11:33:22.794Z"
         dataVersion:
           type: string
+          example: "1.0"
         metadataVersion:
           type: string
+          example: "1"
         topic:
           type: string
+          example: "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/hmcts-cp/providers/Microsoft.EventGrid/topics/hearing-results"
         data:
           type: object
           description: validationCode/validationUrl for the handshake; hearingId/hearingDay/userId for a real event.
           properties:
             validationCode:
               type: string
+              example: "2D1781C7-EBFC-4D6A-8CB9-19B2B4EFB13B"
             validationUrl:
               type: string
+              example: "https://rp-eastus2.eventgrid.azure.net/eventsubscriptions/hearing-results/validate?id=2D1781C7-EBFC-4D6A-8CB9-19B2B4EFB13B"
             hearingId:
               type: string
               format: uuid
+              example: "9c7e33d3-e6c0-4138-b7fb-b176554ae98c"
             hearingDay:
               type: string
               format: date
+              example: "2026-07-15"
             userId:
               type: string
               format: uuid
+              example: "00000000-0000-0000-0000-000000000099"
 
     WebhookAck:
       type: object
@@ -335,12 +808,40 @@ components:
         validationResponse:
           type: string
           description: Only present when acknowledging a subscription validation handshake.
+          example: "2D1781C7-EBFC-4D6A-8CB9-19B2B4EFB13B"
 
     PcrHearingResult:
       description: >-
         A single recorded PCR result for a hearing and defendant. No
         `defendantId` (already in the path) and no `id` (nullable during
         phase 1 — see `PcrVersionMetadata.id`).
+      type: object
+      properties:
+        prosecutionCase:
+          $ref: "#/components/schemas/ProsecutionCase"
+        defendant:
+          $ref: "#/components/schemas/Defendant"
+        custodyLocation:
+          $ref: "#/components/schemas/CustodyLocation"
+        hearing:
+          $ref: "#/components/schemas/HearingDetails"
+        offences:
+          description: Results for each offence charged against the defendant at this hearing
+          type: array
+          items:
+            $ref: "#/components/schemas/Offence"
+        courtApplications:
+          description: >-
+            Court applications (bail applications, variations, etc.) and any
+            results recorded against them.
+          type: array
+          items:
+            $ref: "#/components/schemas/CourtApplication"
+
+    ProsecutionCase:
+      description: >-
+        The prosecution case this hearing belongs to, and case-level facts
+        recorded against it.
       type: object
       properties:
         caseURN:
@@ -357,33 +858,20 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CaseMarker"
-        defendant:
-          $ref: "#/components/schemas/Defendant"
-        custodyLocation:
-          $ref: "#/components/schemas/CustodyLocation"
-        hearing:
-          $ref: "#/components/schemas/HearingDetails"
-        nextHearing:
-          $ref: "#/components/schemas/NextHearing"
-        offences:
-          description: Results for each offence charged against the defendant at this hearing
-          type: array
-          items:
-            $ref: "#/components/schemas/Offence"
-        courtApplications:
+        results:
           description: >-
-            Court applications (bail applications, variations, etc.) and any
-            results recorded against them.
+            Judicial results recorded directly against the case, not tied to
+            any specific offence — CP's
+            `defendant.defendantCaseJudicialResults[]`, distinct from
+            `offences[].results`.
           type: array
           items:
-            $ref: "#/components/schemas/CourtApplication"
+            $ref: "#/components/schemas/ResultText"
 
     CustodyLocation:
       description: >-
         The defendant's custody location at the time of the hearing. Maps to
-        CP's `custodialEstablishment`. Whether it prints on the Prison Court
-        Register document is unverified — the document template lives in an
-        external repo.
+        CP's `custodialEstablishment`.
       type: object
       nullable: true
       properties:
@@ -391,12 +879,14 @@ components:
           description: Prison/establishment display name.
           type: string
           nullable: true
+          example: "HMP Dovegate"
         custodyType:
           description: >-
             Custody-type classification (e.g. `Prison`) vs. other custody
             types such as police custody. Full value set unconfirmed.
           type: string
           nullable: true
+          example: "Prison"
 
     HearingDetails:
       description: Facts recorded about the hearing itself, for a single PCR result.
@@ -407,8 +897,8 @@ components:
           type: string
           format: uuid
           example: "f1d2c3b4-a5e6-4f7a-8b9c-0d1e2f3a4b5c"
-        court:
-          $ref: "#/components/schemas/Court"
+        courtDetails:
+          $ref: "#/components/schemas/CourtDetails"
         hearingDate:
           description: Date of the hearing.
           type: string
@@ -421,6 +911,43 @@ components:
             still being confirmed with the business — currently free text.
           type: string
           nullable: true
+          example: "Adjourned"
+        hearingType:
+          description: >-
+            Classification of the hearing itself, e.g. "First hearing". CP
+            sends this as an object (id + description); only the
+            human-readable description is surfaced here, matching the
+            convention for CourtApplication.type.
+          type: string
+          nullable: true
+          example: "First hearing"
+        jurisdiction:
+          description: The hearing's jurisdiction type, e.g. "MAGISTRATES".
+          type: string
+          nullable: true
+          example: "MAGISTRATES"
+        defendantAppearanceDetails:
+          description: >-
+            How this defendant attended this hearing, resolved from the
+            hearing's own attendance record for this defendant on the
+            sitting day.
+          type: string
+          nullable: true
+          example: "In person"
+        sharedTime:
+          description: >-
+            The timestamp CP recorded when this hearing's results were
+            shared — CP's own `sharedTime` field, a sibling of `hearing` in
+            the source payload rather than nested under it. One of the
+            candidate version-correlation mechanisms under consideration
+            (design §7) — exposed here as a raw fact, not yet used to
+            correlate anything.
+          type: string
+          format: date-time
+          nullable: true
+          example: "2026-07-15T11:33:22.794Z"
+        nextHearing:
+          $ref: "#/components/schemas/NextHearing"
 
     NextHearing:
       description: >-
@@ -439,6 +966,7 @@ components:
           type: string
           format: uuid
           nullable: true
+          example: "14085700-414d-4345-9dff-688a128f4177"
         dateTime:
           description: Scheduled date and time of the next appearance, where known.
           type: string
@@ -447,6 +975,28 @@ components:
           example: "2026-07-21T09:00:00Z"
         court:
           $ref: "#/components/schemas/Court"
+
+    CourtDetails:
+      description: >-
+        Court venue detail for the hearing itself — identity, postal address
+        and Local Justice Area name. Kept separate from the shared `Court`
+        schema (used here and on `NextHearing`) because address and LJA name
+        are only ever sourced for the hearing's own venue, never for a next
+        hearing, so `NextHearing` cannot offer them.
+      type: object
+      nullable: true
+      properties:
+        court:
+          $ref: "#/components/schemas/Court"
+        courtAddress:
+          $ref: "#/components/schemas/Address"
+        ljaName:
+          description: >-
+            Local Justice Area name for the hearing's court centre — CP's
+            courtCentre.lja.ljaName.
+          type: string
+          nullable: true
+          example: "South East London Magistrates' Court"
 
     Court:
       description: >-
@@ -460,6 +1010,7 @@ components:
           type: string
           format: uuid
           nullable: true
+          example: "7e967376-eacf-4fca-9b30-21b0c5aad427"
         courtHouseCode:
           description: >-
             CP Reference Data's court house code. CP's own faithful
@@ -531,15 +1082,13 @@ components:
       description: A marker recorded against the whole prosecution case
       type: object
       properties:
-        code:
-          description: Marker type code, e.g. "DomesticViolence"
-          type: string
-          example: "DomesticViolence"
         description:
-          description: Human-readable description of the marker
+          description: >-
+            Human-readable description of the marker — CP's
+            `caseMarkers[].markerTypeDescription`.
           type: string
           nullable: true
-          example: "Domestic violence case marker"
+          example: "Domestic Violence"
 
     Defendant:
       description: >-
@@ -575,6 +1124,7 @@ components:
           description: Middle name, where recorded.
           type: string
           nullable: true
+          example: "Quinn"
         lastName:
           description: Last name.
           type: string
@@ -588,6 +1138,35 @@ components:
           example: "1980-01-31"
         address:
           $ref: "#/components/schemas/Address"
+        gender:
+          description: Gender, where recorded.
+          type: string
+          nullable: true
+          example: "MALE"
+        nationality:
+          description: Nationality, where recorded.
+          type: string
+          nullable: true
+          example: "British"
+        postHearingCustodyStatus:
+          description: >-
+            The defendant's overall post-hearing custody status for this
+            hearing, resolved once per defendant across their case-level
+            judicial results — not to be confused with a specific result's
+            own status. Matches the legacy PCR pipeline's own resolution:
+            the first case-level result whose status isn't already
+            "Not Applicable", defaulting to "Not Applicable" otherwise.
+          type: string
+          example: "Not Applicable"
+        results:
+          description: >-
+            Judicial results recorded directly against the defendant, not
+            tied to any specific case, offence, or application — CP's
+            `hearing.defendantJudicialResults[].judicialResult`, matched by
+            this defendant's own id.
+          type: array
+          items:
+            $ref: "#/components/schemas/ResultText"
 
     Address:
       description: A postal address.
@@ -596,21 +1175,27 @@ components:
         address1:
           type: string
           nullable: true
+          example: "1 Example Street"
         address2:
           type: string
           nullable: true
+          example: "Example District"
         address3:
           type: string
           nullable: true
+          example: "London"
         address4:
           type: string
           nullable: true
+          example: "Greater London"
         address5:
           type: string
           nullable: true
+          example: ""
         postCode:
           type: string
           nullable: true
+          example: "SW1A 1AA"
 
     Offence:
       description: A single offence and the result(s) recorded against it
@@ -629,6 +1214,7 @@ components:
           description: Full wording of the offence as charged.
           type: string
           nullable: true
+          example: "Stole a bicycle belonging to another, contrary to section 1(1) of the Theft Act 1968."
         startDate:
           description: Offence start date.
           type: string
@@ -641,29 +1227,57 @@ components:
           type: string
           format: date
           nullable: true
+          example: "2026-06-20"
         listingNumber:
           description: The listing/count number the offence was recorded against, where set.
           type: integer
           nullable: true
+          example: 1
         convictionDate:
           description: Conviction date recorded against the offence, where applicable.
           type: string
           format: date
           nullable: true
+          example: "2026-06-13"
         pleaValue:
           description: Plea recorded against the offence, where taken.
           type: string
           nullable: true
+          example: "GUILTY"
         pleaDate:
           description: Date the plea was recorded, where taken. Kept as its own field rather than folded into pleaValue's text.
           type: string
           format: date
           nullable: true
-        verdictCode:
-          description: Verdict code recorded against the offence, where applicable.
+          example: "2026-06-13"
+        verdict:
+          description: >-
+            Verdict recorded against the offence, where applicable — CP's
+            verdict.verdictType.description (e.g. "Found guilty").
           type: string
           nullable: true
-        judicialResults:
+          example: "Found guilty"
+        offenceLegislation:
+          description: The legislation the offence was charged under, where recorded.
+          type: string
+          nullable: true
+          example: "Contrary to section 8(1) of the Theft Act 1968."
+        allocationDecision:
+          description: >-
+            Mode-of-trial allocation decision reason, where recorded — CP's
+            allocationDecision.motReasonDescription.
+          type: string
+          nullable: true
+          example: "Indictable-only offence"
+        indicatedPleaValue:
+          description: >-
+            Indicated plea recorded against the offence, where taken — CP's
+            indicatedPlea.indicatedPleaValue. Distinct from pleaValue, which
+            is the plea actually entered.
+          type: string
+          nullable: true
+          example: "INDICATED_NOT_GUILTY"
+        results:
           description: >-
             Judicial result(s) recorded against this offence. An offence can
             carry more than one result (e.g. a conviction result plus a
@@ -671,9 +1285,9 @@ components:
             real shape and is not collapsed to a single result.
           type: array
           items:
-            $ref: "#/components/schemas/JudicialResult"
+            $ref: "#/components/schemas/ResultText"
 
-    JudicialResult:
+    ResultText:
       description: >-
         A single judicial result, with its Reference Data classification and
         any sentence detail it carries. Reused for both offence results and
@@ -681,42 +1295,7 @@ components:
         wherever they are recorded.
       type: object
       properties:
-        resultCode:
-          description: CJS result code for this judicial result.
-          type: string
-          example: "1200"
-        resultText:
-          description: Rendered result text.
-          type: string
-          example: "Sentenced to 6 months imprisonment"
-        postHearingCustodyStatus:
-          description: >-
-            From Reference Data's `ResultDefinition.postHearingCustodyStatus`
-            (confirmed directly against the reference-data fixture, alongside
-            `financial`/`category`/`convicted`/`publishedForNows`) — CP's own
-            classification of the resulting custody/bail status.
-          type: string
-          nullable: true
-          example: "Bailed"
-        financial:
-          description: >-
-            From `ResultDefinition.financial` — whether this result type is
-            inherently financial. CP holds this as `Y`/`N`; mapped to a
-            boolean here for consumer ergonomics.
-          type: boolean
-          nullable: true
-        category:
-          description: From `ResultDefinition.category`.
-          type: string
-          nullable: true
-        convicted:
-          description: >-
-            From `ResultDefinition.convicted` — whether this result type
-            represents a conviction. CP holds this as `Y`/`N`; mapped to a
-            boolean here for consumer ergonomics.
-          type: boolean
-          nullable: true
-        prompts:
+        resultTexts:
           description: >-
             Raw judicial result prompts recorded against this result, exposed
             as-is so consumers can build their own downstream logic on top of
@@ -724,70 +1303,20 @@ components:
             than depend only on CP's own derived convenience fields.
           type: array
           items:
-            $ref: "#/components/schemas/JudicialResultPrompt"
-        concurrent:
-          description: Whether this sentencing result runs concurrently with another. Only meaningful where this result is a sentence.
-          type: boolean
-          nullable: true
-        consecutiveToDate:
-          description: >-
-            Date of the sentence this one runs consecutively to, where
-            recorded. CP holds this as a date and a court name, not a
-            reference to another sentence's identifier — exposed as CP
-            actually holds it, not as a foreign key CP doesn't have. Only
-            meaningful where this result is a sentence.
-          type: string
-          format: date
-          nullable: true
-        consecutiveToCourtName:
-          description: Name of the court that imposed the sentence this one runs consecutively to, where recorded. Only meaningful where this result is a sentence.
-          type: string
-          nullable: true
-        fineAmount:
-          description: >-
-            Fine amount imposed alongside this sentence, where applicable.
-            Excludes costs and victim surcharge, which are separate result
-            types. Only meaningful where this result is a sentence.
-          type: number
-          format: double
-          nullable: true
-        imprisonmentPeriod:
-          description: >-
-            The custodial period for this sentencing result, as CP records it
-            — a free-text phrase (e.g. "6 Months 1 week"), not pre-parsed into
-            components. Consumers needing a structured breakdown parse it
-            themselves; CP does not commit to any one consumer's decomposition
-            as the contract shape. Only meaningful where this result is a
-            sentence.
-          type: string
-          nullable: true
-          example: "6 Months 1 week"
-        totalCustodialPeriod:
-          description: >-
-            The total custodial period across the sentence, where it differs
-            from `imprisonmentPeriod` (e.g. where consecutive terms combine).
-            Same free-text convention as `imprisonmentPeriod`. Only meaningful
-            where this result is a sentence.
-          type: string
-          nullable: true
+            $ref: "#/components/schemas/Text"
 
-    JudicialResultPrompt:
+    Text:
       description: A single prompt recorded against a judicial result
       type: object
       properties:
         label:
           type: string
           nullable: true
+          example: "Total custodial period"
         value:
           type: string
           nullable: true
-        reference:
-          type: string
-          nullable: true
-        type:
-          description: Prompt value type, e.g. "BOOLEAN", "TEXT", "DATE".
-          type: string
-          nullable: true
+          example: "5 Months"
 
     CourtApplication:
       description: A court application (bail application, variation, etc.) and any results recorded against it
@@ -801,32 +1330,37 @@ components:
           description: Application type.
           type: string
           nullable: true
+          example: "Application within criminal proceedings"
         decision:
           description: Decision made on the application, where applicable.
           type: string
           nullable: true
+          example: "Granted"
         decisionDate:
           type: string
           format: date
           nullable: true
+          example: "2026-06-13"
         response:
           description: Response to the application, where applicable.
           type: string
           nullable: true
+          example: "Consented"
         responseDate:
           type: string
           format: date
           nullable: true
-        judicialResults:
+          example: "2026-06-13"
+        results:
           description: >-
             Judicial results recorded directly against the application itself
             (CP source: `CourtApplication.judicialResults`) — distinct from
             results recorded against a specific offence the application
-            relates to, which appear under `offences[].judicialResults`
+            relates to, which appear under `offences[].results`
             instead.
           type: array
           items:
-            $ref: "#/components/schemas/JudicialResult"
+            $ref: "#/components/schemas/ResultText"
         offences:
           description: >-
             Offence(s) this application relates to, where linked — CP source:
