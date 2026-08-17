@@ -134,7 +134,7 @@ paths:
                                 - label: Prison organisation name
                                   value: HMP/YOI High Down
                                 - label: Prison email address 1
-                                  value: OMU.Highdown@justice.gov.uk
+                                  value: OMU.Highdown@example-prison.gov.uk
                           startDate: '2026-06-12'
                           title: Theft from the person of another
                           verdict: Autrefois convict
@@ -235,7 +235,7 @@ paths:
                                 - label: Prison organisation name
                                   value: HMP/YOI Eastwood Park
                                 - label: Prison email address 1
-                                  value: OMU.EastwoodPark@justice.gov.uk
+                                  value: OMU.EastwoodPark@example-prison.gov.uk
                           startDate: '2026-05-02'
                           title: Attempt theft of motor vehicle
                           wording: Attempt theft to vehicle
@@ -525,7 +525,7 @@ paths:
                                 - label: Prison organisation name
                                   value: HMP/YOI Low Newton
                                 - label: Prison email address 1
-                                  value: OMU.LowNewton@justice.gov.uk
+                                  value: OMU.LowNewton@example-prison.gov.uk
                           startDate: '2026-06-12'
                           title: Robbery
                           wording: Robbery
