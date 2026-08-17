@@ -25,7 +25,7 @@ jobs:
 
       - name: Assert disallowed URLs are not present
         run: |
-          DISALLOWED_DOMAINS="cjscp\.org\.uk|service\.gov\.uk|justice\.gov\.uk|hmcts\.net|ejudiciary\.net"
+          DISALLOWED_DOMAINS="cjscp\.org\.uk|service\.gov\.uk|justice\.gov\.uk|hmcts\.net|ejudiciary\.net|cjsm\.net"
           if grep -E "$DISALLOWED_DOMAINS" "${{ steps.find_spec.outputs.openapi_file }}"; then
             echo "❌ Error: Found disallowed internal URLs in OpenAPI spec."
             exit 1

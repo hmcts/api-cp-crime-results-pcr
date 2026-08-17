@@ -321,7 +321,7 @@ paths:
                                 - label: Prison organisation name
                                   value: HMP Ashfield
                                 - label: Prison email address 1
-                                  value: yoiashfield.premiercustody@premier-serco.cjsm.net
+                                  value: yoiashfield.premiercustody@example-custody.gov.uk
                           startDate: '2026-05-01'
                           title: Attempt theft of motor vehicle
                           wording: Attempt theft to vehicle
@@ -357,7 +357,7 @@ paths:
                                 - label: Prison organisation name
                                   value: HMP Ashfield
                                 - label: Prison email address 1
-                                  value: yoiashfield.premiercustody@premier-serco.cjsm.net
+                                  value: yoiashfield.premiercustody@example-custody.gov.uk
                           startDate: '2026-05-01'
                           title: Possess / control TV set with intent another use install without a licence
                           wording: Theft of pedal cycle
