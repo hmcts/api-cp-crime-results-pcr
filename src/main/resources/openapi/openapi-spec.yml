@@ -724,9 +724,7 @@ components:
               example: "00000000-0000-0000-0000-000000000099"
 
     PcrHearingResult:
-      description: >-
-        A single recorded PCR result for a hearing and defendant. No
-        `defendantId` (already in the path).
+      description: A single recorded PCR result for a hearing and defendant.
       type: object
       properties:
         prosecutionCase:
