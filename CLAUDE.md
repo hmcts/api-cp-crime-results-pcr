@@ -18,21 +18,13 @@ kept as reference material for that integration, not as the source of the contra
 ## API Endpoint(s)
 
 - `GET /cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}` → bare `PcrHearingResult[]`
-  (full data, no `id`, no per-item `defendantId` — already known from the path)
-  (200/400/404/500)
-- `GET /cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}/versions?versionId={value}`
-  → `PcrVersionMetadataList` (`{ versions: PcrVersionMetadata[] }`, metadata only — `id`,
-  `hearingId`, `defendantId`, `recordedAt`) (200/400/404/500)
+  (full data, no per-item `defendantId` — already known from the path) (200/400/404/500)
 
-No `401`/`403` on either endpoint — subscription-key/auth gating happens at APIM before the
-request reaches this service, matching `api-cp-crime-prosecution-case-details`'s pattern (only
-backend-computable responses are declared). `404` on both means the case, hearing, or defendant
-itself doesn't exist — neither endpoint ever 404s on a filter match miss (both return an empty
-list/array instead).
+No `401`/`403` — subscription-key/auth gating happens at APIM before the request reaches this
+service, matching `api-cp-crime-prosecution-case-details`'s pattern (only backend-computable
+responses are declared). `404` means the case, hearing, or defendant itself doesn't exist — the
+endpoint never 404s on a filter match miss (returns an empty array instead).
 
-The second endpoint's `versionId` query parameter is optional: omitted, it lists metadata for
-every recorded version; supplied, it filters the list down to the single matching entry (still a
-list, just narrowed) — there is no `latest` special value and no single-full-data-by-id lookup.
 Security: `bearerAuth` + `subscriptionKey` (no OAuth2 scope), matching HRDS's pattern —
 see ADR-006/AMP-890 in `service-cp-crime-results-pcr`.
 
@@ -69,7 +61,7 @@ the spec, keep both in sync.
 
 | Class | What it validates |
 |---|---|
-| `OpenApiObjectsTest` | Generated `ErrorResponse`/`PcrHearingResult`/`PcrVersionMetadataList`/`PcrVersionMetadata` field shapes, generated `PcrApi` method names (`getPcrHearingResults`, `getPcrHearingResultsMetadata`), and that `ErrorResponse.timestamp` generates as `Instant` (not `OffsetDateTime`) |
+| `OpenApiObjectsTest` | Generated `ErrorResponse`/`PcrHearingResult` field shapes, generated `PcrApi` method names (`getPcrHearingResults`), and that `ErrorResponse.timestamp` generates as `Instant` (not `OffsetDateTime`) |
 
 ## Generator Config Notes
 
