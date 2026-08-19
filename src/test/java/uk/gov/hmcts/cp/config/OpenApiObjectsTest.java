@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.cp.openapi.api.PcrApi;
 import uk.gov.hmcts.cp.openapi.model.ErrorResponse;
 import uk.gov.hmcts.cp.openapi.model.PcrHearingResult;
-import uk.gov.hmcts.cp.openapi.model.PcrVersionMetadataList;
-import uk.gov.hmcts.cp.openapi.model.PcrVersionMetadata;
 import java.lang.reflect.Field;
 import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,19 +23,9 @@ class OpenApiObjectsTest {
     }
 
     @Test
-    void generated_pcr_version_metadata_list_should_have_expected_fields() {
-        assertThat(PcrVersionMetadataList.class).hasDeclaredFields("versions");
-    }
-
-    @Test
-    void generated_pcr_version_metadata_should_have_expected_fields() {
-        assertThat(PcrVersionMetadata.class).hasDeclaredFields("id", "hearingId", "defendantId", "recordedAt");
-    }
-
-    @Test
     void generated_pcr_api_should_have_expected_methods() {
         assertThat(PcrApi.class)
-                .hasDeclaredMethods("getPcrHearingResults", "getPcrHearingResultsMetadata");
+                .hasDeclaredMethods("getPcrHearingResults");
     }
 
     @Test

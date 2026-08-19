@@ -160,6 +160,11 @@ whether HMPPS calls a defendant-scoped endpoint or filters a case-level response
 currently no way to fetch a *single* version's full data by id — only all-versions-full-data (base path) or
 any-version-metadata (`/versions`) exist.
 
+**Update, 19 Aug 2026:** the `.../versions` metadata-only operation described above has been removed from
+the spec — the API now has a single operation under `/cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}`
+(the base path, full data). Kept the paragraph above as the historical record of why the two-operation shape
+was chosen in the first place.
+
 ---
 
 ## 5. Superseded framing (kept for the CP source-code trail)
