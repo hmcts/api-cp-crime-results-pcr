@@ -120,7 +120,7 @@ paths:
                         hearingType: Appeal
                         id: c95ea2d2-0845-40d9-adbe-71ac88af4962
                         jurisdiction: MAGISTRATES
-                        sharedTime: '2026-08-12T08:44:03.431Z'
+                      sharedTime: '2026-08-12T08:44:03.431Z'
                       offences:
                         - code: TH68001
                           listingNumber: 2
@@ -205,7 +205,7 @@ paths:
                             courtHouseName: Lavender Hill Magistrates' Court
                           dateTime: '2026-08-03T09:00:00Z'
                           hearingId: 6b8aafdc-aa57-4158-bbd8-6f1ea525ba01
-                        sharedTime: '2026-07-31T08:33:21.608Z'
+                      sharedTime: '2026-07-31T08:33:21.608Z'
                       offences:
                         - code: TH68013A
                           listingNumber: 2
@@ -288,7 +288,7 @@ paths:
                             courtHouseName: Lavender Hill Magistrates' Court
                           dateTime: '2026-07-31T09:00:00Z'
                           hearingId: cf1f6d0c-6f9c-461f-b91a-5458a16c6342
-                        sharedTime: '2026-07-30T13:45:43.563Z'
+                      sharedTime: '2026-07-30T13:45:43.563Z'
                       offences:
                         - code: TH68013A
                           convictionDate: '2026-07-31'
@@ -411,7 +411,7 @@ paths:
                             courtHouseName: City of London Magistrates' Court
                           dateTime: '2026-08-11T09:00:00Z'
                           hearingId: 69304c69-7264-46b2-ac4c-0c94b26788dc
-                        sharedTime: '2026-08-11T13:57:14.435Z'
+                      sharedTime: '2026-08-11T13:57:14.435Z'
                       offences:
                         - code: TH68013A
                           convictionDate: '2026-08-11'
@@ -509,7 +509,7 @@ paths:
                         hearingType: First hearing
                         id: cd274eae-19f3-4a4a-b615-ad85dace6331
                         jurisdiction: MAGISTRATES
-                        sharedTime: '2026-08-11T10:57:08.180Z'
+                      sharedTime: '2026-08-11T10:57:08.180Z'
                       offences:
                         - allocationDecision: Indictable-only offence
                           code: TH68023
@@ -735,6 +735,12 @@ components:
           $ref: "#/components/schemas/CustodyLocation"
         hearing:
           $ref: "#/components/schemas/HearingDetails"
+        sharedTime:
+          description: The timestamp CP recorded when this hearing's results were shared.
+          type: string
+          format: date-time
+          nullable: true
+          example: "2026-07-15T11:33:22.794Z"
         offences:
           description: Results for each offence charged against the defendant at this hearing
           type: array
@@ -844,18 +850,6 @@ components:
           type: string
           nullable: true
           example: "In person"
-        sharedTime:
-          description: >-
-            The timestamp CP recorded when this hearing's results were
-            shared — CP's own `sharedTime` field, a sibling of `hearing` in
-            the source payload rather than nested under it. One of the
-            candidate version-correlation mechanisms under consideration
-            (design §7) — exposed here as a raw fact, not yet used to
-            correlate anything.
-          type: string
-          format: date-time
-          nullable: true
-          example: "2026-07-15T11:33:22.794Z"
         nextHearing:
           $ref: "#/components/schemas/NextHearing"
 
