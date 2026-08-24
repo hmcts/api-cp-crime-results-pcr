@@ -10,15 +10,16 @@ apim_product = {
   product_access_control_groups = ["developers", "administrators", "guests"]
 }
 
-entra_tenant_id = "e2995d11-9947-4e78-9de6-d44e0603518e"
+entra_tenant_id = "d44f885c-4fac-47bf-afde-d7d861ec4d7b"
 entra_client_id = "d03af961-b3a6-4b59-ba5e-ad16a6329b6b"
 
 apis = {
   pcrresults = {
     openapi_spec_path = "../src/main/resources/openapi/openapi-spec.yml"
+    display_name      = "Crime Case Prison Court Register API (pcr)"
+    path              = "amp/pcr"
     service_host      = "devamp01-appgw.dev.nl.cjscp"
     service_path      = "/pcr"
-    path              = "amp/pcr"
     revision          = "1"
   }
 }
