@@ -1141,12 +1141,21 @@ components:
 
     ResultText:
       description: >-
-        A single judicial result, with its Reference Data classification and
-        any sentence detail it carries. Reused for both offence results and
-        court application results — they are the same kind of CP fact,
+        A single judicial result, with its resultDescription classification
+        and any sentence detail it carries. Reused for both offence results
+        and court application results — they are the same kind of CP fact,
         wherever they are recorded.
       type: object
       properties:
+        resultDescription:
+          description: >-
+            Short, code-prefixed description of this specific judicial
+            result (e.g. `"RI - Remanded in custody"`), derived from CP's own
+            result text, stripped of any narrative detail already carried in
+            `resultTexts`.
+          type: string
+          nullable: true
+          example: "RI - Remanded in custody"
         resultTexts:
           description: >-
             Raw judicial result prompts recorded against this result, exposed
