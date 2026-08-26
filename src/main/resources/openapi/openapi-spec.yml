@@ -1054,14 +1054,7 @@ components:
       type: object
       properties:
         id:
-          description: >-
-            CP's unique identifier for this offence. Stable across amendments
-            to the same offence (e.g. a downgraded/upgraded charge edited in
-            place); a genuinely new offence gets a new id. Use this, not the
-            combination of code/startDate/endDate, to identify the same
-            offence across hearings — that combination is not guaranteed
-            unique (e.g. multiple offences with the same code and dates can
-            appear on one warrant).
+          description: CP's unique identifier for this offence.
           type: string
           format: uuid
           nullable: true
