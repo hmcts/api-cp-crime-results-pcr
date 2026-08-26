@@ -1053,6 +1053,12 @@ components:
       description: A single offence and the result(s) recorded against it
       type: object
       properties:
+        id:
+          description: CP's unique identifier for this offence.
+          type: string
+          format: uuid
+          nullable: true
+          example: "9c7e33d3-e6c0-4138-b7fb-b176554ae98c"
         code:
           description: Offence code, aligned with OMS.
           type: string
