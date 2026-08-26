@@ -1053,6 +1053,19 @@ components:
       description: A single offence and the result(s) recorded against it
       type: object
       properties:
+        id:
+          description: >-
+            CP's unique identifier for this offence. Stable across amendments
+            to the same offence (e.g. a downgraded/upgraded charge edited in
+            place); a genuinely new offence gets a new id. Use this, not the
+            combination of code/startDate/endDate, to identify the same
+            offence across hearings — that combination is not guaranteed
+            unique (e.g. multiple offences with the same code and dates can
+            appear on one warrant).
+          type: string
+          format: uuid
+          nullable: true
+          example: "9c7e33d3-e6c0-4138-b7fb-b176554ae98c"
         code:
           description: Offence code, aligned with OMS.
           type: string
