@@ -130,7 +130,7 @@ paths:
                           pleaDate: '2026-08-11'
                           pleaValue: NOT_GUILTY
                           results:
-                            - resultDescription: IMP - Imprisonment
+                            - resultDescription: "IMP - Imprisonment\nCommitted to prison for 7 Months. Total custodial period: 7 Months."
                               resultTexts:
                                 - label: Total custodial period
                                   value: 7 Months
@@ -462,7 +462,7 @@ paths:
                               pleaDate: '2026-08-11'
                               pleaValue: GUILTY
                               results:
-                                - resultDescription: IMP - Imprisonment
+                                - resultDescription: "IMP - Imprisonment\nCommitted to prison for 15 Days. Reason: the offence(s) are so serious that only a custodial sentence can be justified because of an unprovoked attack of a serious nature. Bail remand days to count (Tagged Days): 0."
                                   resultTexts:
                                     - label: Imprisonment Period
                                       value: 15 Days
@@ -531,7 +531,7 @@ paths:
                           pleaDate: '2026-08-11'
                           pleaValue: GUILTY
                           results:
-                            - resultDescription: IMP - Imprisonment
+                            - resultDescription: "IMP - Imprisonment\nCommitted to prison for 15 Days. Reason: the offence(s) are so serious that only a custodial sentence can be justified because of an unprovoked attack of a serious nature. Total custodial period is life."
                               resultTexts:
                                 - label: Total custodial period is life
                                   value: 'true'
