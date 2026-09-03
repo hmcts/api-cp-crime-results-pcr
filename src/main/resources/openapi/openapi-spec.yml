@@ -95,10 +95,12 @@ paths:
                         nationality: British
                         postHearingCustodyStatus: A
                         results:
-                          - resultTexts:
+                          - resultDescription: COLLO - Collection order
+                            resultTexts:
                               - label: Collection order type
                                 value: Make payments as ordered
-                          - resultTexts:
+                          - resultDescription: PDATE - Pay by date
+                            resultTexts:
                               - label: Date to pay in full by
                                 value: 19/08/2026
                         title: Mr
@@ -128,7 +130,8 @@ paths:
                           pleaDate: '2026-08-11'
                           pleaValue: NOT_GUILTY
                           results:
-                            - resultTexts:
+                            - resultDescription: "IMP - Imprisonment\nCommitted to prison for 7 Months. Total custodial period: 7 Months."
+                              resultTexts:
                                 - label: Total custodial period
                                   value: 7 Months
                                 - label: Prison organisation name
@@ -144,7 +147,8 @@ paths:
                           - description: Domestic Violence
                         caseURN: OG231065167
                         results:
-                          - resultTexts:
+                          - resultDescription: FCOST - Costs
+                            resultTexts:
                               - label: Amount of costs
                                 value: £567.00
                               - label: Major creditor organisation name
@@ -159,7 +163,8 @@ paths:
                         - offences: []
                           reference: JS238681716
                           results:
-                            - resultTexts: []
+                            - resultDescription: G - Granted
+                              resultTexts: []
                           type: Application within criminal proceedings
                       custodyLocation:
                         custodyType: Prison
@@ -211,7 +216,8 @@ paths:
                           listingNumber: 2
                           offenceLegislation: Contrary to section 1(1)    of the Criminal Attempts Act 1981.
                           results:
-                            - resultTexts:
+                            - resultDescription: RI - Remanded in custody
+                              resultTexts:
                                 - label: Next hearing in magistrates' court
                                   value: 'Date of hearing:03/08/2026
 
@@ -297,7 +303,8 @@ paths:
                           pleaDate: '2026-07-31'
                           pleaValue: GUILTY
                           results:
-                            - resultTexts:
+                            - resultDescription: RI - Remanded in custody
+                              resultTexts:
                                 - label: Next hearing in magistrates' court
                                   value: 'Date of hearing:31/07/2026
 
@@ -333,7 +340,8 @@ paths:
                           pleaDate: '2026-07-31'
                           pleaValue: GUILTY
                           results:
-                            - resultTexts:
+                            - resultDescription: RI - Remanded in custody
+                              resultTexts:
                                 - label: Next hearing in magistrates' court
                                   value: 'Date of hearing:31/07/2026
 
@@ -421,7 +429,8 @@ paths:
                           pleaDate: '2026-08-11'
                           pleaValue: NOT_GUILTY
                           results:
-                            - resultTexts:
+                            - resultDescription: RMR - Remanded for medical report
+                              resultTexts:
                                 - label: Remanded for medical reports under Section
                                   value: Act 1983
                                 - label: Type of medical report required
@@ -437,7 +446,8 @@ paths:
                           - description: Domestic Violence
                         caseURN: TM370142723
                         results:
-                          - resultTexts: []
+                          - resultDescription: Defendant's details changed
+                            resultTexts: []
                 CourtApplicationWithLinkedOffence:
                   summary: Community order breach application with its own linked offence and result
                   description: A community order breach application with its own linked offence and result.
@@ -452,7 +462,8 @@ paths:
                               pleaDate: '2026-08-11'
                               pleaValue: GUILTY
                               results:
-                                - resultTexts:
+                                - resultDescription: "IMP - Imprisonment\nCommitted to prison for 15 Days. Reason: the offence(s) are so serious that only a custodial sentence can be justified because of an unprovoked attack of a serious nature. Bail remand days to count (Tagged Days): 0."
+                                  resultTexts:
                                     - label: Imprisonment Period
                                       value: 15 Days
                                     - label: Imprisonment reasons
@@ -468,7 +479,8 @@ paths:
                               wording: 'Original CaseURN: YX123927526, Re-sentenced Original code : TH68023, Original details: Robbery'
                           reference: OD123921416
                           results:
-                            - resultTexts:
+                            - resultDescription: OREV - Order revoked
+                              resultTexts:
                                 - label: Date original order made
                                   value: 10/08/2026
                                 - label: Order revoked
@@ -519,7 +531,8 @@ paths:
                           pleaDate: '2026-08-11'
                           pleaValue: GUILTY
                           results:
-                            - resultTexts:
+                            - resultDescription: "IMP - Imprisonment\nCommitted to prison for 15 Days. Reason: the offence(s) are so serious that only a custodial sentence can be justified because of an unprovoked attack of a serious nature. Total custodial period is life."
+                              resultTexts:
                                 - label: Total custodial period is life
                                   value: 'true'
                                 - label: Prison organisation name
@@ -532,6 +545,66 @@ paths:
                       prosecutionCase:
                         caseMarkers: []
                         caseURN: OD123921416
+                        results: []
+                CourtApplicationDefendantType:
+                  summary: Application to reopen a case, brought by the defendant as Applicant
+                  description: >-
+                    defendantType is populated directly from the application
+                    itself, independent of the defendant's role on any linked
+                    prosecution case.
+                  value:
+                    - courtApplications:
+                        - defendantType: Applicant
+                          offences: []
+                          reference: RA780611523
+                          results:
+                            - resultDescription: G - Granted
+                              resultTexts:
+                                - label: Application outcome
+                                  value: Case reopened
+                          type: Application to reopen case
+                      custodyLocation:
+                        custodyType: Prison
+                        name: HMP Bure
+                      defendant:
+                        address:
+                          address1: 8 Orchard Close
+                          address2: Orchard Close
+                          address3: Norwich
+                          postCode: NW1 5BR
+                        dateOfBirth: '1988-04-22'
+                        firstName: Farrah
+                        gender: FEMALE
+                        id: 5e91c2a4-3d67-48b0-9c15-7a2f6b8d4c93
+                        lastName: Considine
+                        masterDefendantId: 5e91c2a4-3d67-48b0-9c15-7a2f6b8d4c93
+                        nationality: British
+                        postHearingCustodyStatus: A
+                        results: []
+                        title: Ms
+                      hearing:
+                        courtDetails:
+                          court:
+                            courtHouseCode: B01LY00
+                            courtHouseName: Lavender Hill Magistrates' Court
+                          courtAddress:
+                            address1: 176A Lavender Hill
+                            address2: London
+                            address3: ''
+                            address4: ''
+                            address5: ''
+                            postCode: SW11 1JU
+                          ljaName: South West London Magistrates' Court
+                        defendantAppearanceDetails: In person
+                        hearingDate: '2026-08-20'
+                        hearingType: Application
+                        id: 3af5c9d2-7b41-4e28-9c60-1f8a4b2e7d15
+                        jurisdiction: MAGISTRATES
+                      sharedTime: '2026-08-20T09:12:47.221Z'
+                      offences: []
+                      prosecutionCase:
+                        caseMarkers: []
+                        caseURN: RA780611523
                         results: []
         '400':
           $ref: "#/components/responses/BadRequest"
