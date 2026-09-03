@@ -95,10 +95,12 @@ paths:
                         nationality: British
                         postHearingCustodyStatus: A
                         results:
-                          - resultTexts:
+                          - resultDescription: COLLO - Collection order
+                            resultTexts:
                               - label: Collection order type
                                 value: Make payments as ordered
-                          - resultTexts:
+                          - resultDescription: PDATE - Pay by date
+                            resultTexts:
                               - label: Date to pay in full by
                                 value: 19/08/2026
                         title: Mr
@@ -128,7 +130,8 @@ paths:
                           pleaDate: '2026-08-11'
                           pleaValue: NOT_GUILTY
                           results:
-                            - resultTexts:
+                            - resultDescription: IMP - Imprisonment
+                              resultTexts:
                                 - label: Total custodial period
                                   value: 7 Months
                                 - label: Prison organisation name
@@ -144,7 +147,8 @@ paths:
                           - description: Domestic Violence
                         caseURN: OG231065167
                         results:
-                          - resultTexts:
+                          - resultDescription: FCOST - Costs
+                            resultTexts:
                               - label: Amount of costs
                                 value: £567.00
                               - label: Major creditor organisation name
@@ -159,7 +163,8 @@ paths:
                         - offences: []
                           reference: JS238681716
                           results:
-                            - resultTexts: []
+                            - resultDescription: G - Granted
+                              resultTexts: []
                           type: Application within criminal proceedings
                       custodyLocation:
                         custodyType: Prison
@@ -211,7 +216,8 @@ paths:
                           listingNumber: 2
                           offenceLegislation: Contrary to section 1(1)    of the Criminal Attempts Act 1981.
                           results:
-                            - resultTexts:
+                            - resultDescription: RI - Remanded in custody
+                              resultTexts:
                                 - label: Next hearing in magistrates' court
                                   value: 'Date of hearing:03/08/2026
 
@@ -297,7 +303,8 @@ paths:
                           pleaDate: '2026-07-31'
                           pleaValue: GUILTY
                           results:
-                            - resultTexts:
+                            - resultDescription: RI - Remanded in custody
+                              resultTexts:
                                 - label: Next hearing in magistrates' court
                                   value: 'Date of hearing:31/07/2026
 
@@ -333,7 +340,8 @@ paths:
                           pleaDate: '2026-07-31'
                           pleaValue: GUILTY
                           results:
-                            - resultTexts:
+                            - resultDescription: RI - Remanded in custody
+                              resultTexts:
                                 - label: Next hearing in magistrates' court
                                   value: 'Date of hearing:31/07/2026
 
@@ -421,7 +429,8 @@ paths:
                           pleaDate: '2026-08-11'
                           pleaValue: NOT_GUILTY
                           results:
-                            - resultTexts:
+                            - resultDescription: RMR - Remanded for medical report
+                              resultTexts:
                                 - label: Remanded for medical reports under Section
                                   value: Act 1983
                                 - label: Type of medical report required
@@ -437,7 +446,8 @@ paths:
                           - description: Domestic Violence
                         caseURN: TM370142723
                         results:
-                          - resultTexts: []
+                          - resultDescription: Defendant's details changed
+                            resultTexts: []
                 CourtApplicationWithLinkedOffence:
                   summary: Community order breach application with its own linked offence and result
                   description: A community order breach application with its own linked offence and result.
@@ -452,7 +462,8 @@ paths:
                               pleaDate: '2026-08-11'
                               pleaValue: GUILTY
                               results:
-                                - resultTexts:
+                                - resultDescription: IMP - Imprisonment
+                                  resultTexts:
                                     - label: Imprisonment Period
                                       value: 15 Days
                                     - label: Imprisonment reasons
@@ -468,7 +479,8 @@ paths:
                               wording: 'Original CaseURN: YX123927526, Re-sentenced Original code : TH68023, Original details: Robbery'
                           reference: OD123921416
                           results:
-                            - resultTexts:
+                            - resultDescription: OREV - Order revoked
+                              resultTexts:
                                 - label: Date original order made
                                   value: 10/08/2026
                                 - label: Order revoked
@@ -519,7 +531,8 @@ paths:
                           pleaDate: '2026-08-11'
                           pleaValue: GUILTY
                           results:
-                            - resultTexts:
+                            - resultDescription: IMP - Imprisonment
+                              resultTexts:
                                 - label: Total custodial period is life
                                   value: 'true'
                                 - label: Prison organisation name
@@ -545,7 +558,8 @@ paths:
                           offences: []
                           reference: RA780611523
                           results:
-                            - resultTexts:
+                            - resultDescription: G - Granted
+                              resultTexts:
                                 - label: Application outcome
                                   value: Case reopened
                           type: Application to reopen case
