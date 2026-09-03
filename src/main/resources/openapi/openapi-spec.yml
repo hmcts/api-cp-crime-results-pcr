@@ -1198,6 +1198,14 @@ components:
           type: string
           nullable: true
           example: "Application within criminal proceedings"
+        defendantType:
+          description: >-
+            The defendant's role on this application — "Applicant", "Appellant",
+            "Respondent", or "Defendant" (not named on the application at all).
+            Reflects who applied and why, not the application's own type/decision.
+          type: string
+          nullable: true
+          example: "Respondent"
         decision:
           description: Decision made on the application, where applicable.
           type: string

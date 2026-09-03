@@ -3,6 +3,7 @@ package uk.gov.hmcts.cp.config;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.cp.openapi.api.PcrApi;
+import uk.gov.hmcts.cp.openapi.model.CourtApplication;
 import uk.gov.hmcts.cp.openapi.model.ErrorResponse;
 import uk.gov.hmcts.cp.openapi.model.PcrHearingResult;
 import java.lang.reflect.Field;
@@ -21,6 +22,13 @@ class OpenApiObjectsTest {
         assertThat(PcrHearingResult.class).hasDeclaredFields(
                 "prosecutionCase", "defendant", "custodyLocation", "hearing", "sharedTime", "offences",
                 "courtApplications");
+    }
+
+    @Test
+    void generated_court_application_should_have_defendant_type_field() {
+        assertThat(CourtApplication.class).hasDeclaredFields(
+                "reference", "type", "defendantType", "decision", "decisionDate", "response", "responseDate",
+                "results", "offences");
     }
 
     @Test
