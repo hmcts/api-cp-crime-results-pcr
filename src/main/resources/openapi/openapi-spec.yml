@@ -146,6 +146,7 @@ paths:
                         caseMarkers:
                           - description: Domestic Violence
                         caseURN: OG231065167
+                        prosecutor: City of London Police
                         results:
                           - resultDescription: FCOST - Costs
                             resultTexts:
@@ -248,6 +249,7 @@ paths:
                       prosecutionCase:
                         caseMarkers: []
                         caseURN: JS238681716
+                        prosecutor: Derbyshire Police
                         results: []
                 MultipleOffencesPerDefendant:
                   summary: One defendant with two offences at the same hearing
@@ -372,6 +374,7 @@ paths:
                       prosecutionCase:
                         caseMarkers: []
                         caseURN: AS231157673
+                        prosecutor: City of London Police
                         results: []
                 DomesticViolenceMarkerWithRemand:
                   summary: Domestic-violence marker with a remand result and video-link appearance
@@ -445,6 +448,7 @@ paths:
                         caseMarkers:
                           - description: Domestic Violence
                         caseURN: TM370142723
+                        prosecutor: City of London Police
                         results:
                           - resultDescription: Defendant's details changed
                             resultTexts: []
@@ -545,6 +549,7 @@ paths:
                       prosecutionCase:
                         caseMarkers: []
                         caseURN: OD123921416
+                        prosecutor: City of London Police
                         results: []
                 CourtApplicationDefendantType:
                   summary: Application to reopen a case, brought by the defendant as Applicant
@@ -605,6 +610,7 @@ paths:
                       prosecutionCase:
                         caseMarkers: []
                         caseURN: RA780611523
+                        prosecutor: Nottinghamshire Police
                         results: []
         '400':
           $ref: "#/components/responses/BadRequest"
@@ -839,6 +845,11 @@ components:
             in `cpp-context-hearing`), not an invented API-only name.
           type: string
           example: "example-case-urn"
+        prosecutor:
+          description: Name of the prosecuting authority for this case.
+          type: string
+          nullable: true
+          example: "City of London Police"
         caseMarkers:
           description: >-
             Case-level markers recorded against the prosecution case (e.g.

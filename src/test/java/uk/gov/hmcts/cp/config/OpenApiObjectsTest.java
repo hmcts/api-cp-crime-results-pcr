@@ -6,6 +6,7 @@ import uk.gov.hmcts.cp.openapi.api.PcrApi;
 import uk.gov.hmcts.cp.openapi.model.CourtApplication;
 import uk.gov.hmcts.cp.openapi.model.ErrorResponse;
 import uk.gov.hmcts.cp.openapi.model.PcrHearingResult;
+import uk.gov.hmcts.cp.openapi.model.ProsecutionCase;
 import java.lang.reflect.Field;
 import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,6 +30,12 @@ class OpenApiObjectsTest {
         assertThat(CourtApplication.class).hasDeclaredFields(
                 "reference", "type", "defendantType", "decision", "decisionDate", "response", "responseDate",
                 "results", "offences");
+    }
+
+    @Test
+    void generated_prosecution_case_should_have_prosecutor_field() {
+        assertThat(ProsecutionCase.class).hasDeclaredFields(
+                "caseURN", "prosecutor", "caseMarkers", "results");
     }
 
     @Test
