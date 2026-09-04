@@ -696,53 +696,6 @@ components:
             traceId: "f6d5e708192a3b4c"
 
   schemas:
-    HearingResultedEvent:
-      type: object
-      required: [id, eventType, data]
-      description: >-
-        The Hearing_Resulted event (EventGridSchema shape), relayed verbatim
-        by an upstream relay. Event Grid's own subscription-validation
-        handshake never reaches this operation — the relay answers it
-        upstream.
-      properties:
-        id:
-          type: string
-          example: "b2f1c3d4-e5f6-4708-91a2-b3c4d5e6f708"
-        eventType:
-          type: string
-          example: Hearing_Resulted
-        subject:
-          type: string
-          example: "hearing/9c7e33d3-e6c0-4138-b7fb-b176554ae98c"
-        eventTime:
-          type: string
-          format: date-time
-          example: "2026-07-15T11:33:22.794Z"
-        dataVersion:
-          type: string
-          example: "1.0"
-        metadataVersion:
-          type: string
-          example: "1"
-        topic:
-          type: string
-          example: "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/hmcts-cp/providers/Microsoft.EventGrid/topics/hearing-results"
-        data:
-          type: object
-          properties:
-            hearingId:
-              type: string
-              format: uuid
-              example: "9c7e33d3-e6c0-4138-b7fb-b176554ae98c"
-            hearingDay:
-              type: string
-              format: date
-              example: "2026-07-15"
-            userId:
-              type: string
-              format: uuid
-              example: "00000000-0000-0000-0000-000000000099"
-
     PcrHearingResult:
       description: A single recorded PCR result for a hearing and defendant.
       type: object
