@@ -34,8 +34,6 @@ security:
 tags:
   - name: pcr
     description: Prison Court Register(s) results per case, hearing and defendant
-  - name: Internal
-    description: Internal, platform-only operations — not exposed via the public APIM gateway
 
 paths:
   /cases/{caseURN}/hearings/{hearingId}/defendants/{defendantId}:
@@ -619,63 +617,6 @@ paths:
         '500':
           $ref: "#/components/responses/InternalServerError"
 
-  /internal/hearing-results:
-    post:
-      summary: Receive Hearing_Resulted events
-      description: >-
-        Internal ingestion endpoint. An upstream relay owns the Event Grid
-        subscription and its subscription-validation handshake, and forwards
-        each Hearing_Resulted pointer event here verbatim (EventGridSchema,
-        delivered as a JSON array) via a plain internal HTTP call — this
-        operation itself never sees Event Grid's own handshake.
-      operationId: receiveHearingResultedEvent
-      tags:
-        - Internal
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/HearingResultedEvent"
-      responses:
-        '200':
-          description: Hearing_Resulted event accepted and processed. No response body.
-        '400':
-          description: Malformed payload or unrecognized eventType — Event Grid will not retry.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-              example:
-                message: "Unrecognized eventType: Hearing_Amended"
-                timestamp: "2026-07-15T11:33:22.794Z"
-                traceId: "b2f1c3d4e5f60718"
-        '503':
-          description: >-
-            Hearing details not yet complete after in-process retries —
-            Event Grid should redeliver per its own retry policy.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-              example:
-                message: "Hearing details for hearingId f1d2c3b4-a5e6-4f7a-8b9c-0d1e2f3a4b5c still incomplete after 3 retries"
-                timestamp: "2026-07-15T11:33:22.794Z"
-                traceId: "e5c4d6f708192a3b"
-        '500':
-          description: An unexpected error occurred while processing the event.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-              example:
-                message: "An unexpected error occurred while processing the request"
-                timestamp: "2026-07-15T11:33:22.794Z"
-                traceId: "f6d5e708192a3b4c"
-
 components:
   securitySchemes:
     bearerAuth:
@@ -755,53 +696,6 @@ components:
             traceId: "f6d5e708192a3b4c"
 
   schemas:
-    HearingResultedEvent:
-      type: object
-      required: [id, eventType, data]
-      description: >-
-        The Hearing_Resulted event (EventGridSchema shape), relayed verbatim
-        by an upstream relay. Event Grid's own subscription-validation
-        handshake never reaches this operation — the relay answers it
-        upstream.
-      properties:
-        id:
-          type: string
-          example: "b2f1c3d4-e5f6-4708-91a2-b3c4d5e6f708"
-        eventType:
-          type: string
-          example: Hearing_Resulted
-        subject:
-          type: string
-          example: "hearing/9c7e33d3-e6c0-4138-b7fb-b176554ae98c"
-        eventTime:
-          type: string
-          format: date-time
-          example: "2026-07-15T11:33:22.794Z"
-        dataVersion:
-          type: string
-          example: "1.0"
-        metadataVersion:
-          type: string
-          example: "1"
-        topic:
-          type: string
-          example: "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/hmcts-cp/providers/Microsoft.EventGrid/topics/hearing-results"
-        data:
-          type: object
-          properties:
-            hearingId:
-              type: string
-              format: uuid
-              example: "9c7e33d3-e6c0-4138-b7fb-b176554ae98c"
-            hearingDay:
-              type: string
-              format: date
-              example: "2026-07-15"
-            userId:
-              type: string
-              format: uuid
-              example: "00000000-0000-0000-0000-000000000099"
-
     PcrHearingResult:
       description: A single recorded PCR result for a hearing and defendant.
       type: object
