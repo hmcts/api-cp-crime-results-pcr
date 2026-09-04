@@ -2,3 +2,7 @@ extends: ["spectral:oas"]
 rules:
   oas3-valid-media-example: off
   oas3-valid-schema-example: off
+  # HearingResultedEvent/HearingResultedEventData are consumed as generated Java models by a
+  # Service Bus message consumer in service-cp-crime-results-pcr, not referenced by any operation
+  # in this spec — see ADR 004. A real cross-repo usage, not dead spec content.
+  oas3-unused-component: off
