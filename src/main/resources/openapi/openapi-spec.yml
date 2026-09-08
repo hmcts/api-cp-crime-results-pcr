@@ -1169,6 +1169,20 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ResultText"
+        caseURN:
+          description: >-
+            The case URN this offence belongs to, for an offence recorded
+            against a court application that links more than one
+            prosecution case (CP's courtApplicationCases) — e.g. a linked
+            appeal. Null for an offence recorded directly against the
+            defendant's own prosecution case, where prosecutionCase.caseURN
+            already identifies the case unambiguously. Populated even when
+            the application links to only one case, so a consumer never
+            needs to fall back to courtApplications[].reference to
+            attribute an offence to a case.
+          type: string
+          nullable: true
+          example: "CX137539232"
 
     ResultText:
       description: >-
