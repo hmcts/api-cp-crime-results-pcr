@@ -610,6 +610,71 @@ paths:
                         caseURN: RA780611523
                         prosecutor: Nottinghamshire Police
                         results: []
+                CourtApplicationLinkedCases:
+                  summary: Appeal application linking two prosecution cases
+                  description: >-
+                    caseURN is the first of the linked cases; linkedCases
+                    carries the full set so none of them are lost. CP itself
+                    only sends one combined applicationReference
+                    ("IE137532124,XI137534386") for this application — this
+                    is the only place that raw value would otherwise leak
+                    into a URL path parameter.
+                  value:
+                    - courtApplications:
+                        - defendantType: Appellant
+                          offences: []
+                          reference: IE137532124,XI137534386
+                          results:
+                            - resultDescription: G - Granted
+                              resultTexts:
+                                - label: Application outcome
+                                  value: Appeal allowed
+                          type: Appeal against conviction
+                      custodyLocation: null
+                      defendant:
+                        address:
+                          address1: 40 Kings Road
+                          address2: Kings Road
+                          address3: Reading
+                          postCode: NW1 5BR
+                        dateOfBirth: '1985-02-14'
+                        firstName: Priya
+                        gender: FEMALE
+                        id: 6df20c09-ed31-46c9-9b31-0c8d25792f88
+                        lastName: Chang
+                        masterDefendantId: 6df20c09-ed31-46c9-9b31-0c8d25792f88
+                        nationality: British
+                        postHearingCustodyStatus: A
+                        results: []
+                        title: Mrs
+                      hearing:
+                        courtDetails:
+                          court:
+                            courtHouseCode: B01LY00
+                            courtHouseName: Lavender Hill Magistrates' Court
+                          courtAddress:
+                            address1: 176A Lavender Hill
+                            address2: London
+                            address3: ''
+                            address4: ''
+                            address5: ''
+                            postCode: SW11 1JU
+                          ljaName: South West London Magistrates' Court
+                        defendantAppearanceDetails: In person
+                        hearingDate: '2026-08-14'
+                        hearingType: Appeal
+                        id: ef32c32c-84fe-42cd-824a-279bd35742b0
+                        jurisdiction: MAGISTRATES
+                      sharedTime: '2026-08-14T10:17:11.777Z'
+                      offences: []
+                      prosecutionCase:
+                        caseMarkers: []
+                        caseURN: IE137532124
+                        linkedCases:
+                          - caseURN: IE137532124
+                          - caseURN: XI137534386
+                        prosecutor: City of London Police
+                        results: []
         '400':
           $ref: "#/components/responses/BadRequest"
         '404':
@@ -808,6 +873,19 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ResultText"
+        linkedCases:
+          description: >-
+            Every case linked under the court application this record
+            represents, when this hearing/defendant is reached via a court
+            application spanning multiple prosecution cases. `caseURN` above
+            is always one real case URN (the first of these); this carries
+            the full set. Absent for a defendant reached via their own
+            single prosecution case, or via an application linked to zero or
+            one case.
+          type: array
+          nullable: true
+          items:
+            $ref: "#/components/schemas/LinkedCase"
 
     CustodyLocation:
       description: >-
@@ -966,6 +1044,16 @@ components:
           type: string
           nullable: true
           example: "Domestic Violence"
+
+    LinkedCase:
+      description: >-
+        One case URN linked under a court application spanning multiple
+        prosecution cases — see `ProsecutionCase.linkedCases`.
+      type: object
+      properties:
+        caseURN:
+          type: string
+          example: "XI137534386"
 
     Defendant:
       description: >-
