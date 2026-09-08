@@ -82,8 +82,8 @@ paths:
                   $ref: "./examples/court-application-with-linked-offence.yaml"
                 CourtApplicationDefendantType:
                   $ref: "./examples/court-application-defendant-type.yaml"
-                CourtApplicationLinkedCases:
-                  $ref: "./examples/court-application-linked-cases.yaml"
+                CourtApplicationRelatedCases:
+                  $ref: "./examples/court-application-related-cases.yaml"
         '400':
           $ref: "#/components/responses/BadRequest"
         '404':
@@ -282,19 +282,18 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ResultText"
-        linkedCases:
+        relatedCases:
           description: >-
-            Every case linked under the court application this record
-            represents, when this hearing/defendant is reached via a court
-            application spanning multiple prosecution cases. `caseURN` above
-            is always one real case URN (the first of these); this carries
-            the full set. Absent for a defendant reached via their own
-            single prosecution case, or via an application linked to zero or
-            one case.
+            Every other case connected to this record, when this
+            hearing/defendant is reached via a court application spanning
+            multiple prosecution cases. `caseURN` above is always one real
+            case URN (the first of these); this carries the full set.
+            Absent for a defendant reached via their own single prosecution
+            case, or via an application linked to zero or one case.
           type: array
           nullable: true
           items:
-            $ref: "#/components/schemas/LinkedCase"
+            $ref: "#/components/schemas/RelatedCase"
 
     CustodyLocation:
       description: >-
@@ -454,10 +453,9 @@ components:
           nullable: true
           example: "Domestic Violence"
 
-    LinkedCase:
+    RelatedCase:
       description: >-
-        One case URN linked under a court application spanning multiple
-        prosecution cases — see `ProsecutionCase.linkedCases`.
+        One case URN connected to this record — see `ProsecutionCase.relatedCases`.
       type: object
       properties:
         caseURN:

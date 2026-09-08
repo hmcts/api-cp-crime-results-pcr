@@ -1,6 +1,6 @@
 summary: Appeal application linking two prosecution cases
 description: >-
-  caseURN is the first of the linked cases; linkedCases
+  caseURN is the first of the related cases; relatedCases
   carries the full set so none of them are lost. CP itself
   only sends one combined applicationReference
   ("IE137532124,XI137534386") for this application — this
@@ -57,7 +57,7 @@ value:
     prosecutionCase:
       caseMarkers: []
       caseURN: IE137532124
-      linkedCases:
+      relatedCases:
         - caseURN: IE137532124
         - caseURN: XI137534386
       prosecutor: City of London Police
