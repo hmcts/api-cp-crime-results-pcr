@@ -1,0 +1,64 @@
+summary: Appeal application linking two prosecution cases
+description: >-
+  caseURN is the first of the related cases; relatedCases
+  carries the full set so none of them are lost. CP itself
+  only sends one combined applicationReference
+  ("IE137532124,XI137534386") for this application — this
+  is the only place that raw value would otherwise leak
+  into a URL path parameter.
+value:
+  - courtApplications:
+      - defendantType: Appellant
+        offences: []
+        reference: IE137532124,XI137534386
+        results:
+          - resultDescription: G - Granted
+            resultTexts:
+              - label: Application outcome
+                value: Appeal allowed
+        type: Appeal against conviction
+    custodyLocation: null
+    defendant:
+      address:
+        address1: 40 Kings Road
+        address2: Kings Road
+        address3: Reading
+        postCode: NW1 5BR
+      dateOfBirth: '1985-02-14'
+      firstName: Priya
+      gender: FEMALE
+      id: 6df20c09-ed31-46c9-9b31-0c8d25792f88
+      lastName: Chang
+      masterDefendantId: 6df20c09-ed31-46c9-9b31-0c8d25792f88
+      nationality: British
+      postHearingCustodyStatus: A
+      results: []
+      title: Mrs
+    hearing:
+      courtDetails:
+        court:
+          courtHouseCode: B01LY00
+          courtHouseName: Lavender Hill Magistrates' Court
+        courtAddress:
+          address1: 176A Lavender Hill
+          address2: London
+          address3: ''
+          address4: ''
+          address5: ''
+          postCode: SW11 1JU
+        ljaName: South West London Magistrates' Court
+      defendantAppearanceDetails: In person
+      hearingDate: '2026-08-14'
+      hearingType: Appeal
+      id: ef32c32c-84fe-42cd-824a-279bd35742b0
+      jurisdiction: MAGISTRATES
+    sharedTime: '2026-08-14T10:17:11.777Z'
+    offences: []
+    prosecutionCase:
+      caseMarkers: []
+      caseURN: IE137532124
+      relatedCases:
+        - caseURN: IE137532124
+        - caseURN: XI137534386
+      prosecutor: City of London Police
+      results: []
