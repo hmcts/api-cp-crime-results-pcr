@@ -5,8 +5,12 @@ import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.cp.openapi.api.PcrApi;
 import uk.gov.hmcts.cp.openapi.model.CourtApplication;
 import uk.gov.hmcts.cp.openapi.model.ErrorResponse;
+import uk.gov.hmcts.cp.openapi.model.HearingDetails;
+import uk.gov.hmcts.cp.openapi.model.NextHearing;
+import uk.gov.hmcts.cp.openapi.model.Offence;
 import uk.gov.hmcts.cp.openapi.model.PcrHearingResult;
 import uk.gov.hmcts.cp.openapi.model.ProsecutionCase;
+import uk.gov.hmcts.cp.openapi.model.ResultText;
 import java.lang.reflect.Field;
 import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,6 +40,22 @@ class OpenApiObjectsTest {
     void generated_prosecution_case_should_have_prosecutor_field() {
         assertThat(ProsecutionCase.class).hasDeclaredFields(
                 "caseURN", "prosecutor", "caseMarkers", "results");
+    }
+
+    @Test
+    void generated_result_text_should_have_next_hearing_field() throws Exception {
+        assertThat(ResultText.class.getDeclaredField("nextHearing").getType()).isEqualTo(NextHearing.class);
+    }
+
+    @Test
+    void generated_offence_and_hearing_details_should_not_have_next_hearing_field() {
+        assertThat(Offence.class.getDeclaredFields()).extracting(Field::getName).doesNotContain("nextHearing");
+        assertThat(HearingDetails.class.getDeclaredFields()).extracting(Field::getName).doesNotContain("nextHearing");
+    }
+
+    @Test
+    void generated_next_hearing_should_have_expected_fields() {
+        assertThat(NextHearing.class).hasDeclaredFields("hearingId", "dateTime", "court");
     }
 
     @Test
