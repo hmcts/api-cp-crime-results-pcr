@@ -14,6 +14,7 @@ import uk.gov.hmcts.cp.openapi.model.ResultText;
 import java.lang.reflect.Field;
 import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Slf4j
 class OpenApiObjectsTest {
@@ -49,8 +50,8 @@ class OpenApiObjectsTest {
 
     @Test
     void generated_offence_and_hearing_details_should_not_have_next_hearing_field() {
-        assertThat(Offence.class.getDeclaredFields()).extracting(Field::getName).doesNotContain("nextHearing");
-        assertThat(HearingDetails.class.getDeclaredFields()).extracting(Field::getName).doesNotContain("nextHearing");
+        assertThatThrownBy(() -> Offence.class.getDeclaredField("nextHearing")).isInstanceOf(NoSuchFieldException.class);
+        assertThatThrownBy(() -> HearingDetails.class.getDeclaredField("nextHearing")).isInstanceOf(NoSuchFieldException.class);
     }
 
     @Test
