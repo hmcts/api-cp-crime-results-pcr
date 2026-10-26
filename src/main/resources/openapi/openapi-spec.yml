@@ -361,15 +361,16 @@ components:
           type: string
           nullable: true
           example: "In person"
-        nextHearing:
-          $ref: "#/components/schemas/NextHearing"
 
     NextHearing:
       description: >-
-        The next scheduled hearing following this one, where known. CP's own
-        field name (`nextHearing`), not an invented API-only name. Open item:
-        when offences on the same case adjourn to different future dates,
-        which one this object reflects is not yet confirmed on CP's side.
+        The next scheduled hearing set by a single judicial result, where
+        known. CP's own field name (`nextHearing`), not an invented API-only
+        name. CP records a next hearing against the result that sets it
+        (e.g. "RI - Remanded in custody"), so it is carried on that result
+        as-is. One offence or court application can have several results
+        each setting a different next hearing; no single next hearing is
+        derived from them.
         `dateTime` merges date and time into a single field for beta — kept
         single pending confirmation with the business; may split back into
         separate date/time fields later.
@@ -377,7 +378,10 @@ components:
       nullable: true
       properties:
         hearingId:
-          description: Identifier of the next hearing, where known.
+          description: >-
+            Identifier of the next hearing. Not currently populated — CP's
+            hearing results carry a booking reference for the next hearing,
+            not its hearing identifier.
           type: string
           format: uuid
           nullable: true
@@ -701,6 +705,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Text"
+        nextHearing:
+          $ref: "#/components/schemas/NextHearing"
 
     Text:
       description: A single prompt recorded against a judicial result
