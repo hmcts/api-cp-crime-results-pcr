@@ -61,8 +61,7 @@ rather than nested under `HearingDetails.nextHearing`. See the shared `Court` ta
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
-| `dateTime` | `next_court_appearance.appearance_date` + `appearance_time` | CP `nextHearing.listedStartDateTime` — the earliest across the defendant's own prosecution-case offences' `judicialResults[]` | Earliest-wins rule defined (AMP-1292); the `appearance_time` half of the CP source isn't yet confirmed |
-| `hearingId` | — | — | Not populated — CP's `nextHearing` carries a `bookingReference`, not the next hearing's id |
+| `dateTime` | `next_court_appearance.appearance_date` + `appearance_time` | CP `nextHearing` | Open on two counts: which offence's `nextHearing` wins when several diverge is still with HMPPs (Nutty/Steven query on file), and the `appearance_time` half of the CP source isn't yet confirmed either |
 | *(not currently in the API)* | `next_court_appearance.appearance_type_id` | — | Gap — video-link-vs-in-person not yet added to the contract, and CP source not yet confirmed either |
 
 ### Offence (`Offence`)
@@ -74,7 +73,6 @@ rather than nested under `HearingDetails.nextHearing`. See the shared `Court` ta
 | `endDate` | `charge.offence_end_date` | `offences[]` (terminated results only) | Confirmed optional |
 | `convictionDate` | `charge.conviction_date` | `offences[].convictionDate` | Confirmed |
 | `listingNumber` | `sentence.count_number` | `offences[].listingNumber` | Open — not yet confirmed as the right mapping; verify against warrant examples |
-| `nextHearing` | — | earliest `offences[].judicialResults[].nextHearing` for that offence | Added (AMP-1292) — offences on one hearing can be adjourned to different dates; null for an offence linked through a court application |
 
 Terrorism/foreign-power/domestic-violence signals aren't separate `Offence` fields — the raw judicial result prompts (`theCourtDeterminedATerroristConnectionUnderSection30OfTheCounterTerrorismAct2008AppliesToThisOffence`/`...Count`, `offenceAggByForeignPowerCondition`) are exposed as-is via `ResultText.resultTexts[]` instead, and the domestic-violence marker is case-level (`PcrHearingResult.caseMarkers[]`, sourced from CP's case-level `caseMarkers[]` with `markerTypeCode == 'DomesticViolence'`), not per-offence. **2026-08-14:**
 `CaseMarker.code` is removed from the contract (no confirmed consumer need); `CaseMarker.description`
