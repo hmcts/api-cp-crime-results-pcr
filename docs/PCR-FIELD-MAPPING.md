@@ -55,13 +55,17 @@ both `HearingDetails` and `NextHearing`, and added `courtHouseId` (UUID) alongsi
 
 ### Next Hearing (`NextHearing`)
 
-Architect review moved `nextHearing` up to be a sibling of `hearing` on `PcrHearingResult`,
-rather than nested under `HearingDetails.nextHearing`. See the shared `Court` table above for
+`nextHearing` sits on each judicial result (`ResultText.nextHearing`) — the result CP recorded it
+against, e.g. "RI - Remanded in custody". It is no longer carried on `hearing` or on `Offence`
+(AMP-1292): one offence can carry several results each setting a different next hearing, and
+which one is the defendant's next appearance is a business rule (e.g. the date on the remand
+warrant) left to the consumer. See the shared `Court` table above for
 `court.courtHouseCode`/`court.courtHouseId`/`court.courtHouseName`.
 
 | API field | HMPPs field | CP source | Status |
 |---|---|---|---|
-| `dateTime` | `next_court_appearance.appearance_date` + `appearance_time` | CP `nextHearing` | Open on two counts: which offence's `nextHearing` wins when several diverge is still with HMPPs (Nutty/Steven query on file), and the `appearance_time` half of the CP source isn't yet confirmed either |
+| `dateTime` | `next_court_appearance.appearance_date` + `appearance_time` | CP `judicialResults[].nextHearing.listedStartDateTime` of that result | Carried per result (AMP-1292); no `nextHearing` is returned when CP records no listed start (e.g. date to be fixed) |
+| `hearingId` | — | — | Not populated — CP's `nextHearing` carries a `bookingReference`, not the next hearing's id |
 | *(not currently in the API)* | `next_court_appearance.appearance_type_id` | — | Gap — video-link-vs-in-person not yet added to the contract, and CP source not yet confirmed either |
 
 ### Offence (`Offence`)
@@ -99,6 +103,7 @@ decision record.
 |---|---|---|---|
 | ~~`resultCode`~~ | input to `charge_outcome.outcome_type` resolution | Judicial result CJS code | **Removed 2026-08-14** — no confirmed consumer need |
 | `resultText` | — (audit only) | Judicial result rendered text | Confirmed |
+| `nextHearing` | `next_court_appearance.*` | `judicialResults[].nextHearing` of that result | Added (AMP-1292) — on every result that carries one, including court application and defendant/case-level results |
 | ~~`postHearingCustodyStatus`~~ | input to `outcome_type` (NON_CUSTODIAL/REMAND/etc.) | `ResultDefinition.postHearingCustodyStatus`, Reference Data, keyed on `cjsResultCode` — confirmed directly against the reference-data JSON fixture, alongside `financial`/`category`/`convicted`/`publishedForNows` | Not on `ResultText` in the current contract — this field lives on `Defendant.postHearingCustodyStatus` instead; row kept for the CP-source trail only |
 | ~~`financial`~~ / ~~`category`~~ / ~~`convicted`~~ | same | `ResultDefinition.financial`/`category`/`convicted`, Reference Data | **Removed 2026-08-14** — structured, offered, never a finished classification; no confirmed consumer need |
 | ~~`concurrent`~~ | `sentence.sentence_serve_type` | `concurrent` prompt | **Removed 2026-08-14** |

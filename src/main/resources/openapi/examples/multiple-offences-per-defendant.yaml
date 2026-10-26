@@ -35,13 +35,6 @@ value:
       hearingType: First hearing
       id: f15a49db-812e-43d2-bfc5-7f3c7ee9ede1
       jurisdiction: MAGISTRATES
-      nextHearing:
-        court:
-          courtHouseCode: B01LY00
-          courtHouseId: f8254db1-1683-483e-afb3-b87fde5a0a26
-          courtHouseName: Lavender Hill Magistrates' Court
-        dateTime: '2026-07-31T09:00:00Z'
-        hearingId: cf1f6d0c-6f9c-461f-b91a-5458a16c6342
     sharedTime: '2026-07-30T13:45:43.563Z'
     offences:
       - code: TH68013A
@@ -51,7 +44,13 @@ value:
         pleaDate: '2026-07-31'
         pleaValue: GUILTY
         results:
-          - resultDescription: RI - Remanded in custody
+          - nextHearing:
+              court:
+                courtHouseCode: B01LY00
+                courtHouseId: f8254db1-1683-483e-afb3-b87fde5a0a26
+                courtHouseName: Lavender Hill Magistrates' Court
+              dateTime: '2026-07-31T09:00:00Z'
+            resultDescription: RI - Remanded in custody
             resultTexts:
               - label: Next hearing in magistrates' court
                 value: 'Date of hearing:31/07/2026
@@ -88,7 +87,13 @@ value:
         pleaDate: '2026-07-31'
         pleaValue: GUILTY
         results:
-          - resultDescription: RI - Remanded in custody
+          - nextHearing:
+              court:
+                courtHouseCode: B01LY00
+                courtHouseId: f8254db1-1683-483e-afb3-b87fde5a0a26
+                courtHouseName: Lavender Hill Magistrates' Court
+              dateTime: '2026-07-31T09:00:00Z'
+            resultDescription: RI - Remanded in custody
             resultTexts:
               - label: Next hearing in magistrates' court
                 value: 'Date of hearing:31/07/2026
