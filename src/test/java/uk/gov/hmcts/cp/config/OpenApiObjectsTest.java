@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.cp.openapi.api.PcrApi;
 import uk.gov.hmcts.cp.openapi.model.CourtApplication;
 import uk.gov.hmcts.cp.openapi.model.ErrorResponse;
-import uk.gov.hmcts.cp.openapi.model.NextHearing;
-import uk.gov.hmcts.cp.openapi.model.Offence;
 import uk.gov.hmcts.cp.openapi.model.PcrHearingResult;
 import uk.gov.hmcts.cp.openapi.model.ProsecutionCase;
 import java.lang.reflect.Field;
@@ -38,16 +36,6 @@ class OpenApiObjectsTest {
     void generated_prosecution_case_should_have_prosecutor_field() {
         assertThat(ProsecutionCase.class).hasDeclaredFields(
                 "caseURN", "prosecutor", "caseMarkers", "results");
-    }
-
-    @Test
-    void generated_offence_should_have_next_hearing_field() throws Exception {
-        assertThat(Offence.class.getDeclaredField("nextHearing").getType()).isEqualTo(NextHearing.class);
-    }
-
-    @Test
-    void generated_next_hearing_should_have_expected_fields() {
-        assertThat(NextHearing.class).hasDeclaredFields("hearingId", "dateTime", "court");
     }
 
     @Test

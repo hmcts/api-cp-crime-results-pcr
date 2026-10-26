@@ -367,13 +367,9 @@ components:
     NextHearing:
       description: >-
         The next scheduled hearing following this one, where known. CP's own
-        field name (`nextHearing`), not an invented API-only name. On an
-        offence, it is the earliest next hearing recorded against that
-        offence's own results. On `hearing`, it is the earliest across the
-        defendant's own prosecution-case offences, so offences adjourned to
-        different future dates each keep their own value while `hearing`
-        carries the soonest. Offences linked through a court application do
-        not carry one.
+        field name (`nextHearing`), not an invented API-only name. Open item:
+        when offences on the same case adjourn to different future dates,
+        which one this object reflects is not yet confirmed on CP's side.
         `dateTime` merges date and time into a single field for beta — kept
         single pending confirmation with the business; may split back into
         separate date/time fields later.
@@ -381,10 +377,7 @@ components:
       nullable: true
       properties:
         hearingId:
-          description: >-
-            Identifier of the next hearing. Not currently populated — CP's
-            hearing results carry a booking reference for the next hearing,
-            not its hearing identifier.
+          description: Identifier of the next hearing, where known.
           type: string
           format: uuid
           nullable: true
@@ -671,8 +664,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ResultText"
-        nextHearing:
-          $ref: "#/components/schemas/NextHearing"
         caseURN:
           description: >-
             The case URN this offence belongs to, when linked via a court
