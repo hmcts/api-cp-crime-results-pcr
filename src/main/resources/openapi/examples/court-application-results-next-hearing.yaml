@@ -1,0 +1,119 @@
+summary: Court application whose own results carry next hearings
+description: >-
+  nextHearing is set on each court application result that fixes one,
+  the same as on offence results. Here the application is adjourned
+  (NHMC) to one court and date and the defendant is remanded (RI) to a
+  different court and date, so each result carries its own nextHearing.
+  A remand's next hearing is entered as a child result in CP; it is
+  returned on the remand result, not as a separate result.
+value:
+  - courtApplications:
+      - defendantType: Defendant
+        offences: []
+        reference: BB238124567
+        results:
+          - nextHearing:
+              court:
+                courtHouseCode: B01BH00
+                courtHouseId: 7e967376-eacf-4fca-9b30-21b0c5aad427
+                courtHouseName: Bexley Magistrates' Court
+              dateTime: '2026-11-04T10:00:00Z'
+            resultDescription: |-
+              NHMC - Next hearing in magistrates' court
+              hearing on 04/11/2026 at 10:00 in Courtroom 02, Bexley Magistrates' Court
+            resultTexts:
+              - label: Date of hearing
+                value: 04/11/2026
+              - label: Time of hearing
+                value: '10:00'
+              - label: Courthouse organisation name
+                value: Bexley Magistrates' Court
+              - label: Courtroom
+                value: Courtroom 02
+              - label: Hearing type
+                value: Plea
+              - label: Estimated duration
+                value: 20 MINUTES
+          - nextHearing:
+              court:
+                courtHouseCode: B01EF00
+                courtHouseId: 31b3d313-7a7c-4598-bb4b-c1bff9b00e26
+                courtHouseName: Croydon Magistrates' Court
+              dateTime: '2026-11-02T10:00:00Z'
+            resultDescription: |-
+              RI - Remanded in custody
+              Remanded in custody until hearing on 02/11/2026 at 10:00 in Courtroom 02, Croydon Magistrates' Court. Basis: Charged with an offence punishable in the case of an adult with 14 years imprisonment or more. Bail exceptions: Likely to offend (physical or mental injury).
+            resultTexts:
+              - label: Next hearing in magistrates' court
+                value: |-
+                  Date of hearing:02/11/2026
+                  Time of hearing:10:00
+                  Courthouse organisation name:Croydon Magistrates' Court
+                  Courtroom:Courtroom 02
+                  Hearing type:Bail Application
+                  Estimated duration:20 MINUTES
+              - label: Prison organisation name
+                value: HMP Birmingham
+              - label: Prison email address 1
+                value: OMU.Birmingham@example-prison.gov.uk
+              - label: Remand basis
+                value: Charged with an offence punishable in the case of an adult with 14 years imprisonment or more
+              - label: Bail exception
+                value: Likely to offend (physical or mental injury)
+        type: Breach of bail conditions whilst awaiting extradition
+    custodyLocation:
+      custodyType: Prison
+      name: HMP Birmingham
+    defendant:
+      address:
+        address1: 14 Mill Lane
+        address2: Mill Lane
+        address3: Bexleyheath
+        postCode: DA6 7AB
+      dateOfBirth: '1978-11-11'
+      firstName: Rowan
+      gender: FEMALE
+      id: 8a24203b-99ef-40ae-9bfe-609bd4603ed0
+      lastName: Ellison
+      masterDefendantId: 8a24203b-99ef-40ae-9bfe-609bd4603ed0
+      postHearingCustodyStatus: Not Applicable
+      results: []
+      title: Ms
+    hearing:
+      courtDetails:
+        court:
+          courtHouseCode: B01EF00
+          courtHouseId: 31b3d313-7a7c-4598-bb4b-c1bff9b00e26
+          courtHouseName: Croydon Magistrates' Court
+        courtAddress:
+          address1: The Magistrates' Court
+          address2: Barclay Road
+          address3: Croydon
+          postCode: CR9 3NG
+        ljaName: South London Magistrates' Court
+      defendantAppearanceDetails: In person
+      hearingDate: '2026-10-29'
+      hearingType: Application
+      id: 8da7374b-2373-4dc3-b21b-1f642590f269
+      jurisdiction: MAGISTRATES
+    offences:
+      - code: TH68010
+        id: bf7ea606-ad2f-4690-bf64-9918dbd03760
+        listingNumber: 1
+        offenceLegislation: Contrary to sections 1 and 7 of the Theft Act 1968.
+        results:
+          - resultDescription: |-
+              CD - Conditional discharge
+              Discharged conditionally for 1 Years.
+            resultTexts:
+              - label: Period of conditional discharge
+                value: 1 Years
+        startDate: '2026-05-02'
+        title: Theft from a shop
+        wording: Stole groceries to the value of 45.00 belonging to a retailer.
+    prosecutionCase:
+      caseMarkers: []
+      caseURN: BB238124567
+      prosecutor: Derbyshire Police
+      results: []
+    sharedTime: '2026-10-29T08:31:12.323Z'
