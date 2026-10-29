@@ -236,7 +236,10 @@ components:
           nullable: true
           example: "2026-07-15T11:33:22.794Z"
         offences:
-          description: Results for each offence charged against the defendant at this hearing
+          description: >-
+            Results for each offence charged against the defendant at this
+            hearing, in the order the Prison Court Register document lists
+            them.
           type: array
           items:
             $ref: "#/components/schemas/Offence"
@@ -294,6 +297,27 @@ components:
           nullable: true
           items:
             $ref: "#/components/schemas/RelatedCase"
+        documentSequence:
+          description: >-
+            This case's position (1-based) among the cases on the defendant's
+            Prison Court Register document. CP lists the defendant's cases in
+            the order the hearing holds them, then cases reached only via a
+            court application. Null where this record has no prosecution case
+            of its own (an application-only defendant).
+          type: integer
+          minimum: 1
+          nullable: true
+          example: 1
+        documentCaseOrder:
+          description: >-
+            Every case URN on the defendant's Prison Court Register document,
+            in the order the document lists them. The same for every case on
+            the document, so one call is enough to order them all.
+          type: array
+          nullable: true
+          items:
+            type: string
+          example: ["ZZ231257861", "MF231295264"]
 
     CustodyLocation:
       description: >-

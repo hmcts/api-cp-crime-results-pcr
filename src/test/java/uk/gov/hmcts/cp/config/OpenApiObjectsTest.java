@@ -44,6 +44,11 @@ class OpenApiObjectsTest {
     }
 
     @Test
+    void generated_prosecution_case_should_have_document_order_fields() {
+        assertThat(ProsecutionCase.class).hasDeclaredFields("documentSequence", "documentCaseOrder");
+    }
+
+    @Test
     void generated_result_text_should_have_next_hearing_field() throws Exception {
         assertThat(ResultText.class.getDeclaredField("nextHearing").getType()).isEqualTo(NextHearing.class);
     }
