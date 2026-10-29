@@ -302,8 +302,9 @@ components:
             This case's position (1-based) among the cases on the defendant's
             Prison Court Register document. CP lists the defendant's cases in
             the order the hearing holds them, then cases reached only via a
-            court application. Null where this record has no prosecution case
-            of its own (an application-only defendant).
+            court application. Null where the hearing holds no prosecution
+            case for the defendant (an application-only hearing) or the record
+            was ingested before document order was recorded.
           type: integer
           minimum: 1
           nullable: true
@@ -312,7 +313,8 @@ components:
           description: >-
             Every case URN on the defendant's Prison Court Register document,
             in the order the document lists them. The same for every case on
-            the document, so one call is enough to order them all.
+            the document, so one call is enough to order them all. Null in the
+            same circumstances as documentSequence.
           type: array
           nullable: true
           items:
