@@ -299,27 +299,16 @@ components:
             $ref: "#/components/schemas/RelatedCase"
         documentSequence:
           description: >-
-            This case's position (1-based) among the cases on the defendant's
-            Prison Court Register document. CP lists the defendant's cases in
-            the order the hearing holds them, then cases reached only via a
-            court application. Null where the hearing holds no prosecution
-            case for the defendant (an application-only hearing) or the record
-            was ingested before document order was recorded.
+            Where this case's offences come on the defendant's Prison Court
+            Register document when it covers more than one case: 1 for the
+            case listed first, 2 for the next, and so on. Null where the
+            hearing holds no prosecution case for the defendant (an
+            application-only hearing) or the record was ingested before
+            document order was recorded.
           type: integer
           minimum: 1
           nullable: true
           example: 1
-        documentCaseOrder:
-          description: >-
-            Every case URN on the defendant's Prison Court Register document,
-            in the order the document lists them. The same for every case on
-            the document, so one call is enough to order them all. Null in the
-            same circumstances as documentSequence.
-          type: array
-          nullable: true
-          items:
-            type: string
-          example: ["ZZ231257861", "MF231295264"]
 
     CustodyLocation:
       description: >-
