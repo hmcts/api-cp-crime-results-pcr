@@ -84,6 +84,8 @@ paths:
                   $ref: "./examples/court-application-defendant-type.yaml"
                 CourtApplicationRelatedCases:
                   $ref: "./examples/court-application-related-cases.yaml"
+                CourtApplicationResultsWithNextHearing:
+                  $ref: "./examples/court-application-results-next-hearing.yaml"
         '400':
           $ref: "#/components/responses/BadRequest"
         '404':
